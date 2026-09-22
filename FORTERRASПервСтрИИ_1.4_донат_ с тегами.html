@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Основные SEO-теги для Google и Яндекса -->
+    <title>FORTERRAS — Экосистема здорового тела и экологичной жизни</title>
+    <meta name="description" content="Независимый проект FORTERRAS: простые и научно обоснованные рекомендации по здоровью. Сбалансированное питание без диет и тревоги. Соберите рацион в бесплатном конструкторе «Разноцветная тарелка»!">
+
+    <!-- Микроразметка Open Graph (чтобы страница красиво выглядела при отправке в Telegram, WhatsApp, VK) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="FORTERRAS — Комплексный подход к экологичной жизни">
+
+    <title>FORTERRAS — Комплексный подход к экологичной жизни</title>
+    <style>
+:root {
+    --bg-color: #f7f9f6;
+    --text-color: #2c3e2b;
+    --accent-green: #4a7c59;
+    --accent-green-hover: #3b6347;
+    --card-bg: #ffffff;
+    --muted-text: #607260;
+    --border-color: #e2e8e2;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.logo {
+    font-size: 2.8rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--accent-green);
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--muted-text);
+    margin-bottom: 25px;
+}
+
+.slogan-box {
+    background-color: var(--card-bg);
+    border-left: 4px solid var(--accent-green);
+    padding: 15px 20px;
+    margin: 20px 0;
+    border-radius: 0 8px 8px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.slogan-text {
+    font-style: italic;
+    font-weight: 600;
+    color: var(--accent-green);
+}
+
+.intro-text {
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+}
+
+.intro-text p {
+    margin-bottom: 15px;
+}
+
+h2 {
+    font-size: 1.8rem;
+    color: var(--accent-green);
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 25px;
+    margin-bottom: 50px;
+}
+
+.card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+}
+
+.card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.card p {
+    color: var(--muted-text);
+    margin-bottom: 20px;
+    font-size: 1rem;
+}
+
+.instrument-badge {
+    background-color: #f0f5f1;
+    border-left: 3px solid var(--accent-green);
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.95rem;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn-active {
+    background-color: var(--accent-green);
+    color: #ffffff;
+}
+
+.btn-active:hover {
+    background-color: var(--accent-green-hover);
+}
+
+.btn-disabled {
+    background-color: #e2e8e2;
+    color: #8fa38f;
+    cursor: not-allowed;
+}
+
+.status-tag {
+    float: right;
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.tag-active { background-color: #eaf5ec; color: #2e6930; }
+.tag-dev { background-color: #f5f5f5; color: #757575; }
+
+.donate-section {
+    background-color: #eef3ef;
+    border-radius: 16px;
+    padding: 35px;
+    margin-top: 5px;
+    border: 1px solid #dee7df;
+}
+
+.donate-section ul {
+    list-style-type: none;
+    margin: 20px 0;
+}
+
+.donate-section li {
+    margin-bottom: 12px;
+    padding-left: 25px;
+    position: relative;
+    color: var(--text-color);
+}
+
+.donate-section li::before {
+    content: "•";
+    color: var(--accent-green);
+    font-weight: bold;
+    font-size: 1.5rem;
+    position: absolute;
+    left: 5px;
+    top: -4px;
+}
+
+.donate-btn-wrapper {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.btn-donate {
+    background-color: #d96b43;
+    color: #ffffff;
+    font-size: 1.1rem;
+    padding: 14px 32px;
+    box-shadow: 0 4px 10px rgba(217, 107, 67, 0.2);
+}
+
+.btn-donate:hover {
+    background-color: #c25730;
+}
+
+@media (min-width: 600px) {
+    body { padding: 40px; }
+    .card h3 { font-size: 1.5rem; }
+}
+
+
+
+
+ 
+
+
+</style>
+
+</head>
+<body>
+
+    <div class="container">
+        
+        <header>
+            <div class="logo">🌱 FORTERRAS</div>
+            <div class="subtitle">Комплексный подход к экологичной жизни</div>
+            <div class="slogan-box">
+                <p class="slogan-text">«Forterras. Экосистема ясного ума и здорового тела»</p>
+            </div>
+        </header>
+
+        <main class="intro-text">
+            <h2>Здоровье без тревоги и жестких ограничений</h2>
+            <p>Современный мир перегружен рекомендациями по здоровью, сложными правилами, подсчетом калорий и ложными цифрами. Забота о себе должна давать энергию, а не отнимать её.</p>
+            <p><strong>Forterras</strong> — независимый проект, цель которого — создать формат простых, понятных, традиционных и одновременно научно обоснованных рекомендаций по здоровью. Это применимые на практике решения, которые легко понять и внедрить в повседневную жизнь без лишних усилий и озабоченности.</p>
+        </main>
+
+        <section>
+            <h2>🗺️ Три опоры — устойчивая конструкция</h2>
+            <p style="margin-bottom: 25px; color: var(--muted-text);">Фундамент подхода построен на трех террасах благополучия, актуальных для человека в любом возрасте:</p>
+
+            <div class="grid-container">
+                
+                <div class="card">
+                    <span class="status-tag tag-active">Активен</span>
+                    <h3>🍽️ Живой стол (Опора 1)</h3>
+                    <p>Осознанное, экологичное питание — без жестких запретов, взвешивания еды, диетической тревожности и чувства вины.</p>
+                    <div class="instrument-badge">
+                        <strong>Инструмент:</strong> Бесплатный интерактивный конструктор «Разноцветная тарелка». Сборка сбалансированного рациона за пару кликов по визуальным подсказкам.
+                    </div>
+                    <a href="index (3)_две кнопки_1.html" class="btn btn-active">Открыть страницу «Живой стол»</a>
+                </div>
+
+                <div class="card">
+                    <span class="status-tag tag-dev">В разработке</span>
+                    <h3>🏃‍♂️ Движение и дыхание (Опора 2)</h3>
+                    <p>Мягкая физическая активность, которая приносит радость и легко вписывается в привычную повседневную рутину. Никаких изнурительных тренировок — только практики для поддержания тонуса, энергии и легкости движений.</p>
+                    <a class="btn btn-disabled">Перейти в раздел «Движение»</a>
+                </div>
+
+                <div class="card">
+                    <span class="status-tag tag-dev">В разработке</span>
+                    <h3>🧘‍♂️ Баланс (Опора 3)</h3>
+                    <p>Гармония с внутренним и внешним миром. Психологический комфорт как основа физического здоровья, качественный сон, управление стрессом и разумная гигиена потребления.</p>
+                    <a class="btn btn-disabled">Перейти в раздел «Гармония»</a>
+                </div>
+
+            </div>
+        </section>
+
+        <div class="slogan-box" style="margin: 40px 0; text-align: center; border-left: none; border-right: 4px solid var(--accent-green); border-radius: 8px 0 0 8px;">
+            <p class="slogan-text">«Forterras. Плодородная почва для вашего роста и долголетия»</p>
+        </div>
+
+        <section class="donate-section">
+            <h3 style="margin-bottom: 15px;">❤️ Если Вам понравился подход, поддержите проект</h3>
+            <p>Развитие Forterras идет исключительно своими силами. На сайте сознательно нет коммерческой рекламы. Все донаты направляются на техническую реализацию и создание новых интерактивных модулей. В проект войдут:</p>
+            
+            <ul>
+                <li>Системы индивидуальных профилактических рекомендаций – питание, движение и дыхание.</li>
+                <li>Методики для здорового сна и управления стрессом.</li>
+                <li>Рекомендации для мягкого внедрения полезных привычек без насилия над собой.</li>
+            </ul>
+
+            <p style="margin-top: 15px; margin-bottom: 20px;">Ваш вклад помогает нам делать заботу о здоровье доступной и свободной от стресса.</p>
+            
+<!-- КНОПКИ -->
+<style>
+  /* Стили для красивой кнопки поддержки */
+  .donate-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Расстояние между сердцем и текстом */
+    
+    /* Размеры и отступы */
+    padding: 12px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: sans-serif;
+    text-decoration: none;
+    
+    /* Цвета (природный зеленый в стиле Forterras) */
+    color: #ffffff !important; /* !important защищает цвет текста от перезаписи другими стилями */
+    background-color: #2e7d32; 
+    
+    /* Скругление углов и тень */
+    border-radius: 50px;
+    box-shadow: 0 4px 10px rgba(46, 125, 50, 0.2);
+    
+    /* Плавный переход для анимации */
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  /* Эффект при наведении курсора */
+  .donate-btn:hover {
+    background-color: #1b5e20; /* Темно-зеленый при наведении */
+    box-shadow: 0 6px 15px rgba(46, 125, 50, 0.4);
+    transform: translateY(-2px); /* Кнопка слегка приподнимается */
+  }
+
+  /* Эффект при клике */
+  .donate-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 5px rgba(46, 125, 50, 0.3);
+  }
+
+  /* Анимация пульсации для сердечка внутри кнопки */
+  .donate-btn:hover .heart-icon {
+    display: inline-block;
+    animation: heartbeat 0.8s infinite alternate;
+  }
+
+  @keyframes heartbeat {
+    to { transform: scale(1.3); }
+  }
+</style>
+
+<div class="donate-section" style="text-align: center; margin-top: 30px;">
+    <p class="donate-text">🌿 Поддержите проект «Forterras». </p>
+    <!-- Рабочая ссылка бережно сохранена и упакована в новый дизайн -->
+    <a class="donate-btn" id="donateButton" href="https://www.tbank.ru/cf/123Oi6rjyve" target="_blank" rel="noopener">
+        <span class="heart-icon">❤️</span> Поддержать проект
+    </a>
+    <button class="btn-checklist" id="showChecklistBtn"></button>
+</div>
+
+
+
+</body>
+</html>

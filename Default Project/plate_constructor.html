@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Живой Стол — Конструктор Тарелки</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9fbf9;
+        }
+        h1, h2 { color: #2c5e3b; }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .flex-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .box { flex: 1; min-width: 280px; }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .btn-food {
+            background: #f0f4f0;
+            border: 1px solid #d0e0d0;
+            border-radius: 8px;
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .btn-food:hover { background: #e0eee0; }
+        .btn-food.active {
+            background: #2c5e3b;
+            color: white;
+            border-color: #2c5e3b;
+        }
+        #plate-display {
+            background: #fff;
+            border: 4px dashed #2c5e3b;
+            border-radius: 50%;
+            width: 240px;
+            height: 240px;
+            margin: 20px auto;
+            display: flex;
+            align-content: center;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 20px;
+        }
+        .plate-item {
+            font-size: 24px;
+            animation: pop 0.3s ease;
+        }
+        #feedback {
+            background: #eef7f2;
+            border-left: 4px solid #2c5e3b;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            font-weight: 500;
+        }
+        @keyframes pop {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🍽 Интерактивный прототип «Живой Стол»</h1>
+    <p>Пример кастомизированного инструмента без весов, калорий и стресса.</p>
+
+    <div class="flex-container">
+        <!-- Левая колонка: Выбор -->
+        <div class="box card">
+            <h2>Добавьте на тарелку:</h2>
+            <div class="products-grid" id="products"></div>
+        </div>
+
+        <!-- Правая колонка: Визуализация -->
+        <div class="box card" style="text-align: center;">
+            <h2>Ваша тарелка</h2>
+            <div id="plate-display"></div>
+            <div id="color-counter">Цветов: 0 из 4</div>
+        </div>
+    </div>
+
+    <!-- Обратная связь -->
+    <div class="card" id="feedback">
+        Выберите продукты, чтобы получить мягкую подсказку по правилу «4 цветов».
+    </div>
+
+    <script>
+        // Простая база данных продуктов
+        const database = [
+            { id: 'tomato', name: 'Томат', color: 'red', icon: '🍅' },
+            { id: 'cucumber', name: 'Огурец', color: 'green', icon: '🥒' },
+            { id: 'pumpkin', name: 'Тыква', color: 'orange', icon: '🎃' },
+            { id: 'eggplant', name: 'Баклажан', color: 'purple', icon: '🍆' },
+            { id: 'chicken', name: 'Курица', color: 'white', icon: '🍗' },
+            { id: 'egg', name: 'Яйцо', color: 'white', icon: '🥚' }
+        ];
+
+        let selected = [];
+
+        const grid = document.getElementById('products');
+        const plate = document.getElementById('plate-display');
+        const feedback = document.getElementById('feedback');
+        const counter = document.getElementById('color-counter');
+
+        // Отрисовка кнопок
+        database.forEach(item => {
+            const btn = document.createElement('div');
+            btn.className = 'btn-food';
+            btn.innerHTML = `${item.icon}<br>${item.name}`;
+            btn.onclick = () => toggleProduct(item, btn);
+            grid.appendChild(btn);
+        });
+
+        function toggleProduct(item, btn) {
+            const index = selected.findIndex(p => p.id === item.id);
+            if (index > -1) {
+                selected.splice(index, 1);
+                btn.classList.remove('active');
+            } else {
+                selected.push(item);
+                btn.classList.add('active');
+            }
+            updatePlate();
+        }
+
+        function updatePlate() {
+            // Обновляем визуал тарелки
+            plate.innerHTML = '';
+            if(selected.length === 0) {
+                plate.innerHTML = '<span style="color:#aaa">Тарелка пуста</span>';
+            }
+            selected.forEach(item => {
+                const el = document.createElement('span');
+                el.className = 'plate-item';
+                el.innerHTML = item.icon;
+                el.title = item.name;
+                plate.appendChild(el);
+            });
+
+            // Считаем уникальные цвета
+            const colors = [...new Set(selected.map(item => item.color))];
+            counter.innerHTML = `<strong>Цветов на тарелке: ${colors.length} из 4</strong>`;
+
+            // Логика подсказок (Принцип «Добавь, а не убери»)
+            if (selected.length === 0) {
+                feedback.innerHTML = "Выберите продукты, чтобы получить мягкую подсказку по правилу «4 цветов».";
+            } else if (colors.length < 4) {
+                // Ищем, какого цвета не хватает
+                const allColors = ['red', 'green', 'orange', 'purple'];
+                const missing = allColors.filter(c => !colors.includes(c));
+                const colorNames = { red: 'красного', green: 'зеленого', orange: 'оранжевого', purple: 'фиолетового' };
+                const tipColor = colorNames[missing[0]] || 'нового';
+                
+                feedback.innerHTML = `🌿 Отлично! Сейчас цветов на тарелке: ${colors.length}. Наш организм любит разнообразие. Попробуйте добавить что-то ${tipColor} цвета (например, из списка слева).`;
+            } else {
+                feedback.innerHTML = "🎉 Великолепно! Вы собрали идеальное разноцветие для микробиома без всяких весов и калькуляторов калорий!";
+            }
+        }
+        updatePlate();
+    </script>
+</body>
+</html>

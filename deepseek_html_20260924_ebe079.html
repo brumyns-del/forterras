@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Разноцветная тарелка — Шаг 1</title>
+<style>
+  :root {
+    --green: #4caf50;
+    --orange: #ff9800;
+    --red: #e53935;
+    --dark: #2e3a2e;
+    --bg: #f4f8f4;
+    --card: #ffffff;
+    --muted: #6b7a6b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(135deg, #eaf6ea 0%, #fff7e6 100%);
+    color: var(--dark);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 32px 16px;
+  }
+  #app {
+    width: 100%;
+    max-width: 720px;
+  }
+  .card {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 28px 28px 32px;
+    box-shadow: 0 12px 40px rgba(46, 58, 46, 0.12);
+    animation: fadeIn 0.4s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  h1 {
+    margin: 0 0 8px;
+    font-size: 1.7rem;
+    letter-spacing: -0.5px;
+  }
+  .lead {
+    color: var(--muted);
+    line-height: 1.5;
+    margin: 0 0 24px;
+  }
+  fieldset {
+    border: 1px solid #e3ece3;
+    border-radius: 14px;
+    padding: 16px 18px 18px;
+    margin: 0 0 18px;
+  }
+  legend {
+    font-weight: 600;
+    padding: 0 8px;
+    color: var(--dark);
+  }
+  .options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 6px;
+  }
+  .options label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border: 1.5px solid #dfe8df;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 0.95rem;
+    background: #fbfdfb;
+  }
+  .options label:hover { border-color: var(--green); }
+  .options input { accent-color: var(--green); }
+  .options input:checked + span { font-weight: 600; }
+  .options label:has(input:checked) {
+    border-color: var(--green);
+    background: #eef8ee;
+  }
+  button {
+    width: 100%;
+    padding: 14px 18px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--green), #66bb6a);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.2s;
+    box-shadow: 0 6px 18px rgba(76, 175, 80, 0.35);
+  }
+  button:hover { transform: translateY(-1px); }
+  button:active { transform: translateY(1px); }
+  .error {
+    color: var(--red);
+    font-size: 0.9rem;
+    margin-top: 12px;
+    display: none;
+  }
+  .error.visible { display: block; }
+  .summary {
+    background: #f7fbf7;
+    border-left: 4px solid var(--green);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-top: 20px;
+    line-height: 1.6;
+  }
+  .summary h3 { margin: 0 0 8px; font-size: 1.05rem; }
+  .summary ul { margin: 0; padding-left: 20px; }
+  .summary code {
+    background: #e8f4e8;
+    padding: 1px 6px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+  }
+  .badge {
+    display: inline-block;
+    background: var(--orange);
+    color: #fff;
+    font-size: 0.72rem;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-weight: 600;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+</style>
+</head>
+<body>
+  <div id="app"></div>
+
+<script>
+/* ============================================================================
+   KNOWLEDGE BASE (содержимое внешнего файла knowledge_base.txt)
+   ----------------------------------------------------------------------------
+   Питание по принципу «Тарелки» (Гарвардская тарелка) — простой и научно
+   обоснованный метод составления сбалансированного рациона без подсчёта
+   калорий. Тарелка диаметром 20–22 см визуально делится на сектора:
+
+   🥦 1/2 тарелки — Овощи, зелень и фрукты (клетчатка).
+      • Свежие, тушёные, запечённые овощи, салатные листья, ягоды, фрукты.
+      • Принцип «радуги» — чем разнообразнее цвета, тем лучше.
+      • Исключение: картофель (из-за крахмала) переносится в сектор углеводов.
+      • Польза: витамины, минералы, клетчатка → сытость и пищеварение.
+
+   🍗 1/4 тарелки — Полезный белок.
+      • Рыба, морепродукты, птица (курица, индейка), яйца, нежирное мясо,
+        растительный белок — бобовые (чечевица, нут, фасоль), тофу, орехи.
+      • Избегать: переработанного мяса (колбасы, сосиски, полуфабрикаты).
+      • Польза: мышцы, обновление клеток, сытость.
+
+   🌾 1/4 тарелки — Сложные (цельнозерновые) углеводы.
+      • Крупы (гречка, бурый/дикий рис, овсянка, киноа, булгур), цельнозерновые
+        макароны и хлеб, картофель, батат.
+      • Избегать: белой муки, быстрорастворимых каш, белого риса.
+      • Польза: стабильная энергия без резких скачков сахара.
+
+   🥑 Важные дополнения:
+      • Полезные жиры: нерафинированные растительные масла (оливковое, льняное),
+        авокадо, семечки, орехи — в небольшом количестве.
+      • Вода: чистая вода, чай, кофе без сахара. Исключить сладкие газировки
+        и пакетированные соки.
+
+   Официальные рекомендации и перевод оригинального руководства — на сайте
+   Гарвардской школы общественного здравоохранения (The Healthy Eating Plate).
+   ========================================================================== */
+
+
+/* ============================================================================
+   ГЛОБАЛЬНОЕ СОСТОЯНИЕ ПРИЛОЖЕНИЯ
+   ----------------------------------------------------------------------------
+   Единая точка хранения данных пользователя и прогресса по шагам.
+   На следующих этапах сюда будут добавляться новые поля (бюджет, продукты,
+   сгенерированное меню и т.д.) — без переписывания уже готовых модулей.
+   ========================================================================== */
+const AppState = {
+  currentStep: 1,
+  completedSteps: [],
+
+  // Ответы пользователя, собранные на Шаге 1
+  user: {
+    dietType: null,   // 'all' | 'vegetarian' | 'flexitarian' | 'lactose_free' | 'gluten_free'
+    season: null,     // 'cold' | 'warm'
+    activity: null    // 'sedentary' | 'mobile' | 'active_training'
+  },
+
+  // Базовая структура тарелки (из knowledge_base.txt) — 50/25/25.
+  // На следующих шагах будет адаптироваться под ответы пользователя.
+  plate: {
+    vegetables: 0.5,  // 1/2 тарелки
+    protein: 0.25,    // 1/4 тарелки
+    carbs: 0.25       // 1/4 тарелки
+  },
+
+  // TODO (ШАГ 2): сюда добавим поле user.budget и массив доступных продуктов.
+  // TODO (ШАГ 3): сюда добавим сгенерированное меню / блюда на день.
+  // TODO (ШАГ 4): сюда добавим историю приёмов пищи и обратную связь.
+
+  history: []
+};
+
+// Удобно для отладки из консоли браузера: AppState
+window.AppState = AppState;
+
+
+/* ============================================================================
+   КОНСТАНТЫ (справочники вариантов ответа)
+   ========================================================================== */
+const DIET_OPTIONS = [
+  { value: 'all',          label: 'Всеядный' },
+  { value: 'vegetarian',   label: 'Вегетарианец' },
+  { value: 'flexitarian',  label: 'Флекситарианец' },
+  { value: 'lactose_free', label: 'Без лактозы' },
+  { value: 'gluten_free',  label: 'Без глютена' }
+];
+
+const SEASON_OPTIONS = [
+  { value: 'cold', label: 'Зима–осень' },
+  { value: 'warm', label: 'Весна–лето' }
+];
+
+const ACTIVITY_OPTIONS = [
+  { value: 'sedentary',       label: 'Сидячий' },
+  { value: 'mobile',          label: 'Подвижный' },
+  { value: 'active_training', label: 'Активный день и тренировка' }
+];
+
+
+/* ============================================================================
+   УТИЛИТЫ
+   ========================================================================== */
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, s => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[s]));
+}
+
+// Рендер группы радиокнопок из массива {value,label}
+function renderRadioGroup(name, options) {
+  return `
+    <div class="options">
+      ${options.map(opt => `
+        <label>
+          <input type="radio" name="${name}" value="${opt.value}" />
+          <span>${escapeHtml(opt.label)}</span>
+        </label>
+      `).join('')}
+    </div>
+  `;
+}
+
+// Найти человекочитаемый ярлык по значению в массиве опций
+function labelOf(options, value) {
+  const found = options.find(o => o.value === value);
+  return found ? found.label : '—';
+}
+
+
+/* ============================================================================
+   ШАГ 1 — Знакомство и сбор ответов пользователя
+   ----------------------------------------------------------------------------
+   Модуль полностью изолирован: он умеет только отрисовать форму, собрать
+   три ответа и сохранить их в AppState. Никакой логики генерации меню здесь
+   нет — она появится на следующих шагах.
+   ========================================================================== */
+const Step1 = {
+  id: 1,
+
+  render(container) {
+    container.innerHTML = `
+      <div class="card">
+        <h1>🍽️ Разноцветная тарелка <span class="badge">Шаг 1 из N</span></h1>
+        <p class="lead">
+          Привет! Я — AI-помощник по питанию. Мы не считаем калории и не взвешиваем
+          продукты. Вместо этого соберём твою «разноцветную тарелку» по принципу
+          Гарварда: <strong>½ — овощи и фрукты</strong>,
+          <strong>¼ — белок</strong>, <strong>¼ — сложные углеводы</strong>.
+          Ответь, пожалуйста, на 3 коротких вопроса — это займёт меньше минуты.
+        </p>
+
+        <form id="step1-form" novalidate>
+          <fieldset>
+            <legend>1. Тип питания</legend>
+            ${renderRadioGroup('dietType', DIET_OPTIONS)}
+          </fieldset>
+
+          <fieldset>
+            <legend>2. Текущий сезон</legend>
+            ${renderRadioGroup('season', SEASON_OPTIONS)}
+          </fieldset>
+
+          <fieldset>
+            <legend>3. Уровень активности сегодня</legend>
+            ${renderRadioGroup('activity', ACTIVITY_OPTIONS)}
+          </fieldset>
+
+          <button type="submit">Сохранить ответы</button>
+          <p class="error" id="step1-error">Пожалуйста, ответь на все три вопроса.</p>
+        </form>
+
+        <div id="step1-result"></div>
+      </div>
+    `;
+
+    const form = container.querySelector('#step1-form');
+    form.addEventListener('submit', (e) => this.handleSubmit(e));
+  },
+
+  handleSubmit(event) {
+    event.preventDefault();
+    const form = event.target;
+    const errorEl = document.getElementById('step1-error');
+
+    const data = new FormData(form);
+    const dietType = data.get('dietType');
+    const season   = data.get('season');
+    const activity = data.get('activity');
+
+    // Валидация: все три ответа обязательны
+    if (!dietType || !season || !activity) {
+      errorEl.classList.add('visible');
+      return;
+    }
+    errorEl.classList.remove('visible');
+
+    // Сохраняем ответы в глобальное состояние
+    AppState.user.dietType = dietType;
+    AppState.user.season   = season;
+    AppState.user.activity = activity;
+
+    // Отмечаем шаг как завершённый
+    if (!AppState.completedSteps.includes(this.id)) {
+      AppState.completedSteps.push(this.id);
+    }
+    AppState.currentStep = this.id + 1;
+
+    // Тестовая проверка работоспособности
+    console.log('[Шаг 1] Ответы пользователя сохранены:', AppState.user);
+    alert(
+      'Ответы сохранены!\n\n' +
+      '• Тип питания: ' + labelOf(DIET_OPTIONS, dietType) + '\n' +
+      '• Сезон: ' + labelOf(SEASON_OPTIONS, season) + '\n' +
+      '• Активность: ' + labelOf(ACTIVITY_OPTIONS, activity) + '\n\n' +
+      'Дальше — Шаг 2 (пока не реализован).'
+    );
+
+    // Показываем пользователю краткое резюме и останавливаемся.
+    this.renderSummary(document.getElementById('step1-result'));
+  },
+
+  renderSummary(container) {
+    const { dietType, season, activity } = AppState.user;
+    container.innerHTML = `
+      <div class="summary">
+        <h3>✅ Шаг 1 завершён</h3>
+        <p>Твои ответы:</p>
+        <ul>
+          <li>Тип питания: <code>${escapeHtml(labelOf(DIET_OPTIONS, dietType))}</code></li>
+          <li>Сезон: <code>${escapeHtml(labelOf(SEASON_OPTIONS, season))}</code></li>
+          <li>Активность: <code>${escapeHtml(labelOf(ACTIVITY_OPTIONS, activity))}</code></li>
+        </ul>
+        <p>Программа останавливается и ждёт следующего этапа.</p>
+      </div>
+    `;
+  }
+
+  // TODO (ШАГ 2): здесь появится метод Step2.render(), который прочитает
+  // AppState.user.dietType / season / activity и предложит выбрать бюджет
+  // и список доступных продуктов. Точка внедрения — функция renderStep()
+  // ниже (ветка case 2).
+};
+
+
+/* ============================================================================
+   РОУТЕР ШАГОВ
+   ----------------------------------------------------------------------------
+   Центральный переключатель. На каждом следующем шаге достаточно добавить
+   новую ветку case — основа переписываться не будет.
+   ========================================================================== */
+function renderStep(stepNumber) {
+  const container = document.getElementById('app');
+  switch (stepNumber) {
+    case 1:
+      Step1.render(container);
+      break;
+
+    // TODO (ШАГ 2): раскомментировать и реализовать модуль Step2.
+    // case 2:
+    //   Step2.render(container);
+    //   break;
+
+    // TODO (ШАГ 3): генерация меню на основе AppState.plate и ответов.
+    // case 3:
+    //   Step3.render(container);
+    //   break;
+
+    default:
+      container.innerHTML = `
+        <div class="card">
+          <h1>Шаг ${stepNumber}</h1>
+          <p class="lead">Этот шаг ещё не реализован. Следующий модуль будет добавлен позже.</p>
+        </div>
+      `;
+  }
+}
+
+
+/* ============================================================================
+   ТОЧКА ВХОДА
+   ========================================================================== */
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('[App] Разноцветная тарелка — запуск. Стартовое состояние:', AppState);
+  renderStep(1);
+});
+</script>
+</body>
+</html>

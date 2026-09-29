@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Разноцветная тарелка</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app"></div>
+
+  <!-- Ядро (порядок важен: state → utils → router) -->
+  <script src="core/state.js"></script>
+  <script src="core/utils.js"></script>
+  <script src="core/router.js"></script>
+
+  <!-- Данные (продуктовые стратегии) -->
+  <script src="data/plateStrategies.js"></script>
+
+  <!-- Шаги. Чтобы добавить новый — просто допиши <script> -->
+  <script src="steps/step1.js"></script>
+  <script src="steps/step2.js"></script>
+  <!-- <script src="steps/step3.js"></script> -->
+  <!-- <script src="steps/step4.js"></script> -->
+
+  <!-- Точка входа -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('[App] Запуск. Состояние:', App.State);
+      App.goToStep(1);
+    });
+  </script>
+</body>
+</html>

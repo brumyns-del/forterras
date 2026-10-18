@@ -11,11 +11,18 @@
 (function () {
   const { escapeHtml, labelOf } = App.utils;
 
-  const CATEGORY_META = {
-    vegetables: { title: '🥦 Овощи и фрукты (½ тарелки)', cls: 'veg' },
-    protein:    { title: '🍗 Белок (¼ тарелки)',          cls: 'protein' },
-    carbs:      { title: '🌾 Сложные углеводы (¼ тарелки)', cls: 'carbs' }
-  };
+ 
+const CATEGORY_META = {
+  // Тарелочные группы (½ / ¼ / ¼)
+  vegetables: { title: '🌱 Живые продукты (½ тарелки)', cls: 'veg',     color: '#2e7d32' },
+  protein:    { title: '🍗 Белки (¼ тарелки)',           cls: 'protein', color: '#d84315' },
+  carbs:      { title: '🌾 Углеводы (¼ тарелки)',         cls: 'carbs',   color: '#b28704' },
+  // Отдельные группы
+  fats:       { title: '🥑 Полезные жиры',                cls: 'fats',    color: '#6a4c93' },
+  water:      { title: '💧 Вода и напитки',               cls: 'water',   color: '#00838f' },
+  sweets:     { title: '🍬 Сладкое',                      cls: 'sweets',  color: '#c2185b' },
+  harmful:    { title: '⚠️ Нежелательно и вредно',         cls: 'harmful', color: '#555' }
+};
 
   App.registerStep(2, {
     render(container) {
@@ -86,11 +93,41 @@
       `;
 
       // Навешиваем обработчики
-      container.querySelectorAll('.btn-food').forEach(btn => {
-        btn.addEventListener('click', () => this.toggleProduct(btn.dataset.pid));
+      // Открытие/закрытие дропдаунов
+container.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const dd = toggle.closest('.custom-dropdown');
+    const wasOpen = dd.classList.contains('is-open');
+    container.querySelectorAll('.custom-dropdown.is-open')
+      .forEach(d => d.classList.remove('is-open'));
+    if (!wasOpen) dd.classList.add('is-open');
+  });
+});
+
+
+// Клик вне дропдауна — закрыть все
+document.addEventListener('click', () => {
+  document.querySelectorAll('.custom-dropdown.is-open')
+    .forEach(d => d.classList.remove('is-open'));
+});
+           // Клик по продукту — добавить/убрать с тарелки
+           container.querySelectorAll('.btn-food').forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.toggleProduct(btn.dataset.pid);
+          btn.classList.toggle('active');
+        });
       });
 
-      container.querySelector('#step2-next').addEventListener('click', () => {
+      // Кнопки «Подробнее» — открыть модалку
+      container.querySelectorAll('.details-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.openDetails(btn.dataset.details);
+        });
+      });
+ container.querySelector('#step2-next').addEventListener('click', () => {
         console.log('[Шаг 2.1] Выбранные продукты:', App.State.selectedProducts);
         alert(
           'Шаг 2.1 завершён!\n\n' +
@@ -105,60 +142,138 @@
 
       console.log('[Шаг 2.1] Интерактив запущен для:', App.State.user);
     },
+    
+            renderProductSections(config) {
+      if (!config) return '';
 
-    /* --------------------------------------------------------------------- */
-    renderProductSections(config) {
+      const renderButton = (cat, p) => {
+        const pid = App.productId(cat, p);
+        const isActive = App.State.selectedProducts.includes(pid);
+        return '<button type="button" class="btn-food' + (isActive ? ' active' : '') +
+               '" data-pid="' + escapeHtml(pid) + '">' +
+                                  '<span class="icon">' + (App.COLOR_EMOJI[p.color] || '⚪') + '</span>' +
+                 '<span>' + escapeHtml(p.name) + '</span>' +
+               '</button>';
+      };
+
+      const renderHeader = (cat, meta) => {
+        const hasDetails = App.DETAILS && App.DETAILS[cat];
+        return '<div class="product-section-header">' +
+                 '<h3 class="' + meta.cls + '">' + meta.title + '</h3>' +
+                 (hasDetails
+                   ? '<button type="button" class="details-btn" data-details="' + cat + '">Подробнее →</button>'
+                   : '') +
+               '</div>';
+      };
+
       return Object.keys(CATEGORY_META).map(cat => {
         const meta = CATEGORY_META[cat];
-        const products = config[cat] || [];
-        return `
-          <div class="product-section">
-            <h3 class="${meta.cls}">${meta.title}</h3>
-            <div class="product-buttons">
-              ${products.map(p => {
-                const pid = App.productId(cat, p);
-                return `
-                  <button type="button"
-                          class="btn-food"
-                          data-pid="${escapeHtml(pid)}">
-                    <span class="icon">${p.icon}</span>
-                    <span>${escapeHtml(p.name)}</span>
-                  </button>`;
-              }).join('')}
-            </div>
-          </div>
-        `;
+        const data = config[cat];
+        if (!data) return '';
+
+        // Массив — плоский список продуктов
+        if (Array.isArray(data)) {
+          if (!data.length) return '';
+          return '<div class="product-section">' +
+                   renderHeader(cat, meta) +
+                   '<div class="product-buttons">' +
+                     data.map(p => renderButton(cat, p)).join('') +
+                   '</div>' +
+                 '</div>';
+        }
+
+        // Объект — с подгруппами
+        let subgroupsHtml = '';
+        Object.keys(data).forEach(subTitle => {
+          const products = data[subTitle] || [];
+          if (!products.length) return;
+          subgroupsHtml += '<details class="food-subgroup">' +
+                             '<summary>' + escapeHtml(subTitle) + '</summary>' +
+                             '<div class="food-dropdown-list scrollable">' +
+                               products.map(p => renderButton(cat, p)).join('') +
+                             '</div>' +
+                           '</details>';
+        });
+
+        if (!subgroupsHtml) return '';
+        return '<div class="product-section">' +
+                 renderHeader(cat, meta) +
+                 subgroupsHtml +
+               '</div>';
       }).join('');
     },
 
     /* --------------------------------------------------------------------- */
-    toggleProduct(pid) {
-      const idx = App.State.selectedProducts.indexOf(pid);
-      if (idx > -1) {
-        App.State.selectedProducts.splice(idx, 1);
-      } else {
-        App.State.selectedProducts.push(pid);
-      }
-
-      // Обновляем класс .active на кнопке
-      const btn = document.querySelector(`.btn-food[data-pid="${CSS.escape(pid)}"]`);
-      if (btn) btn.classList.toggle('active', App.State.selectedProducts.includes(pid));
-
-      this.updatePlate();
-    },
-
-    /* --------------------------------------------------------------------- */
+    
     findProductByPid(pid) {
       const config = App.getPlateConfig(App.State.user);
       if (!config) return null;
+
       const [cat, ...nameParts] = pid.split(':');
       const name = nameParts.join(':');
-      const list = config[cat] || [];
+      const data = config[cat];
+      if (!data) return null;
+
+      const list = Array.isArray(data)
+        ? data
+        : Object.values(data).flat();
+
       return list.find(p => p.name === name) || null;
     },
 
+
     /* --------------------------------------------------------------------- */
-    updatePlate() {
+    
+
+    /* --------------------------------------------------------------------- */
+        /* ------------------------------------------------------------------ */
+    toggleProduct(pid) {
+      if (!pid) return;
+
+      const list = App.State.selectedProducts;
+      const idx  = list.indexOf(pid);
+
+      if (idx === -1) {
+        list.push(pid);          // добавляем продукт
+      } else {
+        list.splice(idx, 1);     // убираем, если уже выбран
+      }
+
+      this.updatePlate();        // перерисовать тарелку, счётчик, фидбек
+    },
+
+     /* ------------------------------------------------------------------ */
+    openDetails(cat) {
+      const data = App.DETAILS && App.DETAILS[cat];
+      if (!data) return;
+
+      // Убираем старую модалку, если есть
+      const old = document.getElementById('details-modal');
+      if (old) old.remove();
+
+      const modal = document.createElement('div');
+      modal.id = 'details-modal';
+      modal.className = 'modal-overlay';
+      modal.innerHTML =
+        '<div class="modal-card" role="dialog" aria-modal="true">' +
+          '<button type="button" class="modal-close" aria-label="Закрыть">×</button>' +
+          '<h2>' + escapeHtml(data.title || '') + '</h2>' +
+          '<div class="modal-body">' + (data.html || '') + '</div>' +
+        '</div>';
+
+      document.body.appendChild(modal);
+
+      const close = () => modal.remove();
+      modal.querySelector('.modal-close').addEventListener('click', close);
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) close();
+      });
+      const escHandler = (e) => {
+        if (e.key === 'Escape') { close(); document.removeEventListener('keydown', escHandler); }
+      };
+      document.addEventListener('keydown', escHandler);
+    },
+   updatePlate() {
       const config = App.getPlateConfig(App.State.user);
       if (!config) return;
 
@@ -184,7 +299,7 @@
         } else {
           sector.innerHTML = `
             <div class="items">
-              ${selectedHere.map(p => `<span title="${escapeHtml(p.name)}">${p.icon}</span>`).join('')}
+              ${selectedHere.map(p => `<span title="${escapeHtml(p.name)}">${App.COLOR_EMOJI[p.color] || '⚪'}</span>`).join('')}
             </div>
           `;
         }
@@ -198,9 +313,11 @@
       });
       const totalBright = Object.keys(App.BRIGHT_COLORS).length; // 4
 
-      const counterEl = document.getElementById('color-counter');
+            const counterEl = document.getElementById('color-counter');
       if (counterEl) {
-        counterEl.innerHTML = `🎨 Цветов на тарелке: <strong>${brightColors.size} из ${totalBright}</strong>`;
+        counterEl.innerHTML =
+          `🎨 Цветов на тарелке: <strong>${brightColors.size} из ${totalBright}</strong>` +
+          `<small class="counter-hint">Чем разноцветнее тарелка — тем полезнее меню.</small>`;
       }
 
       // 3. Мягкая подсказка

@@ -119,7 +119,7 @@ button:active { transform: translateY(1px); }
 }
 
 .products-panel { min-width: 0; }
-.product-section { margin-bottom: 16px; }
+.product-section  { margin-bottom: 16px; }
 .product-section h3 {
   margin: 0 0 8px;
   font-size: .95rem;
@@ -235,4 +235,397 @@ button:active { transform: translateY(1px); }
   color: #2c5e3b !important;
   box-shadow: none !important;
 }
-.btn-secondary:hover { background: #e0e8e0 !important; }
+.btn-secondary:hover { background: #e0e8e0 !important; }css
+/* Раскрывающиеся подгруппы "Живых" продуктов */
+.food-subgroup {
+  margin: 0.5rem 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.food-subgroup summary {
+  cursor: pointer;
+  padding: 0.65rem 0.85rem;
+  font-weight: 600;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8fafc;
+}
+
+.food-subgroup summary::-webkit-details-marker {
+  display: none;
+}
+
+.food-subgroup summary::after {
+  content: '▾';
+  transition: transform 0.2s ease;
+}
+
+.food-subgroup[open] summary::after {
+  transform: rotate(180deg);
+}
+
+/* Выпадающий список с прокруткой */
+.food-dropdown-list.scrollable {
+  max-height: 220px;
+  overflow-y: auto;
+  padding: 0.5rem;
+  display: grid;
+  gap: 0.4rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.food-dropdown-list.scrollable .btn-food {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+/* Аккуратный скроллбар */
+.food-dropdown-list.scrollable::-webkit-scrollbar {
+  width: 8px;
+}
+
+.food-dropdown-list.scrollable::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 8px;
+}
+
+.food-dropdown-list.scrollable::-webkit-scrollbar-track {
+  background: transparent;
+}
+/* ===== Шаг 2.1 — кастомные выпадающие списки ===== */
+.custom-dropdown {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 16px;
+  background: #fff;
+  border: 1.5px solid #d0e0d0;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: .95rem;
+  font-weight: 600;
+  text-align: left;
+  color: inherit;
+  transition: border-color .15s, box-shadow .15s;
+}
+.dropdown-toggle:hover { border-color: #a8c8a8; }
+.custom-dropdown.is-open .dropdown-toggle {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(44, 94, 59, .12);
+}
+.dropdown-toggle.veg     { color: #2e7d32; }
+.dropdown-toggle.protein { color: #d84315; }
+.dropdown-toggle.carbs   { color: #b28704; }
+
+.dropdown-arrow {
+  font-size: .8rem;
+  color: #888;
+  transition: transform .2s;
+}
+.custom-dropdown.is-open .dropdown-arrow { transform: rotate(180deg); }
+
+.dropdown-panel {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 8px;
+  background: #fff;
+  border: 1.5px solid #d0e0d0;
+  border-radius: 12px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .10);
+  z-index: 30;
+}
+.custom-dropdown.is-open .dropdown-panel { display: block; }
+
+.dropdown-subgroup-label {
+  padding: 8px 10px 4px;
+  font-size: .78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: #7a8a7a;
+}
+
+.dropdown-item {
+  width: 100%;
+  justify-content: flex-start;
+  text-align: left;
+  border-radius: 8px;
+}
+.dropdown-item .check {
+  margin-left: auto;
+  opacity: 0;
+  font-weight: 700;
+}
+.dropdown-item.active .check { opacity: 1; }
+/* ===== Шаг 2.1 — Этап 2: заголовки групп, модалка ===== */
+
+/* Заголовок группы + кнопка «Подробнее» */
+.product-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.product-section-header h3 { margin: 0; }
+
+.details-btn {
+  flex: 0 0 auto;
+  background: transparent;
+  border: 1px solid #cfd8cf;
+  color: #555;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: .78rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.details-btn:hover {
+  background: #f0f4f0;
+  color: var(--green);
+  border-color: var(--green);
+}
+
+/* Цвета заголовков для новых групп */
+.product-section h3.fats    { color: #6a4c93; }
+.product-section h3.water   { color: #00838f; }
+.product-section h3.sweets  { color: #c2185b; }
+.product-section h3.harmful { color: #555; }
+
+/* Модалка «Подробнее» */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+  animation: modal-fade .15s ease;
+}
+.modal-card {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  max-width: 560px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 24px 24px 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .25);
+  animation: modal-up .2s ease;
+}
+.modal-card h2 {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+  padding-right: 36px;
+}
+.modal-body {
+  font-size: .95rem;
+  line-height: 1.55;
+  color: #333;
+}
+.modal-body p  { margin: 0 0 10px; }
+.modal-body ul { margin: 0 0 10px; padding-left: 20px; }
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  background: transparent;
+  border-radius: 50%;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #888;
+  transition: background .15s, color .15s;
+}
+.modal-close:hover { background: #f0f4f0; color: #333; }
+
+@keyframes modal-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes modal-up {
+  from { transform: translateY(10px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* На телефоне — карточка почти на весь экран */
+@media (max-width: 640px) {
+  .modal-overlay { padding: 8px; align-items: flex-end; }
+  .modal-card {
+    max-height: 92vh;
+    padding: 20px 16px;
+    border-radius: 12px;
+  }
+}/* Подсказка под счётчиком цветов */
+.counter-hint {
+  display: block;
+  margin-top: 6px;
+  font-size: .78rem;
+  color: #888;
+  line-height: 1.4;
+}/* ===== Шаг 2.1 — Этап 2: заголовки групп, модалка ===== */
+
+/* Заголовок группы + кнопка «Подробнее» — на одной строке */
+.product-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.product-section-header h3 {
+  margin: 0;
+  flex: 1 1 auto;    /* заголовок занимает свободное место */
+}
+
+.details-btn {
+  flex: 0 0 auto;    /* кнопка не растягивается */
+  background: transparent;
+  border: 1px solid #cfd8cf;
+  color: #555;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: .78rem;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.details-btn:hover {
+  background: #f0f4f0;
+  color: var(--green);
+  border-color: var(--green);
+}
+
+/* Цвета заголовков для новых групп */
+.product-section h3.fats    { color: #6a4c93; }
+.product-section h3.water   { color: #00838f; }
+.product-section h3.sweets  { color: #c2185b; }
+.product-section h3.harmful { color: #555; }
+
+/* Модалка «Подробнее» */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+  animation: modal-fade .15s ease;
+}
+.modal-card {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  max-width: 560px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 24px 24px 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .25);
+  animation: modal-up .2s ease;
+}
+.modal-card h2 {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+  padding-right: 36px;
+}
+.modal-body {
+  font-size: .95rem;
+  line-height: 1.55;
+  color: #333;
+}
+.modal-body p  { margin: 0 0 10px; }
+.modal-body ul { margin: 0 0 10px; padding-left: 20px; }
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  background: transparent;
+  border-radius: 50%;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #888;
+  transition: background .15s, color .15s;
+}
+.modal-close:hover { background: #f0f4f0; color: #333; }
+
+@keyframes modal-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes modal-up {
+  from { transform: translateY(10px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* На телефоне — карточка почти на весь экран */
+@media (max-width: 640px) {
+  .modal-overlay { padding: 8px; align-items: flex-end; }
+  .modal-card {
+    max-height: 92vh;
+    padding: 20px 16px;
+    border-radius: 12px;
+  }
+}/* ===== Шаг 2.1 — Этап 2: заголовки групп, модалка ===== */
+
+.product-section-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  margin-bottom: 8px !important;
+}
+.product-section-header h3 {
+  margin: 0 !important;
+  flex: 1 1 auto !important;
+}
+.details-btn {
+  flex: 0 0 auto !important;
+  background: transparent !important;
+  border: 1px solid #cfd8cf !important;
+  color: #555 !important;
+  padding: 4px 10px !important;
+  border-radius: 999px !important;
+  font-size: .78rem !important;
+  font-family: inherit !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  transition: background .15s, color .15s, border-color .15s !important;
+}
+.details-btn:hover {
+  background: #f0f4f0 !important;
+  color: var(--green) !important;
+  border-color: var(--green) !important;
+}

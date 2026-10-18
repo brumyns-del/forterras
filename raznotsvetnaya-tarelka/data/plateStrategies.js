@@ -1,109 +1,240 @@
+
 /* ============================================================================
    ПРОДУКТОВЫЕ СТРАТЕГИИ ПО КЛЮЧУ "<dietType>_<activity>"
-   ----------------------------------------------------------------------------
-   Каждый продукт: { name: строка, color: 'red'|'green'|'orange'|'purple'|'yellow'|'white'|'brown',
-                     icon: эмодзи }
-   Цвет используется для правила «4 цветов». Белый/коричневый — нейтральные
-   (не учитываются в счётчике, но красиво смотрятся на тарелке).
    ========================================================================== */
 window.App = window.App || {};
 
 App.PLATE_STRATEGIES = {
 
-  /* ----- ШАГ 2.1: Всеядный + Сидячий ---------------------------------- */
   'all_sedentary': {
-    cold: { // Зима–осень
-      vegetables: [
-        { name: 'Капуста белокочанная', color: 'green',  icon: '🥬' },
-        { name: 'Морковь',              color: 'orange', icon: '🥕' },
-        { name: 'Свёкла отварная',      color: 'purple', icon: '🟣' },
-        { name: 'Лук репчатый',         color: 'white',  icon: '🧅' },
-        { name: 'Овощная смесь (зам.)', color: 'green',  icon: '🥦' },
-        { name: 'Яблоки',               color: 'red',    icon: '🍎' },
-        { name: 'Мандарины',            color: 'orange', icon: '🍊' }
-      ],
-      protein: [
-        { name: 'Яйца куриные',         color: 'white',  icon: '🥚' },
-        { name: 'Курица (бедро)',       color: 'white',  icon: '🍗' },
-        { name: 'Минтай / хек',         color: 'white',  icon: '🐟' },
-        { name: 'Фасоль или горох',     color: 'brown',  icon: '🫘' }
-      ],
-      carbs: [
-        { name: 'Гречка',               color: 'brown',  icon: '🌾' },
-        { name: 'Овсянка',              color: 'brown',  icon: '🥣' },
-        { name: 'Картофель',            color: 'brown',  icon: '🥔' },
-        { name: 'Цельнозерновой хлеб',  color: 'brown',  icon: '🍞' }
-      ],
-      note: 'Сидячий образ жизни: порция углеводов ≈ с кулак, порция белка ≈ с ладонь. Овощей — половина тарелки без ограничений.'
-    },
 
-    warm: { // Весна–лето
-      vegetables: [
-        { name: 'Огурцы свежие',        color: 'green',  icon: '🥒' },
-        { name: 'Помидоры',             color: 'red',    icon: '🍅' },
-        { name: 'Кабачки',              color: 'green',  icon: '🥒' },
-        { name: 'Листовой салат',       color: 'green',  icon: '🥗' },
-        { name: 'Молодая капуста',      color: 'green',  icon: '🥬' },
-        { name: 'Ягоды',                color: 'red',    icon: '🍓' },
-        { name: 'Яблоки / сливы',       color: 'red',    icon: '🍎' }
-      ],
-      protein: [
-        { name: 'Яйца куриные',         color: 'white',  icon: '🥚' },
-        { name: 'Курица (грудка)',      color: 'white',  icon: '🍗' },
-        { name: 'Творог 5%',            color: 'white',  icon: '🧀' },
-        { name: 'Минтай / хек',         color: 'white',  icon: '🐟' }
-      ],
-      carbs: [
-        { name: 'Гречка',               color: 'brown',  icon: '🌾' },
-        { name: 'Рис бурый',            color: 'brown',  icon: '🍚' },
-        { name: 'Молодой картофель',    color: 'brown',  icon: '🥔' },
-        { name: 'Цельнозерновой хлеб',  color: 'brown',  icon: '🍞' }
-      ],
-      note: 'Сидячий образ жизни: порция углеводов ≈ с кулак, порция белка ≈ с ладонь. Летом добавь побольше свежих овощей и ягод.'
+    /* ====================================================================
+       ОБЩИЕ ГРУППЫ (одинаковы зимой и летом)
+       ==================================================================== */
+
+    fats: [
+      { name: 'Оливковое масло Extra Virgin', color: 'green' },
+      { name: 'Тыквенное масло',              color: 'green' },
+      { name: 'Подсолнечное масло (нерафин.)', color: 'yellow' },
+      { name: 'Горчичное масло (нерафин.)',   color: 'yellow' },
+      { name: 'Сливочное масло 82%',          color: 'yellow' },
+      { name: 'Рыбий жир',                    color: 'orange' },
+      { name: 'Кокосовое масло',              color: 'white' }
+    ],
+
+    water: [
+      { name: 'Вода питьевая',     color: 'white' },
+      { name: 'Кофе',              color: 'brown' },
+      { name: 'Цикорий',           color: 'brown' },
+      { name: 'Миндальное молоко', color: 'white' },
+      { name: 'Кокосовое молоко',  color: 'white' },
+      { name: 'Зелёный чай',       color: 'green' },
+      { name: 'Матча',             color: 'green' },
+      { name: 'Чёрный чай',        color: 'orange' },
+      { name: 'Чай каркаде',       color: 'red' },
+      { name: 'Анчан (синий чай)', color: 'purple' }
+    ],
+
+    sweets: [
+      { name: 'Тёмный шоколад 70%', color: 'brown' },
+      { name: 'Мёд',                color: 'yellow' }
+    ],
+
+    harmful: [
+      { name: 'Газировка сладкая', color: 'red' },
+      { name: 'Фастфуд',           color: 'orange' }
+    ],
+
+    /* ====================================================================
+       ЗИМА–ОСЕНЬ
+       ==================================================================== */
+
+    cold: {
+      vegetables: {
+        'Овощи и зелень': [
+          { name: 'Шпинат',                   color: 'green' },
+          { name: 'Брокколи',                 color: 'green' },
+          { name: 'Руккола',                  color: 'green' },
+          { name: 'Огурцы',                   color: 'green' },
+          { name: 'Стручковая фасоль',        color: 'green' },
+          { name: 'Зелёный лук',              color: 'green' },
+          { name: 'Водоросли (нори, вакаме)', color: 'green' },
+          { name: 'Кукуруза',                 color: 'yellow' },
+          { name: 'Жёлтый болгарский перец',  color: 'yellow' },
+          { name: 'Морковь',                  color: 'orange' },
+          { name: 'Тыква',                    color: 'orange' },
+          { name: 'Батат',                    color: 'orange' },
+          { name: 'Томаты',                   color: 'red' },
+          { name: 'Томатная паста',           color: 'red' },
+          { name: 'Баклажаны',                color: 'purple' },
+          { name: 'Краснокочанная капуста',   color: 'purple' },
+          { name: 'Свёкла',                   color: 'purple' },
+          { name: 'Лук репчатый',             color: 'white' },
+          { name: 'Чеснок',                   color: 'white' },
+          { name: 'Цветная капуста',          color: 'white' },
+          { name: 'Имбирь',                   color: 'white' },
+          { name: 'Белая редька',             color: 'white' },
+          { name: 'Шампиньоны',               color: 'brown' },
+          { name: 'Вешенки',                  color: 'brown' }
+        ],
+        'Фрукты': [
+          { name: 'Киви',            color: 'green' },
+          { name: 'Авокадо',         color: 'green' },
+          { name: 'Лимоны',          color: 'yellow' },
+          { name: 'Бананы',          color: 'yellow' },
+          { name: 'Ананасы',         color: 'yellow' },
+          { name: 'Хурма',           color: 'orange' },
+          { name: 'Апельсины',       color: 'orange' },
+          { name: 'Мандарины',       color: 'orange' },
+          { name: 'Облепиха',        color: 'orange' },
+          { name: 'Абрикосы',        color: 'orange' },
+          { name: 'Гранат',          color: 'red' },
+          { name: 'Арбуз',           color: 'red' },
+          { name: 'Клубника',        color: 'red' },
+          { name: 'Клюква',          color: 'red' },
+          { name: 'Брусника',        color: 'red' },
+          { name: 'Грейпфрут',       color: 'red' },
+          { name: 'Черника',         color: 'purple' },
+          { name: 'Голубика',        color: 'purple' },
+          { name: 'Ежевика',         color: 'purple' },
+          { name: 'Тёмный виноград', color: 'purple' },
+          { name: 'Инжир',           color: 'purple' }
+        ],
+        'Проростки и микрозелень': [
+          { name: 'Подсолнечник (проростки)', color: 'yellow' },
+          { name: 'Льняное семя',             color: 'brown' },
+          { name: 'Тыквенные семечки',        color: 'green' }
+        ],
+        'Специи': [
+          { name: 'Базилик сушёный', color: 'green' },
+          { name: 'Орегано',         color: 'green' },
+          { name: 'Куркума',         color: 'yellow' },
+          { name: 'Карри',           color: 'orange' },
+          { name: 'Паприка сушёная', color: 'red' }
+        ],
+        'Переработанные продукты': [
+          { name: 'Овощи консервированные', color: 'green' }
+        ]
+      },
+
+      protein: {
+        'Бобовые и орехи': [
+          { name: 'Нут',              color: 'yellow' },
+          { name: 'Красная чечевица', color: 'orange' },
+          { name: 'Красная фасоль',   color: 'red' },
+          { name: 'Чёрная чечевица',  color: 'purple' },
+          { name: 'Тёмная фасоль',    color: 'purple' },
+          { name: 'Грецкие орехи',    color: 'white' },
+          { name: 'Миндаль',          color: 'white' },
+          { name: 'Фисташки',         color: 'green' }
+        ],
+        'Молочные продукты': [
+          { name: 'Твёрдые выдержанные сыры', color: 'yellow' },
+          { name: 'Топлёное масло (гхи)',     color: 'yellow' },
+          { name: 'Сыр Чеддер',               color: 'orange' },
+          { name: 'Сыр тофу',                 color: 'white' },
+          { name: 'Натуральный йогурт',       color: 'white' }
+        ],
+        'Яйца': [
+          { name: 'Яйца куриные (белок)',  color: 'white' },
+          { name: 'Желтки фермерских яиц', color: 'yellow' }
+        ],
+        'Птица': [
+          { name: 'Филе птицы',     color: 'white' },
+          { name: 'Курица (бедро)', color: 'white' }
+        ],
+        'Рыба и морепродукты': [
+          { name: 'Дикий лосось', color: 'red' },
+          { name: 'Дикая форель', color: 'red' },
+          { name: 'Белая рыба',   color: 'white' },
+          { name: 'Минтай / хек', color: 'white' }
+        ],
+        'Красное мясо': [
+          { name: 'Говядина', color: 'red' },
+          { name: 'Баранина', color: 'red' }
+        ],
+        'Переработанные продукты': [
+          { name: 'Колбаса варёная', color: 'red' }
+        ]
+      },
+
+      carbs: {
+        'Цельнозерновые продукты': [
+          { name: 'Цельнозерновой белый хлеб', color: 'white' }
+        ],
+        'Крупы': [
+          { name: 'Гречка',               color: 'white' },
+          { name: 'Овсянка долгой варки', color: 'white' },
+          { name: 'Пшено',                color: 'yellow' },
+          { name: 'Красный рис',          color: 'orange' },
+          { name: 'Красное киноа',        color: 'orange' },
+          { name: 'Чёрный (дикий) рис',   color: 'purple' },
+          { name: 'Чёрное киноа',         color: 'purple' }
+        ],
+        'Хлеб': [
+          { name: 'Хлеб белый цельнозерновой', color: 'white' },
+          { name: 'Хлеб ржаной', color: 'brown' },
+          { name: 'Хлеб черный цельнозерновой', color: 'brown' }
+        ],
+        'Крахмалистые корнеплоды': [
+          { name: 'Картофель', color: 'white' },
+          { name: 'Батат',     color: 'orange' }
+        ],
+        'Переработанные продукты': [
+          { name: 'Белый рис', color: 'white' }
+        ]
+      },
+
+      note: 'Сидячий образ жизни: порция углеводов ≈ с кулак, порция белка ≈ с ладонь. Овощей — половина тарелки без ограничений.'
     }
   }
-
-  /* TODO: Шаг 2.2 — Вегетарианец + Сидячий */
-  // 'vegetarian_sedentary': { cold: {...}, warm: {...} },
-
-  /* TODO: Шаг 2.3 — Флекситарианец + Сидячий */
-  // 'flexitarian_sedentary': { cold: {...}, warm: {...} },
-
-  /* TODO: Шаг 2.4 — Без лактозы + Сидячий */
-  // 'lactose_free_sedentary': { cold: {...}, warm: {...} },
-
-  /* TODO: Шаг 2.5 — Без глютена + Сидячий */
-  // 'gluten_free_sedentary': { cold: {...}, warm: {...} },
-
-  /* TODO: Шаг 2.6 — Профили для активных */
-  // 'all_mobile':          { cold: {...}, warm: {...} },
-  // 'all_active_training': { cold: {...}, warm: {...} },
 };
 
 /**
- * Возвращает конфиг тарелки под текущего пользователя или null.
+ * Возвращает конфиг тарелки под текущего пользователя.
  */
 App.getPlateConfig = function (user) {
   const key = `${user.dietType}_${user.activity}`;
-  const bySeason = App.PLATE_STRATEGIES[key];
-  if (!bySeason) return null;
-  return bySeason[user.season] || null;
+  const strat = App.PLATE_STRATEGIES[key];
+  if (!strat) return null;
+
+  const seasonal = strat[user.season] || strat.cold; // Если нет нужного сезона, берем cold
+  if (!seasonal) return null;
+
+  return Object.assign({}, seasonal, {
+    fats:    strat.fats    || [],
+    water:   strat.water   || [],
+    sweets:  strat.sweets  || [],
+    harmful: strat.harmful || []
+  });
 };
 
 /**
- * Уникальный идентификатор продукта (для хранения выбранных).
+ * Уникальный идентификатор продукта.
  */
 App.productId = function (category, product) {
   return `${category}:${product.name}`;
 };
 
-/**
- * Справочник «ярких» цветов для правила «4 цветов».
- * Белый и коричневый — нейтральные, не считаются.
- */
+/* ----------------------------------------------------------------------------
+   ПАЛИТРА И КРУЖОЧКИ
+---------------------------------------------------------------------------- */
+App.COLOR_EMOJI = {
+  green:  '🟢',
+  yellow: '🟡',
+  orange: '🟠',
+  red:    '🔴',
+  purple: '🟣',
+  white:  '⚪',
+  brown:  '🟤'
+};
+
 App.BRIGHT_COLORS = {
-  red:    { label: 'красный',    suggestion: 'красного' },
-  green:  { label: 'зелёный',    suggestion: 'зелёного' },
-  orange: { label: 'оранжевый',  suggestion: 'оранжевого' },
-  purple: { label: 'фиолетовый', suggestion: 'фиолетового' }
+  green:  { label: 'изумрудно-зелёный',    suggestion: 'зелёного' },
+  yellow: { label: 'золотисто-жёлтый',     suggestion: 'жёлтого' },
+  orange: { label: 'янтарно-оранжевый',    suggestion: 'оранжевого' },
+  red:    { label: 'рубиново-красный',     suggestion: 'красного' },
+  purple: { label: 'сапфирово-фиолетовый', suggestion: 'фиолетового' },
+  white:  { label: 'мраморно-белый',       suggestion: 'белого' },
+  brown:  { label: 'древесно-коричневый',  suggestion: 'коричневого' }
 };

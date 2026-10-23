@@ -12,28 +12,9 @@ App.PLATE_STRATEGIES = {
        ОБЩИЕ ГРУППЫ (одинаковы зимой и летом)
        ==================================================================== */
 
-    fats: [
-      { name: 'Оливковое масло Extra Virgin', color: 'green' },
-      { name: 'Тыквенное масло',              color: 'green' },
-      { name: 'Подсолнечное масло (нерафин.)', color: 'yellow' },
-      { name: 'Горчичное масло (нерафин.)',   color: 'yellow' },
-      { name: 'Сливочное масло 82%',          color: 'yellow' },
-      { name: 'Рыбий жир',                    color: 'orange' },
-      { name: 'Кокосовое масло',              color: 'white' }
-    ],
+    fats: ['fat_olive', 'fat_pumpkin', 'fat_sunflower', 'fat_butter', 'fat_fish', 'fat_coconut'],
 
-    water: [
-      { name: 'Вода питьевая',     color: 'white' },
-      { name: 'Кофе',              color: 'brown' },
-      { name: 'Цикорий',           color: 'brown' },
-      { name: 'Миндальное молоко', color: 'white' },
-      { name: 'Кокосовое молоко',  color: 'white' },
-      { name: 'Зелёный чай',       color: 'green' },
-      { name: 'Матча',             color: 'green' },
-      { name: 'Чёрный чай',        color: 'orange' },
-      { name: 'Чай каркаде',       color: 'red' },
-      { name: 'Анчан (синий чай)', color: 'purple' }
-    ],
+    water: ['water_plain', 'water_coffee', 'water_cocoa', 'water_matcha', 'water_karkade', 'water_anchan'],
 
     sweets: [
       { name: 'Тёмный шоколад 70%', color: 'brown' },
@@ -202,9 +183,9 @@ App.getPlateConfig = function (user) {
   if (!seasonal) return null;
 
   return Object.assign({}, seasonal, {
-    fats:    strat.fats    || [],
-    water:   strat.water   || [],
-    sweets:  strat.sweets  || [],
+    fats: (strat.fats || []).map(id => App.DB.Products[id]).filter(Boolean),
+    water: (strat.water || []).map(id => App.DB.Products[id]).filter(Boolean),
+    sweets: strat.sweets || [],
     harmful: strat.harmful || []
   });
 };

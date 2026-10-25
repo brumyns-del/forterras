@@ -67,6 +67,7 @@
         },
         renderProductSections(config) {
             if (!config) return '';
+
             const renderButton = (cat, p) => {
                 const pid = App.productId(cat, p);
                 const isActive = App.State.selectedProducts.includes(pid);
@@ -75,23 +76,40 @@
 
             const renderHeader = (cat, meta) => {
                 const hasDetails = App.DETAILS && App.DETAILS[cat];
-                return '<div class="product-section-header"><h3 class="' + meta.cls + '">' + meta.title + '</h3>' + (hasDetails ? '<button type="button" class="details-btn" data-details="' + cat + '">Подробнее →</button>' : '') + '</div>';
+                return '<div class="product-section-header">' +
+                    '<h3 class="' + meta.cls + '">' + meta.title + '</h3>' +
+                    (hasDetails ? '<button type="button" class="details-btn" data-details="' + cat + '">Подробнее →</button>' : '') +
+                    '</div>';
             };
 
             return Object.keys(CATEGORY_META).map(cat => {
                 const meta = CATEGORY_META[cat];
                 const data = config[cat];
                 if (!data) return '';
+
+                // 1. Обычный список продуктов (массив)
                 if (Array.isArray(data)) {
                     if (!data.length) return '';
-                    return '<div class="product-section">' + renderHeader(cat, meta) + '<div class="product-buttons">' + data.map(p => renderButton(cat, p)).join('') + '</div></div>';
+                    return '<div class="product-section">' + renderHeader(cat, meta) +
+                        '<div class="product-buttons scrollable-box">' +
+                        data.map(p => renderButton(cat, p)).join('') +
+                        '</div>' +
+                        '</div>';
                 }
+
+                // 2. Список с подгруппами (объект)
                 let subgroupsHtml = '';
                 Object.keys(data).forEach(subTitle => {
                     const products = data[subTitle] || [];
                     if (!products.length) return;
-                    subgroupsHtml += '<details class="food-subgroup"><summary>' + escapeHtml(subTitle) + '</summary><div class="food-dropdown-list scrollable">' + products.map(p => renderButton(cat, p)).join('') + '</div></details>';
+                    subgroupsHtml += '<details class="food-subgroup">' +
+                        '<summary>' + escapeHtml(subTitle) + '</summary>' +
+                        '<div class="food-dropdown-list scrollable-box">' +
+                        products.map(p => renderButton(cat, p)).join('') +
+                        '</div>' +
+                        '</details>';
                 });
+
                 if (!subgroupsHtml) return '';
                 return '<div class="product-section">' + renderHeader(cat, meta) + subgroupsHtml + '</div>';
             }).join('');

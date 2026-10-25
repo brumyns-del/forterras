@@ -628,4 +628,215 @@ button:active { transform: translateY(1px); }
   background: #f0f4f0 !important;
   color: var(--green) !important;
   border-color: var(--green) !important;
+}/* ===== Окошко с ползунком для продуктов ===== */
+/* ===== Окно прокрутки ===== */
+.scrollable-box {
+  max-height: 165px !important;
+  /* Высота ровно на 3 продукта */
+  overflow-y: auto !important;
+  /* Вертикальный ползунок */
+  overflow-x: hidden !important;
+  /* Прячем горизонтальный */
+  background: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 6px;
+  margin-top: 5px;
+
+  display: flex !important;
+  flex-direction: column !important;
+  /* Строго в столбик */
+  flex-wrap: nowrap !important;
+  /* Запрещаем перенос в колонки */
+  gap: 6px !important;
+}
+
+/* Принудительно растягиваем карточки на всю ширину */
+/* Принудительно растягиваем карточки на всю ширину */
+.scrollable-box product-card {
+  width: 100% !important;
+  display: block !important;
+  margin-bottom: 0 !important;
+}
+
+.scrollable-box .btn-food {
+  width: 100% !important;
+  display: flex !important;
+  /* Возвращаем гибкость */
+  align-items: center !important;
+  /* Выравниваем по центру по вертикали */
+  justify-content: flex-start !important;
+  /* Прижимаем кружок и текст влево */
+  text-align: left !important;
+  /* Текст строго слева */
+  box-sizing: border-box !important;
+  padding: 8px 12px !important;
+}
+
+/* Отступ для текста, чтобы он не прилипал к кружочку */
+.scrollable-box .btn-food span:not(.icon) {
+  margin-left: 8px !important;
+}
+/* Красивый ползунок */
+.scrollable-box::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollable-box::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.scrollable-box::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+/* ===== Выравнивание заголовков и кнопки "Подробнее" ===== */
+.product-section-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  gap: 10px !important;
+  margin-bottom: 8px !important;
+}
+
+.product-section-header h3 {
+  flex: 1 1 auto !important;
+  margin: 0 !important;
+  line-height: 1.3 !important;
+  font-size: 1rem !important;
+}
+
+.details-btn {
+  flex: 0 0 auto !important;
+  white-space: nowrap !important;
+}/* ===== Сделать тарелку прилипающей при прокрутке ===== */
+.plate-panel {
+  position: sticky !important;
+  top: 20px !important;
+  /* Отступ от верхнего края экрана */
+  align-self: start !important;
+  /* Важно: не дает блоку растягиваться на всю высоту */
+}
+
+/* На телефонах отключаем прилипание, чтобы тарелка не перекрывала экран */
+@media (max-width: 768px) {
+  .plate-panel {
+    position: static !important;
+  }
+}/* ============================================================================
+/* ============================================================================
+   ФИНАЛЬНАЯ 3D ТАРЕЛКА (Идеальное совпадение цветов и кружочков)
+   ========================================================================== */
+
+.plate-circle {
+  position: relative !important;
+  width: 280px !important;
+  height: 280px !important;
+  border-radius: 50% !important;
+  margin: 20px auto !important;
+  border: 12px solid #ffffff !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1), inset 0 0 20px rgba(0, 0, 0, 0.05) !important;
+
+  /* Раскрашиваем сектора: верх-право красный, низ-право желтый, левая половина зеленая */
+  background: conic-gradient(#e53935 0% 25%,
+      #f9a825 25% 50%,
+      #43a047 50% 100%) !important;
+
+  overflow: hidden !important;
+}
+
+/* Прозрачные контейнеры для текста и продуктов */
+.plate-sector {
+  position: absolute !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: transparent !important;
+}
+
+/* Жестко привязываем контейнеры к нужным цветам */
+.pc-veg {
+  top: 0 !important;
+  left: 0 !important;
+  width: 50% !important;
+  height: 100% !important;
+}
+
+/* Слева */
+.pc-protein {
+  top: 0 !important;
+  right: 0 !important;
+  width: 50% !important;
+  height: 50% !important;
+}
+
+/* Справа сверху */
+.pc-carbs {
+  bottom: 0 !important;
+  right: 0 !important;
+  width: 50% !important;
+  height: 50% !important;
+}
+
+/* Справа снизу */
+
+/* Текст (½ и ¼) */
+.plate-sector .label {
+  font-size: 1.6rem !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3) !important;
+  line-height: 1 !important;
+}
+
+.plate-sector small {
+  font-size: 0.8rem !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-weight: 600 !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3) !important;
+  margin-top: 2px !important;
+}
+
+/* Контейнер для кружочков */
+.plate-sector .items {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  align-content: center !important;
+  gap: 4px !important;
+  max-width: 90% !important;
+  max-height: 90% !important;
+  overflow: hidden !important;
+}
+
+/* Сдвигаем кружочки к центру, чтобы они не прилипали к краям тарелки */
+.pc-veg .items {
+  padding-left: 10px !important;
+}
+
+.pc-protein .items {
+  padding-right: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+.pc-carbs .items {
+  padding-right: 10px !important;
+  padding-top: 10px !important;
+}
+
+/* Размер кружочков */
+.plate-sector .items span {
+  font-size: 1.3rem !important;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3)) !important;
+}
+
+/* ⚠️ ГЛАВНЫЙ ТРЮК: Если в секторе есть кружочки продуктов, 
+   мы полностью скрываем текст "½" и "¼", чтобы они не накладывались! */
+.plate-sector:has(.items) .label,
+.plate-sector:has(.items) small {
+  display: none !important;
 }

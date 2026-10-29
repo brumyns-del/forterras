@@ -52,3 +52,7 @@ App.DB = {
         }
     }
 };
+// Сливаем импортированные данные из USDA с нашей базой
+if (window.App && App.DB_IMPORT) {
+    Object.assign(App.DB.Products, App.DB_IMPORT);
+}

@@ -1,35 +1,78 @@
-console.log("--- 1. Скрипт запустился! ---");
+const fs = require('fs');
+const csv = require('csv-parser');
+const path = require('path');
 
-async function fetchData() {
-    console.log("--- 2. Начинаем отправлять запрос в базу данных... ---");
+console.log("1. Начинаем сборку двуязычной базы USDA...");
 
-    const url = "https://world.openfoodfacts.org/api/v2/search?categories_tags=en:sprouts&page_size=5";
+const filePath = path.join(__dirname, 'food.csv');
+const allProducts = {};
+const uniqueNames = new Set();
 
-    try {
-        // Добавляем таймер: если сервер не ответит за 10 секунд, мы прервем попытку
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 10000);
+const badWords = ['canned', 'frozen', 'baby food', 'fast food', 'restaurant', 'cooked', 'boiled', 'dehydrated'];
 
-        const response = await fetch(url, { signal: controller.signal });
-        clearTimeout(timeoutId);
+// Словарь для перевода
+const ruDictionary = {
+    'broccoli': 'Брокколи', 'spinach': 'Шпинат', 'carrot': 'Морковь', 'apple': 'Яблоко',
+    'banana': 'Банан', 'orange': 'Апельсин', 'tomato': 'Томат', 'potato': 'Картофель',
+    'cucumber': 'Огурец', 'lettuce': 'Салат', 'onion': 'Лук', 'garlic': 'Чеснок',
+    'strawberry': 'Земляника', 'grape': 'Виноград', 'peach': 'Персик', 'pear': 'Груша',
+    'corn': 'Кукуруза', 'pepper': 'Перец', 'cabbage': 'Капуста', 'beet': 'Свёкла',
+    'sprout': 'Проростки', 'bean': 'Фасоль', 'pea': 'Горох', 'avocado': 'Авокадо',
+    'lemon': 'Лимон', 'lime': 'Лайм', 'melon': 'Дыня', 'watermelon': 'Арбуз'
+};
 
-        console.log("--- 3. Сервер ответил! Код ответа: " + response.status + " ---");
+fs.createReadStream(filePath)
+    .pipe(csv())
+    .on('data', (row) => {
+        if (Object.keys(allProducts).length >= 200) return;
 
-        const data = await response.json();
-        console.log("--- 4. Данные расшифрованы! Количество продуктов: " + data.products.length + " ---");
+        const name = row.description ? row.description.toLowerCase() : '';
+        const categoryId = row.food_category_id;
 
-        data.products.forEach((p, index) => {
-            console.log(`${index + 1}. ${p.product_name_ru || p.product_name}`);
-        });
+        // Овощи (11), Фрукты (9) или Проростки
+        if (categoryId === '11' || categoryId === '9' || name.includes('sprout')) {
+            if (badWords.some(bad => name.includes(bad))) return;
 
-    } catch (error) {
-        console.log("--- ОШИБКА! ---");
-        if (error.name === 'AbortError') {
-            console.log("Превышено время ожидания (10 сек). База данных не отвечает (возможно, проблемы с интернетом или блокировка).");
-        } else {
-            console.log("Текст ошибки:", error.message);
+            const cleanName = row.description.split(',')[0].trim();
+            const lowerClean = cleanName.toLowerCase();
+
+            if (uniqueNames.has(lowerClean)) return;
+            uniqueNames.add(lowerClean);
+
+            // Формируем двуязычное название (English / Russian)
+            let finalName = cleanName; // По умолчанию английское
+            Object.keys(ruDictionary).forEach(eng => {
+                if (lowerClean.includes(eng)) {
+                    finalName = `${cleanName} / ${ruDictionary[eng]}`; // Склеиваем: Английский / Русский
+                }
+            });
+
+            // Определяем цвет
+            let color = 'white';
+            if (name.includes('green') || name.includes('broccoli') || name.includes('spinach') || name.includes('lettuce') || name.includes('cucumber')) color = 'green';
+            if (name.includes('red') || name.includes('tomato') || name.includes('strawberry')) color = 'red';
+            if (name.includes('orange') || name.includes('carrot')) color = 'orange';
+            if (name.includes('yellow') || name.includes('corn')) color = 'yellow';
+            if (name.includes('purple') || name.includes('eggplant')) color = 'purple';
+
+            const safeId = 'usda_' + row.fdc_id;
+
+            // Сортируем по группам (Овощи, Фрукты или Проростки)
+            let group = categoryId === '9' ? 'Фрукты' : 'Овощи и зелень';
+            if (name.includes('sprout')) group = 'Проростки и микрозелень'; // Выносим проростки отдельно
+
+            allProducts[safeId] = {
+                name: finalName,
+                category: 'vegetables',
+                group: group,
+                color: color
+            };
         }
-    }
-}
+    })
+    .on('end', () => {
+        console.log(`\n✅ Сборка завершена. Продуктов: ${Object.keys(allProducts).length}`);
 
-fetchData();
+        const jsCode = `window.App = window.App || {};\nApp.DB_IMPORT = ${JSON.stringify(allProducts, null, 2)};`;
+        fs.writeFileSync(path.join(__dirname, 'usda-import.js'), jsCode);
+        console.log("💾 Результат сохранен в файл: scripts/usda-import.js");
+    });

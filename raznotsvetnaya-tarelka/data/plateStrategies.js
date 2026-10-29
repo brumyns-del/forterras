@@ -179,17 +179,40 @@ App.getPlateConfig = function (user) {
   const strat = App.PLATE_STRATEGIES[key];
   if (!strat) return null;
 
-  const seasonal = strat[user.season] || strat.cold; // Если нет нужного сезона, берем cold
+  const seasonal = strat[user.season] || strat.cold;
   if (!seasonal) return null;
 
+  // 1. Сначала создаем "коробку" mappedVeg и переводим старые ID в продукты
+  const vegData = seasonal.vegetables || {};
+  const mappedVeg = {};
+
+  Object.keys(vegData).forEach(sub => {
+    mappedVeg[sub] = vegData[sub].map(item => {
+      if (typeof item === 'string') return App.DB.Products[item];
+      return item;
+    }).filter(Boolean);
+  });
+
+  // 2. ТЕПЕРЬ добавляем новые продукты из базы USDA в нашу коробку
+  if (window.App && App.DB && App.DB.Products) {
+    Object.keys(App.DB.Products).forEach(id => {
+      if (id.startsWith('usda_')) {
+        const p = App.DB.Products[id];
+        if (!mappedVeg[p.group]) mappedVeg[p.group] = []; // Создаем подгруппу, если её нет
+        mappedVeg[p.group].push(p);
+      }
+    });
+  }
+
+  // 3. Возвращаем готовый результат
   return Object.assign({}, seasonal, {
+    vegetables: mappedVeg,
     fats: (strat.fats || []).map(id => App.DB.Products[id]).filter(Boolean),
     water: (strat.water || []).map(id => App.DB.Products[id]).filter(Boolean),
     sweets: strat.sweets || [],
     harmful: strat.harmful || []
   });
 };
-
 /**
  * Уникальный идентификатор продукта.
  */

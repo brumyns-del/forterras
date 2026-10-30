@@ -242,3 +242,47 @@ App.BRIGHT_COLORS = {
   white:  { label: 'мраморно-белый',       suggestion: 'белого' },
   brown:  { label: 'древесно-коричневый',  suggestion: 'коричневого' }
 };
+/* ============================================================================
+   ФУНКЦИЯ СБОРКИ ТАРЕЛКИ
+   ========================================================================== */
+App.getPlateConfig = function (user) {
+  const key = `${user.dietType}_${user.activity}`;
+  const strat = App.PLATE_STRATEGIES[key];
+  if (!strat) return null;
+
+  const seasonal = strat[user.season] || strat.cold;
+  if (!seasonal) return null;
+
+  // 1. Создаем пустые коробки для групп
+  const mappedVeg = { 'Овощи и зелень': [], 'Фрукты': [], 'Проростки и микрозелень': [] };
+  const mappedProt = { 'Яйца': [], 'Птица': [], 'Красное мясо': [], 'Рыба и морепродукты': [], 'Бобовые и орехи': [], 'Молочные продукты': [] };
+  const mappedCarbs = { 'Крупы': [], 'Хлеб': [], 'Крахмалистые корнеплоды': [], 'Переработанные продукты': [] };
+
+  // 2. Берем ВСЕ продукты из нашей новой базы и раскладываем по коробкам
+  Object.values(App.DB.Products).forEach(p => {
+    if (p.category === 'vegetables') {
+      if (p.group === 'Фрукты') mappedVeg['Фрукты'].push(p);
+      else if (p.group === 'Проростки и микрозелень') mappedVeg['Проростки и микрозелень'].push(p);
+      else mappedVeg['Овощи и зелень'].push(p);
+    }
+    if (p.category === 'protein') {
+      if (!mappedProt[p.group]) mappedProt[p.group] = [];
+      mappedProt[p.group].push(p);
+    }
+    if (p.category === 'carbs') {
+      if (!mappedCarbs[p.group]) mappedCarbs[p.group] = [];
+      mappedCarbs[p.group].push(p);
+    }
+  });
+
+  // 3. Собираем всё вместе
+  return Object.assign({}, seasonal, {
+    vegetables: mappedVeg,
+    protein: mappedProt,
+    carbs: mappedCarbs,
+    fats: Object.values(App.DB.Products).filter(p => p.category === 'fats'),
+    water: Object.values(App.DB.Products).filter(p => p.category === 'water'),
+    sweets: Object.values(App.DB.Products).filter(p => p.category === 'sweets'),
+    harmful: Object.values(App.DB.Products).filter(p => p.category === 'harmful')
+  });
+};

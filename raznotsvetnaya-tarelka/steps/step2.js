@@ -35,14 +35,63 @@
           <h1>🍽️ Собери свою тарелку <span class="badge">Шаг 2.1</span></h1>
           <div class="interactive-grid">
             <div class="products-panel">${this.renderProductSections(config)}</div>
-            <div class="plate-panel">
+                        <div class="plate-panel">
               <div class="plate-circle" id="plate-circle">
                 <div class="plate-sector pc-veg" data-cat="vegetables"></div>
                 <div class="plate-sector pc-protein" data-cat="protein"></div>
                 <div class="plate-sector pc-carbs" data-cat="carbs"></div>
               </div>
+              
+              <!-- НОВЫЙ БЛОК: Полезные жиры с картинкой -->
+              <div class="fats-section">
+                <div class="fats-icon">
+                  <!-- Векторная картинка: Бутылочка + Кубик масла -->
+                  <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Тень под предметами -->
+                    <ellipse cx="60" cy="90" rx="45" ry="6" fill="rgba(0,0,0,0.08)" />
+                    
+                    <!-- Бутылочка масла -->
+                    <path d="M35 25 L35 45 L25 65 L25 85 Q25 90 30 90 L50 90 Q55 90 55 85 L55 65 L45 45 L45 25 Z" fill="#f4f9f0" stroke="#4a7c59" stroke-width="2.5"/>
+                    <rect x="37" y="18" width="6" height="7" fill="#4a7c59" rx="1"/>
+                    <!-- Золотистая капля -->
+                    <path d="M35 96 Q40 102 45 96 Q40 91 35 96 Z" fill="#f9a825"/>
+                    <!-- Блик на бутылке -->
+                    <path d="M32 70 L32 82" stroke="#c8e6c9" stroke-width="2" stroke-linecap="round"/>
+
+                    <!-- Кубик сливочного масла -->
+                    <rect x="65" y="60" width="40" height="30" rx="4" fill="#fef08a" stroke="#d97706" stroke-width="2.5"/>
+                    <path d="M65 68 L105 68" stroke="#d97706" stroke-width="2"/>
+                    <!-- Зеленый листик на кубике -->
+                    <path d="M80 60 Q85 45 100 50 Q95 60 80 60 Z" fill="#43a047"/>
+                  </svg>
+                </div>
+                <div class="fats-label">Немного полезного масла</div>
+                <div class="fats-items" id="fats-items"></div>
+              </div>
+              <!-- НОВЫЙ БЛОК: Вода и напитки с картинкой -->
+              <div class="water-section">
+                <div class="water-icon">
+                  <!-- Векторная картинка: Стакан воды с листиком -->
+                  <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Тень -->
+                    <ellipse cx="60" cy="90" rx="40" ry="6" fill="rgba(0,0,0,0.08)" />
+                    <!-- Стакан -->
+                    <path d="M35 30 L45 80 Q50 90 60 90 Q70 90 75 80 L85 30 Z" fill="rgba(200, 230, 240, 0.4)" stroke="#00838f" stroke-width="2.5" stroke-linejoin="round"/>
+                    <!-- Вода внутри -->
+                    <path d="M40 50 L48 78 Q52 85 60 85 Q68 85 72 78 L80 50 Z" fill="#80deea" opacity="0.8"/>
+                    <!-- Пузырьки -->
+                    <circle cx="60" cy="60" r="3" fill="#ffffff" opacity="0.6"/>
+                    <circle cx="55" cy="70" r="4" fill="#ffffff" opacity="0.6"/>
+                    <circle cx="65" cy="75" r="2" fill="#ffffff" opacity="0.6"/>
+                    <!-- Зеленый листик -->
+                    <path d="M85 30 Q95 20 105 25 Q100 35 85 30 Z" fill="#43a047" />
+                  </svg>
+                </div>
+                <div class="water-label">Вода и напитки</div>
+                <div class="water-items" id="water-items"></div>
+              </div>
               <div class="color-counter" id="color-counter"></div>
-            </div>
+            </div></div>
           </div>
           <div class="feedback" id="feedback"></div>
         </div>
@@ -175,10 +224,36 @@
 
             const counterEl = document.getElementById('color-counter');
             if (counterEl) {
-                counterEl.innerHTML = `🎨 Цветов на тарелке: <strong>${brightColors.size} из ${totalBright}</strong><small class="counter-hint">Чем разноцветнее тарелка — тем полезнее меню.</small>`;
+                counterEl.innerHTML = `🎨 Выбрано <strong>${brightColors.size}</strong> цветов из ${totalBright}<small class="counter-hint">Чем разноцветнее тарелка — тем полезнее меню.</small>`;
             }
 
             const feedbackEl = document.getElementById('feedback');
+                  // 4. Отрисовываем выбранные напитки рядом с картинкой
+      const waterContainer = document.getElementById('water-items');
+      if (waterContainer) {
+        const selectedWater = App.State.selectedProducts
+          .filter(pid => pid.startsWith('water:'))
+          .map(pid => this.findProductByPid(pid))
+          .filter(Boolean);
+        
+        waterContainer.innerHTML = selectedWater.map(p => 
+          `<span title="${escapeHtml(p.name)}">${App.COLOR_EMOJI[p.color] || '⚪'}</span>`
+        ).join('');
+      }
+            // 4. Отрисовываем выбранные жиры рядом с картинкой
+            const fatsContainer = document.getElementById('fats-items');
+            if (fatsContainer) {
+                const selectedFats = App.State.selectedProducts
+                    .filter(pid => pid.startsWith('fats:'))
+                    .map(pid => this.findProductByPid(pid))
+                    .filter(Boolean);
+
+                fatsContainer.innerHTML = selectedFats.map(p =>
+                    `<span title="${escapeHtml(p.name)}">${App.COLOR_EMOJI[p.color] || '🟡'}</span>`
+                ).join('');
+            }
+
+            // 3. Мягкая подсказка (тот самый блок feedbackEl, который уже был)
             if (!feedbackEl) return;
             if (App.State.selectedProducts.length === 0) {
                 feedbackEl.innerHTML = 'Начни собирать тарелку: выбери продукты слева.';

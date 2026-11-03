@@ -1,383 +1,190 @@
+/* ============================================================================
+   БАЗОВЫЕ СТИЛИ И ШАПКА
+   ========================================================================== */
 :root {
-  --green: #4caf50;
-  --orange: #ff9800;
-  --red: #e53935;
-  --dark: #2e3a2e;
-  --muted: #6b7a6b;
+  --green: #4a7c59;
+  --bg: #faf9f6;
+  --text: #1e2a2e;
 }
-* { box-sizing: border-box; }
-body {
+
+* {
+  box-sizing: border-box;
   margin: 0;
+  padding: 0;
+}
+
+body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: linear-gradient(135deg, #eaf6ea 0%, #fff7e6 100%);
-  color: var(--dark);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 32px 16px;
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  padding: 20px;
 }
-#app { width: 100%; max-width: 720px; }
+
+/* ============================================================================
+   СТИЛИ ДЛЯ ШАГА 1 (Опрос)
+   ========================================================================== */
 .card {
-  background: #fff;
-  border-radius: 20px;
-  padding: 28px 28px 32px;
-  box-shadow: 0 12px 40px rgba(46, 58, 46, 0.12);
-  animation: fadeIn .4s ease;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  max-width: 850px;
+  margin: 20px auto;
 }
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+
+h1 {
+  font-size: 2rem;
+  color: #2b5e3b;
+  margin-bottom: 10px;
 }
-h1 { margin: 0 0 8px; font-size: 1.7rem; letter-spacing: -.5px; }
-.lead { color: var(--muted); line-height: 1.5; margin: 0 0 24px; }
-fieldset {
-  border: 1px solid #e3ece3; border-radius: 14px;
-  padding: 16px 18px 18px; margin: 0 0 18px;
-}
-legend { font-weight: 600; padding: 0 8px; }
-.options { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
-.options label {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 10px 14px; border: 1.5px solid #dfe8df; border-radius: 10px;
-  cursor: pointer; transition: all .15s; font-size: .95rem; background: #fbfdfb;
-}
-.options label:hover { border-color: var(--green); }
-.options input { accent-color: var(--green); }
-.options label:has(input:checked) { border-color: var(--green); background: #eef8ee; }
-button {
-  width: 100%; padding: 14px 18px; border: none; border-radius: 12px;
-  background: linear-gradient(135deg, var(--green), #66bb6a);
-  color: #fff; font-size: 1rem; font-weight: 600; cursor: pointer;
-  transition: transform .1s, box-shadow .2s;
-  box-shadow: 0 6px 18px rgba(76, 175, 80, .35);
-}
-button:hover { transform: translateY(-1px); }
-button:active { transform: translateY(1px); }
-.error { color: var(--red); font-size: .9rem; margin-top: 12px; display: none; }
-.error.visible { display: block; }
+
 .badge {
-  display: inline-block; background: var(--orange); color: #fff;
-  font-size: .72rem; padding: 3px 9px; border-radius: 20px;
-  font-weight: 600; margin-left: 8px; vertical-align: middle;
+  background: #f4a261;
+  color: #fff;
+  font-size: 0.8rem;
+  padding: 4px 10px;
+  border-radius: 20px;
+  vertical-align: middle;
 }
 
-/* Визуализация тарелки */
-.plate-circle {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  aspect-ratio: 1 / 1;
-  max-width: 260px;
-  margin: 22px auto 26px;
+.lead {
+  color: #4a5b4e;
+  margin-bottom: 20px;
+}
+
+fieldset {
+  border: 1px solid #e2e8e2;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 25px;
+  background: #faf9f6;
+}
+
+legend {
+  font-weight: 700;
+  color: #2b5e3b;
+  padding: 0 10px;
+  font-size: 1.1rem;
+}
+
+.radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.radio-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  padding: 10px 16px;
+  border: 1.5px solid #d0e0d0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: 500;
+  color: #333;
+}
+
+.radio-label:hover {
+  border-color: var(--green);
+  background: #f4f9f0;
+}
+
+.radio-label input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #b0c4b0;
   border-radius: 50%;
-  overflow: hidden;
-  border: 6px solid #fff;
-  box-shadow: 0 10px 26px rgba(46, 58, 46, .18);
-  font-weight: 700; color: #fff; font-size: 1.05rem;
+  cursor: pointer;
+  position: relative;
+  background: #fff;
+  transition: 0.2s;
 }
-.plate-circle > div {
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center; text-align: center;
-}
-.plate-circle small { font-size: .68rem; font-weight: 500; opacity: .95; margin-top: 2px; }
-.pc-veg     { grid-row: 1 / 3; background: linear-gradient(160deg, #66bb6a, #388e3c); }
-.pc-protein { background: linear-gradient(160deg, #ff8a65, #e64a19); }
-.pc-carbs   { background: linear-gradient(160deg, #ffca28, #f9a825); color: #3e2c00; }
 
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 14px; margin: 0 0 18px;
+.radio-label input[type="radio"]:checked {
+  border-color: var(--green);
+  background-color: var(--green);
 }
-.product-card {
-  background: #fbfdfb; border: 1px solid #e3ece3;
-  border-radius: 12px; padding: 14px 16px;
-}
-.product-card h3 { margin: 0 0 8px; font-size: .98rem; }
-.product-card ul { margin: 0; padding-left: 18px; font-size: .9rem; line-height: 1.45; }
-.product-card li { margin-bottom: 3px; }
-.product-card.veg     { border-top: 4px solid #43a047; }
-.product-card.protein { border-top: 4px solid #e64a19; }
-.product-card.carbs   { border-top: 4px solid #f9a825; }
 
+.radio-label input[type="radio"]:checked::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+button[type="submit"],
+.btn-primary {
+  background: var(--green);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+  width: 100%;
+  margin-top: 10px;
+}
+
+button[type="submit"]:hover,
+.btn-primary:hover {
+  background: #3b6347;
+}
+
+.error-text {
+  color: #d32f2f;
+  font-size: 0.9rem;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+/* ============================================================================
+   СТИЛИ ДЛЯ ШАГА 2 (Тарелка)
+   ========================================================================== */
 .plate-note {
-  background: #fff7e6; border-left: 4px solid #ff9800;
-  padding: 10px 14px; border-radius: 8px;
-  font-size: .9rem; color: #5c4400; margin: 0 0 18px; line-height: 1.5;
+  background: #fff7e6;
+  border-left: 4px solid #ff9800;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  margin-bottom: 20px;
 }
-/* ===== Шаг 2.1 — интерактивная сборка тарелки ===== */
 
 .interactive-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 20px;
-  margin-bottom: 18px;
-}
-@media (min-width: 640px) {
-  .interactive-grid { grid-template-columns: 1.1fr 1fr; }
+  gap: 30px;
+  margin-bottom: 20px;
 }
 
-.products-panel { min-width: 0; }
-.product-section  { margin-bottom: 16px; }
-.product-section h3 {
-  margin: 0 0 8px;
-  font-size: .95rem;
-  font-weight: 600;
-}
-.product-section h3.veg     { color: #2e7d32; }
-.product-section h3.protein { color: #d84315; }
-.product-section h3.carbs   { color: #b28704; }
-
-.product-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+@media (min-width: 800px) {
+  .interactive-grid {
+    grid-template-columns: 1.2fr 1fr;
+  }
 }
 
-.btn-food {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  background: #f0f4f0;
-  border: 1.5px solid #d0e0d0;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: .85rem;
-  font-family: inherit;
-  color: inherit;
-  transition: all .15s;
-  user-select: none;
-}
-.btn-food:hover {
-  background: #e0eee0;
-  border-color: var(--green);
-  transform: translateY(-1px);
-}
-.btn-food.active {
-  background: #2c5e3b;
-  color: #fff;
-  border-color: #2c5e3b;
-  box-shadow: 0 4px 10px rgba(44, 94, 59, .25);
-}
-.btn-food .icon { font-size: 1.05rem; line-height: 1; }
-
-.plate-panel { display: flex; flex-direction: column; }
-
-.plate-circle {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  aspect-ratio: 1 / 1;
-  max-width: 300px;
-  margin: 0 auto;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 6px solid #fff;
-  box-shadow: 0 10px 26px rgba(46, 58, 46, .18);
-  color: #fff;
-}
-.plate-sector {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 6px;
-  text-align: center;
-  font-weight: 700;
-  transition: background .3s;
-}
-.plate-sector .label { font-size: 1.05rem; }
-.plate-sector small { font-size: .65rem; font-weight: 500; opacity: .95; margin-top: 2px; }
-.plate-sector .items {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 3px;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.15rem;
-  line-height: 1;
-  padding: 2px;
-}
-.pc-veg     { grid-row: 1 / 3; background: linear-gradient(160deg, #66bb6a, #388e3c); }
-.pc-protein { background: linear-gradient(160deg, #ff8a65, #e64a19); }
-.pc-carbs   { background: linear-gradient(160deg, #ffca28, #f9a825); color: #3e2c00; }
-
-.color-counter {
-  text-align: center;
-  font-size: .9rem;
-  color: #2c5e3b;
-  margin: 14px 0 4px;
+/* Левая колонка */
+.products-panel {
+  min-width: 0;
 }
 
-.feedback {
-  background: #eef7f2;
-  border-left: 4px solid #2c5e3b;
-  padding: 12px 16px;
-  border-radius: 0 8px 8px 0;
-  font-size: .9rem;
-  line-height: 1.55;
-  margin: 4px 0 18px;
-  min-height: 62px;
-  transition: background .2s;
-}
-.feedback .muted { color: #6b7a6b; }
-
-.actions {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.actions button { flex: 1; min-width: 160px; }
-.btn-secondary {
-  background: #eef1ee !important;
-  color: #2c5e3b !important;
-  box-shadow: none !important;
-}
-.btn-secondary:hover { background: #e0e8e0 !important; }css
-/* Раскрывающиеся подгруппы "Живых" продуктов */
-.food-subgroup {
-  margin: 0.5rem 0;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #fff;
+.product-section {
+  margin-bottom: 15px;
 }
 
-.food-subgroup summary {
-  cursor: pointer;
-  padding: 0.65rem 0.85rem;
-  font-weight: 600;
-  list-style: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #f8fafc;
-}
-
-.food-subgroup summary::-webkit-details-marker {
-  display: none;
-}
-
-.food-subgroup summary::after {
-  content: '▾';
-  transition: transform 0.2s ease;
-}
-
-.food-subgroup[open] summary::after {
-  transform: rotate(180deg);
-}
-
-/* Выпадающий список с прокруткой */
-.food-dropdown-list.scrollable {
-  max-height: 220px;
-  overflow-y: auto;
-  padding: 0.5rem;
-  display: grid;
-  gap: 0.4rem;
-  border-top: 1px solid #e5e7eb;
-}
-
-.food-dropdown-list.scrollable .btn-food {
-  width: 100%;
-  justify-content: flex-start;
-}
-
-/* Аккуратный скроллбар */
-.food-dropdown-list.scrollable::-webkit-scrollbar {
-  width: 8px;
-}
-
-.food-dropdown-list.scrollable::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 8px;
-}
-
-.food-dropdown-list.scrollable::-webkit-scrollbar-track {
-  background: transparent;
-}
-/* ===== Шаг 2.1 — кастомные выпадающие списки ===== */
-.custom-dropdown {
-  position: relative;
-  margin-bottom: 12px;
-}
-
-.dropdown-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  width: 100%;
-  padding: 12px 16px;
-  background: #fff;
-  border: 1.5px solid #d0e0d0;
-  border-radius: 12px;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: .95rem;
-  font-weight: 600;
-  text-align: left;
-  color: inherit;
-  transition: border-color .15s, box-shadow .15s;
-}
-.dropdown-toggle:hover { border-color: #a8c8a8; }
-.custom-dropdown.is-open .dropdown-toggle {
-  border-color: var(--green);
-  box-shadow: 0 0 0 3px rgba(44, 94, 59, .12);
-}
-.dropdown-toggle.veg     { color: #2e7d32; }
-.dropdown-toggle.protein { color: #d84315; }
-.dropdown-toggle.carbs   { color: #b28704; }
-
-.dropdown-arrow {
-  font-size: .8rem;
-  color: #888;
-  transition: transform .2s;
-}
-.custom-dropdown.is-open .dropdown-arrow { transform: rotate(180deg); }
-
-.dropdown-panel {
-  display: none;
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
-  right: 0;
-  max-height: 320px;
-  overflow-y: auto;
-  padding: 8px;
-  background: #fff;
-  border: 1.5px solid #d0e0d0;
-  border-radius: 12px;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, .10);
-  z-index: 30;
-}
-.custom-dropdown.is-open .dropdown-panel { display: block; }
-
-.dropdown-subgroup-label {
-  padding: 8px 10px 4px;
-  font-size: .78rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: .04em;
-  color: #7a8a7a;
-}
-
-.dropdown-item {
-  width: 100%;
-  justify-content: flex-start;
-  text-align: left;
-  border-radius: 8px;
-}
-.dropdown-item .check {
-  margin-left: auto;
-  opacity: 0;
-  font-weight: 700;
-}
-.dropdown-item.active .check { opacity: 1; }
-/* ===== Шаг 2.1 — Этап 2: заголовки групп, модалка ===== */
-
-/* Заголовок группы + кнопка «Подробнее» */
 .product-section-header {
   display: flex;
   align-items: center;
@@ -385,7 +192,40 @@ button:active { transform: translateY(1px); }
   gap: 10px;
   margin-bottom: 8px;
 }
-.product-section-header h3 { margin: 0; }
+
+.product-section-header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.product-section h3.veg {
+  color: #2e7d32;
+}
+
+.product-section h3.protein {
+  color: #d84315;
+}
+
+.product-section h3.carbs {
+  color: #b28704;
+}
+
+.product-section h3.fats {
+  color: #6a4c93;
+}
+
+.product-section h3.water {
+  color: #00838f;
+}
+
+.product-section h3.sweets {
+  color: #c2185b;
+}
+
+.product-section h3.harmful {
+  color: #555;
+}
 
 .details-btn {
   flex: 0 0 auto;
@@ -394,290 +234,62 @@ button:active { transform: translateY(1px); }
   color: #555;
   padding: 4px 10px;
   border-radius: 999px;
-  font-size: .78rem;
-  font-family: inherit;
+  font-size: 0.78rem;
   cursor: pointer;
-  transition: background .15s, color .15s, border-color .15s;
+  transition: 0.2s;
 }
+
 .details-btn:hover {
   background: #f0f4f0;
   color: var(--green);
   border-color: var(--green);
 }
 
-/* Цвета заголовков для новых групп */
-.product-section h3.fats    { color: #6a4c93; }
-.product-section h3.water   { color: #00838f; }
-.product-section h3.sweets  { color: #c2185b; }
-.product-section h3.harmful { color: #555; }
-
-/* Модалка «Подробнее» */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, .55);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 16px;
-  animation: modal-fade .15s ease;
-}
-.modal-card {
-  position: relative;
+details.food-subgroup {
   background: #fff;
-  border-radius: 16px;
-  max-width: 560px;
-  width: 100%;
-  max-height: 85vh;
-  overflow-y: auto;
-  padding: 24px 24px 20px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, .25);
-  animation: modal-up .2s ease;
-}
-.modal-card h2 {
-  margin: 0 0 12px;
-  font-size: 1.1rem;
-  padding-right: 36px;
-}
-.modal-body {
-  font-size: .95rem;
-  line-height: 1.55;
-  color: #333;
-}
-.modal-body p  { margin: 0 0 10px; }
-.modal-body ul { margin: 0 0 10px; padding-left: 20px; }
-.modal-close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 32px;
-  height: 32px;
-  border: 0;
-  background: transparent;
-  border-radius: 50%;
-  font-size: 1.4rem;
-  line-height: 1;
-  cursor: pointer;
-  color: #888;
-  transition: background .15s, color .15s;
-}
-.modal-close:hover { background: #f0f4f0; color: #333; }
-
-@keyframes modal-fade {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes modal-up {
-  from { transform: translateY(10px); opacity: 0; }
-  to   { transform: translateY(0);    opacity: 1; }
-}
-
-/* На телефоне — карточка почти на весь экран */
-@media (max-width: 640px) {
-  .modal-overlay { padding: 8px; align-items: flex-end; }
-  .modal-card {
-    max-height: 92vh;
-    padding: 20px 16px;
-    border-radius: 12px;
-  }
-}/* Подсказка под счётчиком цветов */
-.counter-hint {
-  display: block;
-  margin-top: 6px;
-  font-size: .78rem;
-  color: #888;
-  line-height: 1.4;
-}/* ===== Шаг 2.1 — Этап 2: заголовки групп, модалка ===== */
-
-/* Заголовок группы + кнопка «Подробнее» — на одной строке */
-.product-section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 8px;
-}
-.product-section-header h3 {
-  margin: 0;
-  flex: 1 1 auto;    /* заголовок занимает свободное место */
-}
-
-.details-btn {
-  flex: 0 0 auto;    /* кнопка не растягивается */
-  background: transparent;
-  border: 1px solid #cfd8cf;
-  color: #555;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: .78rem;
-  font-family: inherit;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background .15s, color .15s, border-color .15s;
-}
-.details-btn:hover {
-  background: #f0f4f0;
-  color: var(--green);
-  border-color: var(--green);
-}
-
-/* Цвета заголовков для новых групп */
-.product-section h3.fats    { color: #6a4c93; }
-.product-section h3.water   { color: #00838f; }
-.product-section h3.sweets  { color: #c2185b; }
-.product-section h3.harmful { color: #555; }
-
-/* Модалка «Подробнее» */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, .55);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 16px;
-  animation: modal-fade .15s ease;
-}
-.modal-card {
-  position: relative;
-  background: #fff;
-  border-radius: 16px;
-  max-width: 560px;
-  width: 100%;
-  max-height: 85vh;
-  overflow-y: auto;
-  padding: 24px 24px 20px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, .25);
-  animation: modal-up .2s ease;
-}
-.modal-card h2 {
-  margin: 0 0 12px;
-  font-size: 1.1rem;
-  padding-right: 36px;
-}
-.modal-body {
-  font-size: .95rem;
-  line-height: 1.55;
-  color: #333;
-}
-.modal-body p  { margin: 0 0 10px; }
-.modal-body ul { margin: 0 0 10px; padding-left: 20px; }
-.modal-close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 32px;
-  height: 32px;
-  border: 0;
-  background: transparent;
-  border-radius: 50%;
-  font-size: 1.4rem;
-  line-height: 1;
-  cursor: pointer;
-  color: #888;
-  transition: background .15s, color .15s;
-}
-.modal-close:hover { background: #f0f4f0; color: #333; }
-
-@keyframes modal-fade {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes modal-up {
-  from { transform: translateY(10px); opacity: 0; }
-  to   { transform: translateY(0);    opacity: 1; }
-}
-
-/* На телефоне — карточка почти на весь экран */
-@media (max-width: 640px) {
-  .modal-overlay { padding: 8px; align-items: flex-end; }
-  .modal-card {
-    max-height: 92vh;
-    padding: 20px 16px;
-    border-radius: 12px;
-  }
-}/* ===== Шаг 2.1 — Этап 2: заголовки групп, модалка ===== */
-
-.product-section-header {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 10px !important;
-  margin-bottom: 8px !important;
-}
-.product-section-header h3 {
-  margin: 0 !important;
-  flex: 1 1 auto !important;
-}
-.details-btn {
-  flex: 0 0 auto !important;
-  background: transparent !important;
-  border: 1px solid #cfd8cf !important;
-  color: #555 !important;
-  padding: 4px 10px !important;
-  border-radius: 999px !important;
-  font-size: .78rem !important;
-  font-family: inherit !important;
-  cursor: pointer !important;
-  white-space: nowrap !important;
-  transition: background .15s, color .15s, border-color .15s !important;
-}
-.details-btn:hover {
-  background: #f0f4f0 !important;
-  color: var(--green) !important;
-  border-color: var(--green) !important;
-}/* ===== Окошко с ползунком для продуктов ===== */
-/* ===== Окно прокрутки ===== */
-.scrollable-box {
-  max-height: 165px !important;
-  /* Высота ровно на 3 продукта */
-  overflow-y: auto !important;
-  /* Вертикальный ползунок */
-  overflow-x: hidden !important;
-  /* Прячем горизонтальный */
-  background: #fafafa;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
-  padding: 6px;
-  margin-top: 5px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
 
+details.food-subgroup summary {
+  padding: 10px 15px;
+  background: #f9fbf9;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  list-style: none;
+}
+
+details.food-subgroup summary::-webkit-details-marker {
+  display: none;
+}
+
+details.food-subgroup summary::before {
+  content: '▶';
+  display: inline-block;
+  font-size: 0.7rem;
+  margin-right: 8px;
+  color: var(--green);
+  transition: transform 0.2s;
+}
+
+details[open].food-subgroup summary::before {
+  transform: rotate(90deg);
+}
+
+.scrollable-box {
+  max-height: 165px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
   display: flex !important;
   flex-direction: column !important;
-  /* Строго в столбик */
-  flex-wrap: nowrap !important;
-  /* Запрещаем перенос в колонки */
   gap: 6px !important;
+  padding: 8px !important;
+  background: #fafafa;
 }
 
-/* Принудительно растягиваем карточки на всю ширину */
-/* Принудительно растягиваем карточки на всю ширину */
-.scrollable-box product-card {
-  width: 100% !important;
-  display: block !important;
-  margin-bottom: 0 !important;
-}
-
-.scrollable-box .btn-food {
-  width: 100% !important;
-  display: flex !important;
-  /* Возвращаем гибкость */
-  align-items: center !important;
-  /* Выравниваем по центру по вертикали */
-  justify-content: flex-start !important;
-  /* Прижимаем кружок и текст влево */
-  text-align: left !important;
-  /* Текст строго слева */
-  box-sizing: border-box !important;
-  padding: 8px 12px !important;
-}
-
-/* Отступ для текста, чтобы он не прилипал к кружочку */
-.scrollable-box .btn-food span:not(.icon) {
-  margin-left: 8px !important;
-}
-/* Красивый ползунок */
 .scrollable-box::-webkit-scrollbar {
   width: 8px;
 }
@@ -692,44 +304,51 @@ button:active { transform: translateY(1px); }
   border-radius: 4px;
 }
 
-/* ===== Выравнивание заголовков и кнопки "Подробнее" ===== */
-.product-section-header {
+product-card {
+  display: block;
+  width: 100%;
+}
+
+.btn-food {
+  width: 100% !important;
   display: flex !important;
   align-items: center !important;
-  justify-content: space-between !important;
-  width: 100% !important;
-  gap: 10px !important;
-  margin-bottom: 8px !important;
+  justify-content: flex-start !important;
+  text-align: left !important;
+  padding: 8px 12px !important;
+  background: #fff;
+  border: 1.5px solid #d0e0d0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: 0.15s;
 }
 
-.product-section-header h3 {
-  flex: 1 1 auto !important;
-  margin: 0 !important;
-  line-height: 1.3 !important;
-  font-size: 1rem !important;
+.btn-food:hover {
+  background: #f0f4f0;
+  border-color: var(--green);
 }
 
-.details-btn {
-  flex: 0 0 auto !important;
-  white-space: nowrap !important;
-}/* ===== Сделать тарелку прилипающей при прокрутке ===== */
+.btn-food.active {
+  background: #e8f5e9;
+  border-color: var(--green);
+}
+
+.btn-food span:not(.icon) {
+  margin-left: 8px;
+  font-weight: 500;
+}
+
+.btn-food .icon {
+  font-size: 1.1rem;
+}
+
+/* Правая колонка (Липкая тарелка) */
 .plate-panel {
   position: sticky !important;
   top: 20px !important;
-  /* Отступ от верхнего края экрана */
   align-self: start !important;
-  /* Важно: не дает блоку растягиваться на всю высоту */
 }
-
-/* На телефонах отключаем прилипание, чтобы тарелка не перекрывала экран */
-@media (max-width: 768px) {
-  .plate-panel {
-    position: static !important;
-  }
-}/* ============================================================================
-/* ============================================================================
-   ФИНАЛЬНАЯ 3D ТАРЕЛКА (Идеальное совпадение цветов и кружочков)
-   ========================================================================== */
 
 .plate-circle {
   position: relative !important;
@@ -739,16 +358,10 @@ button:active { transform: translateY(1px); }
   margin: 20px auto !important;
   border: 12px solid #ffffff !important;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1), inset 0 0 20px rgba(0, 0, 0, 0.05) !important;
-
-  /* Раскрашиваем сектора: верх-право красный, низ-право желтый, левая половина зеленая */
-  background: conic-gradient(#e53935 0% 25%,
-      #f9a825 25% 50%,
-      #43a047 50% 100%) !important;
-
+  background: conic-gradient(#e53935 0% 25%, #f9a825 25% 50%, #43a047 50% 100%) !important;
   overflow: hidden !important;
 }
 
-/* Прозрачные контейнеры для текста и продуктов */
 .plate-sector {
   position: absolute !important;
   display: flex !important;
@@ -758,7 +371,6 @@ button:active { transform: translateY(1px); }
   background: transparent !important;
 }
 
-/* Жестко привязываем контейнеры к нужным цветам */
 .pc-veg {
   top: 0 !important;
   left: 0 !important;
@@ -766,7 +378,6 @@ button:active { transform: translateY(1px); }
   height: 100% !important;
 }
 
-/* Слева */
 .pc-protein {
   top: 0 !important;
   right: 0 !important;
@@ -774,7 +385,6 @@ button:active { transform: translateY(1px); }
   height: 50% !important;
 }
 
-/* Справа сверху */
 .pc-carbs {
   bottom: 0 !important;
   right: 0 !important;
@@ -782,11 +392,8 @@ button:active { transform: translateY(1px); }
   height: 50% !important;
 }
 
-/* Справа снизу */
-
-/* Текст (½ и ¼) */
 .plate-sector .label {
-  font-size: 1.6rem !important;
+  font-size: 1.5rem !important;
   font-weight: 800 !important;
   color: #ffffff !important;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3) !important;
@@ -801,42 +408,183 @@ button:active { transform: translateY(1px); }
   margin-top: 2px !important;
 }
 
-/* Контейнер для кружочков */
 .plate-sector .items {
   display: flex !important;
   flex-wrap: wrap !important;
   justify-content: center !important;
   align-content: center !important;
-  gap: 4px !important;
-  max-width: 90% !important;
-  max-height: 90% !important;
-  overflow: hidden !important;
+  gap: 2px !important;
+  width: 80% !important;
 }
 
-/* Сдвигаем кружочки к центру, чтобы они не прилипали к краям тарелки */
 .pc-veg .items {
-  padding-left: 10px !important;
+  padding-left: 15px !important;
 }
 
 .pc-protein .items {
-  padding-right: 10px !important;
-  padding-bottom: 10px !important;
+  padding-right: 15px !important;
+  padding-bottom: 15px !important;
 }
 
 .pc-carbs .items {
-  padding-right: 10px !important;
-  padding-top: 10px !important;
+  padding-right: 15px !important;
+  padding-top: 15px !important;
 }
 
-/* Размер кружочков */
 .plate-sector .items span {
-  font-size: 1.3rem !important;
+  font-size: 1.2rem !important;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3)) !important;
 }
 
-/* ⚠️ ГЛАВНЫЙ ТРЮК: Если в секторе есть кружочки продуктов, 
-   мы полностью скрываем текст "½" и "¼", чтобы они не накладывались! */
 .plate-sector:has(.items) .label,
 .plate-sector:has(.items) small {
   display: none !important;
+}
+
+.color-counter {
+  text-align: center;
+  font-size: 1.1rem;
+  margin-top: 15px;
+  font-weight: 600;
+}
+
+.counter-hint {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.78rem;
+  color: #888;
+  line-height: 1.4;
+  font-weight: normal;
+}
+
+.feedback {
+  background: #f0f4f0;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
+
+.feedback .muted {
+  color: #6a7c6f;
+  font-size: 0.85rem;
+  margin-top: 5px;
+  display: block;
+}
+
+/* Кнопки внизу */
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid #ccc;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#step2-next {
+  background: var(--green);
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  flex-grow: 1;
+}
+
+/* Модалка */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal-card {
+  background: #fff;
+  padding: 25px;
+  border-radius: 16px;
+  max-width: 500px;
+  width: 100%;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #888;
+}
+
+.modal-body {
+  margin-top: 15px;
+  line-height: 1.6;
+  color: #333;
+}
+/* ============================================================================
+   БЛОК ПОЛЕЗНЫХ ЖИРОВ (Под тарелкой)
+   ========================================================================== */
+.fats-section {
+  margin-top: 20px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 16px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  position: relative;
+}
+
+.fats-icon {
+  width: 90px;
+  height: 80px;
+  margin: 0 auto;
+}
+
+.fats-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.fats-label {
+  font-size: 0.9rem;
+  color: #4a5b4e;
+  font-weight: 700;
+  margin-top: 5px;
+  letter-spacing: 0.5px;
+}
+
+.fats-items {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  min-height: 28px;
+  /* Чтобы блок не прыгал, когда пусто */
+  flex-wrap: wrap;
+  font-size: 1.3rem;
+}
+
+.fats-items span {
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.15));
+  animation: popIn 0.3s ease;
 }

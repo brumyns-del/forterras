@@ -202,12 +202,20 @@
         updatePlate() {
             const config = App.getPlateConfig(App.State.user);
             if (!config) return;
+
+            // 1. Отрисовываем секторы тарелки
             ['vegetables', 'protein', 'carbs'].forEach(cat => {
                 const sector = document.querySelector(`.plate-sector[data-cat="${cat}"]`);
                 if (!sector) return;
-                const selectedHere = App.State.selectedProducts.filter(pid => pid.startsWith(cat + ':')).map(pid => this.findProductByPid(pid)).filter(Boolean);
+
+                const selectedHere = App.State.selectedProducts
+                    .filter(pid => pid.startsWith(cat + ':'))
+                    .map(pid => this.findProductByPid(pid))
+                    .filter(Boolean);
+
                 const labelText = cat === 'vegetables' ? '½' : '¼';
                 const labelSub = cat === 'vegetables' ? 'Овощи' : cat === 'protein' ? 'Белок' : 'Углеводы';
+
                 if (selectedHere.length === 0) {
                     sector.innerHTML = `<div class="label">${labelText}</div><small>${labelSub}</small>`;
                 } else {
@@ -215,32 +223,30 @@
                 }
             });
 
+            // 2. Счётчик ярких цветов
             const brightColors = new Set();
+            let hasHarmful = false; // Флаг для вредных продуктов
+
             App.State.selectedProducts.forEach(pid => {
+                // Если продукт из группы "harmful" (вредное) — мы его не считаем!
+                if (pid.startsWith('harmful:')) {
+                    hasHarmful = true;
+                    return;
+                }
+
                 const p = this.findProductByPid(pid);
                 if (p && App.BRIGHT_COLORS[p.color]) brightColors.add(p.color);
             });
+
             const totalBright = Object.keys(App.BRIGHT_COLORS).length;
 
+            // НОВЫЙ ТЕКСТ СЧЕТЧИКА
             const counterEl = document.getElementById('color-counter');
             if (counterEl) {
-                counterEl.innerHTML = `🎨 Выбрано <strong>${brightColors.size}</strong> цветов из ${totalBright}<small class="counter-hint">Чем разноцветнее тарелка — тем полезнее меню.</small>`;
+                counterEl.innerHTML = `Цвета в Вашей тарелке: <strong>${brightColors.size} из ${totalBright}</strong><small class="counter-hint">Чем разноцветнее тарелка — тем полезнее меню.</small>`;
             }
 
-            const feedbackEl = document.getElementById('feedback');
-                  // 4. Отрисовываем выбранные напитки рядом с картинкой
-      const waterContainer = document.getElementById('water-items');
-      if (waterContainer) {
-        const selectedWater = App.State.selectedProducts
-          .filter(pid => pid.startsWith('water:'))
-          .map(pid => this.findProductByPid(pid))
-          .filter(Boolean);
-        
-        waterContainer.innerHTML = selectedWater.map(p => 
-          `<span title="${escapeHtml(p.name)}">${App.COLOR_EMOJI[p.color] || '⚪'}</span>`
-        ).join('');
-      }
-            // 4. Отрисовываем выбранные жиры рядом с картинкой
+            // 3. Отрисовываем выбранные жиры рядом с картинкой
             const fatsContainer = document.getElementById('fats-items');
             if (fatsContainer) {
                 const selectedFats = App.State.selectedProducts
@@ -253,13 +259,31 @@
                 ).join('');
             }
 
-            // 3. Мягкая подсказка (тот самый блок feedbackEl, который уже был)
+            // 4. Отрисовываем выбранные напитки рядом с картинкой
+            const waterContainer = document.getElementById('water-items');
+            if (waterContainer) {
+                const selectedWater = App.State.selectedProducts
+                    .filter(pid => pid.startsWith('water:'))
+                    .map(pid => this.findProductByPid(pid))
+                    .filter(Boolean);
+
+                waterContainer.innerHTML = selectedWater.map(p =>
+                    `<span title="${escapeHtml(p.name)}">${App.COLOR_EMOJI[p.color] || '⚪'}</span>`
+                ).join('');
+            }
+
+            // 5. Мягкая подсказка
+            const feedbackEl = document.getElementById('feedback');
             if (!feedbackEl) return;
+
             if (App.State.selectedProducts.length === 0) {
                 feedbackEl.innerHTML = 'Начни собирать тарелку: выбери продукты слева.';
+            } else if (hasHarmful) {
+                // ВЫВОДИМ ПРЕДУПРЕЖДЕНИЕ ПРО КРАСИТЕЛИ
+                feedbackEl.innerHTML = `😖 <strong>Продукты из последней группы вряд ли принесут пользу</strong> — их цвет обеспечен красителями, поэтому они не добавляются в счётчик цветов.`;
             } else {
                 feedbackEl.innerHTML = `🌈 Сейчас ярких цветов: <strong>${brightColors.size}</strong>.`;
             }
-        }
+        },
     });
 })();

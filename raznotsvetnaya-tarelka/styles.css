@@ -588,3 +588,18 @@ product-card {
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.15));
   animation: popIn 0.3s ease;
 }
+/* ============================================================================
+   РАЗМЕРЫ ИКОНОК (Жиры и Вода)
+   ========================================================================== */
+.fats-icon,
+.water-icon {
+  width: 70px !important;
+  height: 60px !important;
+  margin: 0 auto !important;
+}
+
+.fats-icon svg,
+.water-icon svg {
+  width: 100% !important;
+  height: 100% !important;
+}

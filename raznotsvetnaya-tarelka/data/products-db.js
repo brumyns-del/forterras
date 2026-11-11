@@ -146,12 +146,26 @@ App.DB = {
 
     // 3. ТОЧКИ ПИТАНИЯ (Фундамент для "Вкусно и точка")
     Places: {
-        'place_vkusno': {
-            name: 'Вкусно и точка',
+        'vkusno': {
+            name: 'Вкусно — и точка',
             menu: [
-                { dishName: 'Салат овощной', categories: ['vegetables'], colors: ['green', 'red'] },
-                { dishName: 'Картофель фри', categories: ['carbs'], colors: ['yellow'] },
-                { dishName: 'Чай чёрный', categories: ['water'], colors: ['brown', 'orange'] }
+                { id: 'v_grand', name: 'Гранд Де Люкс', category: 'burger', colors: ['brown', 'yellow', 'red'], green: 5 },
+                { id: 'v_big_hit', name: 'Биг Хит', category: 'burger', colors: ['brown', 'yellow', 'red'], green: 5 },
+                { id: 'v_cheese', name: 'Чизбургер', category: 'burger', colors: ['brown', 'yellow', 'red'], green: 2 },
+                { id: 'v_chicken', name: 'Чикен Премьер', category: 'burger', colors: ['brown', 'yellow', 'white'], green: 3 },
+                { id: 'v_fish', name: 'Фиш Бургер', category: 'burger', colors: ['brown', 'yellow', 'white'], green: 2 },
+                { id: 'v_fries_s', name: 'Картофель фри (мал.)', category: 'snack', colors: ['yellow'], green: 0 },
+                { id: 'v_fries_l', name: 'Картофель фри (бол.)', category: 'snack', colors: ['yellow'], green: 0 },
+                { id: 'v_nuggets', name: 'Наггетсы (6 шт.)', category: 'snack', colors: ['brown', 'yellow'], green: 0 },
+                { id: 'v_strips', name: 'Стрипсы (3 шт.)', category: 'snack', colors: ['brown', 'yellow'], green: 0 },
+                { id: 'v_salad_caesar', name: 'Салат Цезарь', category: 'salad', colors: ['green', 'brown'], green: 40 },
+                { id: 'v_salad_veg', name: 'Салат овощной', category: 'salad', colors: ['green', 'red'], green: 50 },
+                { id: 'v_carrot_sticks', name: 'Морковные палочки', category: 'salad', colors: ['orange'], green: 40 },
+                { id: 'v_apple_slices', name: 'Яблочные дольки', category: 'salad', colors: ['green', 'red'], green: 30 },
+                { id: 'v_water', name: 'Вода', category: 'drink', colors: ['white'], green: 0 },
+                { id: 'v_tea', name: 'Чай без сахара', category: 'drink', colors: ['white'], green: 0 },
+                { id: 'v_cola', name: 'Кола (средняя)', category: 'drink', colors: ['yellow'], green: 0 },
+                { id: 'v_juice', name: 'Сок апельсиновый', category: 'drink', colors: ['orange', 'red'], green: 0 }
             ]
         }
     }

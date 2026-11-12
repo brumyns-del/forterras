@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Питание в городе</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .places-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        @media (min-width: 600px) {
+            .places-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .place-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 30px 20px;
+            text-align: center;
+            border: 1px solid #e2e8e2;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            text-decoration: none;
+            color: inherit;
+            transition: 0.2s;
+        }
+
+        .place-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            border-color: #4a7c59;
+        }
+
+        .place-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .place-card h3 {
+            color: #4a7c59;
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+        }
+
+        .place-card p {
+            color: #607260;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">🏙️ Питание в городе</div>
+            <div class="subtitle">Умный подход к еде вне дома</div>
+            <p class="desc">Даже в ресторане быстрого питания можно собрать сбалансированный поднос. Выберите заведение,
+                чтобы начать.</p>
+        </header>
+
+        <nav class="top-nav">
+            <a href="../index.html" class="nav-btn back-btn">← Назад в Живой стол</a>
+        </nav>
+
+        <div class="places-grid">
+            <a href="vkusno-i-tochka/index.html" class="place-card">
+                <div class="place-icon">🍔</div>
+                <h3>Вкусно — и точка</h3>
+                <p>Соберите поднос из реального меню. Узнайте, как добавить овощи к бургеру и не навредить фигуре.</p>
+            </a>
+            <div class="place-card" style="opacity: 0.6; cursor: not-allowed; background: #f9f9f9;">
+                <div class="place-icon">🍗</div>
+                <h3>Другие точки</h3>
+                <p>Скоро здесь появятся KFC, Burger King и другие рестораны.</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

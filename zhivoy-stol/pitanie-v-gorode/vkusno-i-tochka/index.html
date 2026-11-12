@@ -4,28 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Питание в городе: Вкусно — и точка</title>
+    <title>Вкусно — и точка: Апгрейд чека</title>
     <link rel="stylesheet" href="vkusno.css">
 </head>
 
 <body>
     <div class="container">
         <header>
-            <div class="logo">🍔 Питание в городе</div>
-            <div class="subtitle">Вкусно — и точка: Апгрейд чека</div>
+            <div class="logo">🍔 Вкусно — и точка</div>
+            <div class="subtitle">Апгрейд чека</div>
             <p class="desc">Не отказывайтесь от любимого. Просто добавьте правильный цвет, чтобы сбалансировать поднос.
             </p>
         </header>
 
         <nav class="top-nav">
-            <a href="index.html" class="nav-btn back-btn">← Вернуться в Живой стол</a>
+            <a href="../index.html" class="nav-btn back-btn">← Назад в Питание в городе</a>
         </nav>
 
         <div class="app-layout">
-            <!-- Левая колонка: Меню -->
             <div class="menu-panel">
                 <h2>1. Выберите блюда</h2>
-
                 <div class="menu-category">
                     <h3>Бургеры</h3>
                     <div class="menu-items" id="cat-burger"></div>
@@ -44,37 +42,30 @@
                 </div>
             </div>
 
-            <!-- Правая колонка: Поднос -->
             <div class="tray-panel">
                 <h2>2. Ваш поднос</h2>
-                <div class="tray">
-                    <div class="tray-sectors">
-                        <div class="sector veg" style="width: 50%; background: #43a047;">Овощи (½)</div>
-                        <div class="sector protein" style="width: 25%; background: #d84315;">Белок (¼)</div>
-                        <div class="sector carbs" style="width: 25%; background: #f9a825;">Углеводы (¼)</div>
-                    </div>
-                </div>
-                <div id="smart-tip" class="smart-tip">
-                    Выберите блюда, чтобы получить совет по балансу.
-                </div>
+                                <div class="tray" id="tray-circle">
+                                    <!-- Секторы для кружочков -->
+                                    <div class="tray-sector pc-veg" id="tray-veg"></div>
+                                    <div class="tray-sector pc-protein" id="tray-protein"></div>
+                                    <div class="tray-sector pc-carbs" id="tray-carbs"></div>
+                                </div>
+                <div id="smart-tip" class="smart-tip">Выберите блюда, чтобы получить совет по балансу.</div>
             </div>
         </div>
 
-        <!-- БЛОК PRO И ИСТОРИИ -->
         <div class="pro-section">
             <div class="pro-header">
                 <h3>📊 Ваша статистика за неделю</h3>
                 <span class="pro-badge">PRO</span>
             </div>
-            <p>Соберите «Радугу за неделю» — отслеживайте, сколько цветов вы съели. И получите персональный совет на
-                завтра.</p>
+            <p>Соберите «Радугу за неделю» — отслеживайте, сколько цветов вы съели.</p>
 
             <div class="pro-locked" id="pro-lock">
                 <div class="lock-icon">🔒</div>
                 <p>История и рекомендации доступны в PRO-версии</p>
                 <button class="btn-buy" onclick="App.buyPro()">Оформить за 199 ₽/мес</button>
             </div>
-
             <div class="pro-content" id="pro-content" style="display: none;">
                 <div class="week-tracker" id="week-tracker"></div>
                 <div class="home-advice" id="home-advice"></div>
@@ -82,10 +73,9 @@
         </div>
     </div>
 
-    <!-- ПОДКЛЮЧАЕМ СКРИПТЫ -->
-    <!-- Берем общую базу данных из папки тарелки (путь через ../) -->
-    <script src="../raznotsvetnaya-tarelka/data/products-db.js"></script>
-    <!-- Подключаем логику этой страницы -->
+    <!-- ВАЖНО: Путь на 3 уровня вверх к базе данных -->
+    <script src="../../../raznotsvetnaya-tarelka/data/plateStrategies.js"></script>
+    <script src="../../../raznotsvetnaya-tarelka/data/products-db.js"></script>
     <script src="vkusno.js"></script>
 </body>
 

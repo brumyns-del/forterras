@@ -1,0 +1,350 @@
+:root {
+    --bg: #f7f9f6;
+    --text: #2c3e2b;
+    --accent: #4a7c59;
+    --card: #fff;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--accent);
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: #607260;
+    margin-bottom: 10px;
+}
+
+.desc {
+    font-size: 1rem;
+    color: #4a5b4e;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.top-nav {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.nav-btn {
+    background: #fff;
+    color: var(--accent);
+    text-decoration: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    border: 2px solid var(--accent);
+}
+
+.nav-btn:hover {
+    background: var(--accent);
+    color: white;
+}
+
+.app-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+
+@media (min-width: 800px) {
+    .app-layout {
+        grid-template-columns: 1.2fr 1fr;
+    }
+}
+
+/* Меню */
+.menu-panel h2 {
+    color: var(--accent);
+    border-bottom: 2px solid #e2e8e2;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.menu-category h3 {
+    font-size: 1.1rem;
+    color: #607260;
+    margin: 20px 0 10px;
+}
+
+.menu-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.menu-btn {
+    background: var(--card);
+    border: 1.5px solid #d0e0d0;
+    border-radius: 8px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: inherit;
+    font-size: 0.9rem;
+}
+
+.menu-btn:hover {
+    background: #f0f4f0;
+    border-color: var(--accent);
+}
+
+.menu-btn.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+}
+
+/* Круглый поднос */
+.tray-panel {
+    background: var(--card);
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+    text-align: center;
+}
+
+.tray-panel h2 {
+    color: var(--accent);
+    margin-bottom: 20px;
+}
+
+/* Круглый поднос (адаптивный) */
+.tray-panel {
+    background: var(--card);
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+    text-align: center;
+}
+
+.tray-panel h2 {
+    color: var(--accent);
+    margin-bottom: 20px;
+}
+
+.tray {
+    /* Делаем круг адаптивным: на телефоне он уменьшится, но останется круглым */
+    width: min(260px, 100%);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    border: 10px solid #ffffff;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), inset 0 0 20px rgba(0, 0, 0, 0.05);
+    background: conic-gradient(#43a047 0% 50%, #d84315 50% 75%, #f9a825 75% 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Прозрачные сектора внутри подноса для кружочков */
+.tray-sector {
+    position: absolute;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.pc-veg {
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    padding-left: 15px;
+}
+
+.pc-protein {
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 50%;
+    padding-right: 15px;
+    padding-bottom: 10px;
+}
+
+.pc-carbs {
+    bottom: 0;
+    right: 0;
+    width: 50%;
+    height: 50%;
+    padding-right: 15px;
+    padding-top: 10px;
+}
+
+/* Кружочки продуктов */
+.tray-sector span {
+    font-size: 1.4rem;
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.smart-tip {
+    background: #fff7e6;
+    border-left: 4px solid #ff9800;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    text-align: left;
+    margin-top: 20px;
+}
+
+.smart-tip.good {
+    background: #e8f5e9;
+    border-left-color: #4caf50;
+}
+
+.smart-tip.bad {
+    background: #ffebee;
+    border-left-color: #f44336;
+}
+
+/* =========================================
+   АДАПТИВ ДЛЯ ТЕЛЕФОНОВ
+   ========================================= */
+@media (max-width: 600px) {
+    .app-layout {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .menu-btn {
+        font-size: 0.85rem;
+        padding: 8px 12px;
+    }
+
+    .tray-panel {
+        position: static;
+    }
+
+    /* Убираем прилипание на телефоне */
+    .logo {
+        font-size: 1.8rem;
+    }
+}
+
+/* PRO-блок */
+.pro-section {
+    margin-top: 30px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 2px solid #f4a261;
+}
+
+.pro-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.pro-badge {
+    background: #f4a261;
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.pro-locked {
+    text-align: center;
+    padding: 20px;
+    background: #fafafa;
+    border-radius: 12px;
+    margin-top: 15px;
+}
+
+.lock-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.btn-buy {
+    background: #f4a261;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: 0.2s;
+}
+
+.btn-buy:hover {
+    background: #e76f51;
+    transform: translateY(-2px);
+}
+
+.week-tracker {
+    background: #f0f4f0;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.day-record {
+    padding: 8px 0;
+    border-bottom: 1px solid #dce4da;
+    font-size: 0.9rem;
+}
+
+.home-advice {
+    background: #e8f5e9;
+    border-left: 4px solid #4caf50;
+    padding: 15px;
+    border-radius: 8px;
+}

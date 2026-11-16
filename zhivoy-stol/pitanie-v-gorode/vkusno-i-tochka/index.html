@@ -22,6 +22,7 @@
         </nav>
 
         <div class="app-layout">
+            <!-- ЛЕВАЯ КОЛОНКА: МЕНЮ -->
             <div class="menu-panel">
                 <h2>1. Выберите блюда</h2>
                 <div class="menu-category">
@@ -29,31 +30,56 @@
                     <div class="menu-items" id="cat-burger"></div>
                 </div>
                 <div class="menu-category">
-                    <h3>Картошка и снэки</h3>
+                    <h3>Роллы и панини</h3>
+                    <div class="menu-items" id="cat-roll"></div>
+                </div>
+                <div class="menu-category">
+                    <h3>Снеки</h3>
                     <div class="menu-items" id="cat-snack"></div>
+                </div>
+                <div class="menu-category">
+                    <h3>Завтраки</h3>
+                    <div class="menu-items" id="cat-breakfast"></div>
                 </div>
                 <div class="menu-category">
                     <h3>Салаты и овощи</h3>
                     <div class="menu-items" id="cat-salad"></div>
                 </div>
                 <div class="menu-category">
+                    <h3>Десерты</h3>
+                    <div class="menu-items" id="cat-dessert"></div>
+                </div>
+                <div class="menu-category">
                     <h3>Напитки</h3>
                     <div class="menu-items" id="cat-drink"></div>
                 </div>
+                <div class="menu-category">
+                    <h3>Детское и соусы</h3>
+                    <div class="menu-items" id="cat-kids"></div>
+                    <div class="menu-items" id="cat-sauce" style="margin-top:5px;"></div>
+                </div>
             </div>
 
+            <!-- ПРАВАЯ КОЛОНКА: ПОДНОС -->
             <div class="tray-panel">
                 <h2>2. Ваш поднос</h2>
-                                <div class="tray" id="tray-circle">
-                                    <!-- Секторы для кружочков -->
-                                    <div class="tray-sector pc-veg" id="tray-veg"></div>
-                                    <div class="tray-sector pc-protein" id="tray-protein"></div>
-                                    <div class="tray-sector pc-carbs" id="tray-carbs"></div>
-                                </div>
+                <div class="tray" id="tray-circle">
+                    <div class="tray-sector pc-veg" id="tray-veg"></div>
+                    <div class="tray-sector pc-protein" id="tray-protein"></div>
+                    <div class="tray-sector pc-carbs" id="tray-carbs"></div>
+                </div>
+
+                <!-- Блок для белых кружочков (напитки) -->
+                <div class="tray-drinks" id="tray-drinks-container">
+                    <span style="font-size: 0.85rem; color: #666;">Напитки:</span>
+                    <div id="tray-drinks"></div>
+                </div>
+
                 <div id="smart-tip" class="smart-tip">Выберите блюда, чтобы получить совет по балансу.</div>
             </div>
         </div>
 
+        <!-- БЛОК PRO -->
         <div class="pro-section">
             <div class="pro-header">
                 <h3>📊 Ваша статистика за неделю</h3>
@@ -73,7 +99,7 @@
         </div>
     </div>
 
-    <!-- ВАЖНО: Путь на 3 уровня вверх к базе данных -->
+    <!-- ПОДКЛЮЧАЕМ СКРИПТЫ -->
     <script src="../../../raznotsvetnaya-tarelka/data/plateStrategies.js"></script>
     <script src="../../../raznotsvetnaya-tarelka/data/products-db.js"></script>
     <script src="vkusno.js"></script>

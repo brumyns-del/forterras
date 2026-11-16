@@ -37,36 +37,47 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateTray() {
         const totalGreen = selectedDishes.reduce((sum, dish) => sum + dish.green, 0);
         const trayTip = document.getElementById('smart-tip');
-        // Отрисовка кружочков на подносе
+
+        // Сектора подноса
         const vegContainer = document.getElementById('tray-veg');
         const proteinContainer = document.getElementById('tray-protein');
         const carbsContainer = document.getElementById('tray-carbs');
+        const drinksContainer = document.getElementById('tray-drinks');
 
         if (vegContainer && proteinContainer && carbsContainer) {
-            // Очищаем старые кружочки
             vegContainer.innerHTML = '';
             proteinContainer.innerHTML = '';
             carbsContainer.innerHTML = '';
+            if (drinksContainer) drinksContainer.innerHTML = '';
 
-            // Собираем уникальные цвета из выбранных блюд
+            // Собираем уникальные цвета по секторам
             let colorsInVeg = new Set();
             let colorsInProtein = new Set();
             let colorsInCarbs = new Set();
+            let colorsInDrinks = new Set();
 
             selectedDishes.forEach(dish => {
                 dish.colors.forEach(c => {
-                    // Распределяем цвета по секторам
-                    if (['green', 'red', 'orange'].includes(c)) colorsInVeg.add(c);
-                    else if (c === 'brown') colorsInProtein.add(c);
-                    else if (c === 'yellow') colorsInCarbs.add(c);
+                    // Делаем красивые всплывающие подсказки
+                    const colorName = App.BRIGHT_COLORS[c] ? App.BRIGHT_COLORS[c].label : c;
+                    const tooltip = `title="${colorName}"`;
+                    const emojiSpan = `<span ${tooltip}>${App.COLOR_EMOJI[c]}</span>`;
+
+                    if (c === 'green' || c === 'red' || c === 'orange') colorsInVeg.add(emojiSpan);
+                    else if (c === 'brown') colorsInProtein.add(emojiSpan);
+                    else if (c === 'yellow') colorsInCarbs.add(emojiSpan);
+                    else if (c === 'white') colorsInDrinks.add(emojiSpan); // Белый кружок теперь в напитках
                 });
             });
 
-            // Рисуем их внутри секторов
-            colorsInVeg.forEach(c => vegContainer.innerHTML += `<span>${App.COLOR_EMOJI[c]}</span>`);
-            colorsInProtein.forEach(c => proteinContainer.innerHTML += `<span>${App.COLOR_EMOJI[c]}</span>`);
-            colorsInCarbs.forEach(c => carbsContainer.innerHTML += `<span>${App.COLOR_EMOJI[c]}</span>`);
+            // Вставляем кружочки
+            colorsInVeg.forEach(html => vegContainer.innerHTML += html);
+            colorsInProtein.forEach(html => proteinContainer.innerHTML += html);
+            colorsInCarbs.forEach(html => carbsContainer.innerHTML += html);
+            if (drinksContainer) colorsInDrinks.forEach(html => drinksContainer.innerHTML += html);
         }
+
+        // Текстовые подсказки
         if (selectedDishes.length === 0) {
             trayTip.innerHTML = 'Выберите блюда, чтобы получить совет по балансу.';
             trayTip.className = 'smart-tip';
@@ -77,10 +88,10 @@ document.addEventListener('DOMContentLoaded', () => {
             trayTip.innerHTML = `😮 <strong>Ой, у нас перекос в желтый и коричневый!</strong><br>В заказе мало овощей. Возьмите <em>Морковные палочки</em>.<br><small>💡 <b>Совет на дом:</b> Вечером съешьте яблоко или огурец из раздела «Живой стол».</small>`;
             trayTip.className = 'smart-tip bad';
         } else if (totalGreen >= 40) {
-            trayTip.innerHTML = `🎉 <strong>Отличный апгрейд!</strong><br>Такой поднос даст сытость и не вызовет скачка сахара.`;
+            trayTip.innerHTML = `👍 <strong>Неплохой апгрейд!</strong><br>Такой поднос даст сытость и не вызовет скачка сахара.`;
             trayTip.className = 'smart-tip good';
         } else {
-            trayTip.innerHTML = `👍 <strong>Неплохо!</strong><br>Салат или яблочные дольки сделают этот заказ еще полезнее.`;
+            trayTip.innerHTML = `👍 <strong>Хороший выбор!</strong><br>Салат или яблочные дольки сделают этот заказ еще полезнее.`;
             trayTip.className = 'smart-tip';
         }
 

@@ -86,12 +86,31 @@
                 </div>
                 
                 <!-- Само окошко подсказки (оно уже есть, просто оставьте его ниже) -->
-                <div id="smart-tip" class="smart-tip">Выберите блюда, чтобы получить совет по балансу.</div>
+                                <!-- ПРЕДУПРЕЖДЕНИЕ О КРАСИТЕЛЯХ -->
+                                <div id="dye-warning"
+                                    style="display: none; color: #d84315; font-size: 0.8rem; font-weight: bold; margin-top: 15px; margin-bottom: 10px; text-align: center;">
+                                    ⚠️ К сожалению, цвет выбранных блюд зависит от красителей.
+                                </div>
+
                 <div id="smart-tip" class="smart-tip">Выберите блюда, чтобы получить совет по балансу.</div>
             </div>
         </div>
 
         <!-- БЛОК PRO -->
+                <!-- БЛОК ПРО БЖУ И НОРМЫ -->
+                <div class="bju-info-section">
+                    <h3>⚖️ Норма БЖУ</h3>
+                    <p>Базовое соотношение белков, жиров и углеводов для здорового человека — <b>1 : 1 : 4</b>.</p>
+                    <p style="font-size: 0.9rem; color: #666; margin-top: 5px;">
+                        В пересчете на калорийность: белки 10–35%, жиры 20–35%, углеводы 45–65%.
+                        <a href="#" target="_blank" style="color: #4a7c59; text-decoration: underline;">Читать подробную статью о нормах
+                            БЖУ</a>
+                    </p>
+                    <div style="margin-top: 15px;">
+                        <a href="#" class="btn-buy" style="text-decoration: none; display: inline-block;">Рассчитать индивидуальные
+                            нормы (PRO)</a>
+                    </div>
+                </div>
         <div class="pro-section">
             <div class="pro-header">
                 <h3>📊 Ваша статистика за неделю</h3>

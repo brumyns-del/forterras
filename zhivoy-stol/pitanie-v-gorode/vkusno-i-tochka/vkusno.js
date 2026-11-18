@@ -39,12 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalGreen = selectedDishes.reduce((sum, dish) => sum + dish.green, 0);
         const trayTip = document.getElementById('smart-tip');
 
-        // Считаем БЖУ и порции
+        // Считаем БЖУ, порции и красители
         let totalKcal = 0, totalP = 0, totalF = 0, totalC = 0;
         let totalProteinServings = 0;
-        let totalCarbServings = 0;
-        let totalVeggieServings = 0;
         let junkCount = 0;
+        let dyeCount = 0;
 
         selectedDishes.forEach(dish => {
             if (dish.macros) {
@@ -53,43 +52,85 @@ document.addEventListener('DOMContentLoaded', () => {
                 totalF += dish.macros.f;
                 totalC += dish.macros.c;
             }
-            if (dish.servings) {
-                if (dish.servings.protein) totalProteinServings += dish.servings.protein;
-                if (dish.servings.carbs) totalCarbServings += dish.servings.carbs;
-                if (dish.servings.veggies) totalVeggieServings += dish.servings.veggies;
-            }
+            if (dish.servings && dish.servings.protein) totalProteinServings += dish.servings.protein;
             if (dish.junk) junkCount++;
+            if (dish.dye) dyeCount++;
         });
+
+        // Считаем реальное соотношение БЖУ
+        let ratioText = "0 : 0 : 0";
+        if (totalP > 0) {
+            ratioText = `1 : ${(totalF / totalP).toFixed(1)} : ${(totalC / totalP).toFixed(1)}`;
+        } else if (totalF > 0) {
+            ratioText = `0 : 1 : ${(totalC / totalF).toFixed(1)}`;
+        } else if (totalC > 0) {
+            ratioText = `0 : 0 : 1`;
+        }
 
         // Отображение БЖУ (если включена галочка)
         const macrosDisplay = document.getElementById('macros-display');
         const showMacrosCheckbox = document.getElementById('show-macros');
+
+        if (showMacrosCheckbox) showMacrosCheckbox.onchange = updateTray;
+
         if (showMacrosCheckbox && showMacrosCheckbox.checked && macrosDisplay) {
             macrosDisplay.style.display = 'block';
             macrosDisplay.innerHTML = `<b>Итого по чеку:</b><br>
                 Калории: ${totalKcal} ккал<br>
                 Белки: ${totalP}г | Жиры: ${totalF}г | Углеводы: ${totalC}г<br>
-                <i>Порции: Белок (${totalProteinServings}), Углеводы (${totalCarbServings}), Овощи (${totalVeggieServings})</i>`;
+                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed #ccc;">
+                    Ваше соотношение БЖУ: <b>${ratioText}</b><br>
+                    <span style="font-size: 0.8rem; color: #888;">Норма: 1 : 1 : 4</span>
+                </div>`;
         } else if (macrosDisplay) {
             macrosDisplay.style.display = 'none';
         }
 
-        // Отрисовка кружочков на подносе
+        // Отображение предупреждения о красителях
+        const dyeWarning = document.getElementById('dye-warning');
+        if (dyeWarning) {
+            dyeWarning.style.display = (dyeCount > 0) ? 'block' : 'none';
+        }
+
+        // Честная оценка
+        if (selectedDishes.length === 0) {
+            trayTip.innerHTML = 'Выберите блюда, чтобы получить совет по балансу.';
+            trayTip.className = 'smart-tip';
+            return;
+        }
+
+        const plateLink = `<br><small>💡 <b>Совет на дом:</b> Вечером соберите <a href="../../../raznotsvetnaya-tarelka/index.html" style="color: #d84315; font-weight: bold;">«Разноцветную тарелку»</a>, чтобы добрать клетчатку.</small>`;
+
+        if (junkCount >= 2) {
+            trayTip.innerHTML = `⚠️ <strong>Внимание: избыток сахара.</strong><br>В заказе ${junkCount} десерта/сладких напитка. Это даст быстрый скачок энергии, но через час вы снова захотите есть.<br><small>💡 <b>Совет:</b> Оставьте один десерт, а остальное замените на воду.</small>${plateLink}`;
+            trayTip.className = 'smart-tip bad';
+        } else if (totalProteinServings < 1) {
+            trayTip.innerHTML = `⚠️ <strong>В заказе мало белка.</strong><br>Без белка (мяса, рыбы, яиц) вы быстро проголодаетесь. Добавьте бургер или наггетсы.${plateLink}`;
+            trayTip.className = 'smart-tip bad';
+        } else if (totalGreen === 0) {
+            trayTip.innerHTML = `<strong>В заказе нет овощей.</strong><br>Это фастфуд, но можно сделать его сбалансированнее. Добавьте <em>Морковные палочки</em> или <em>Салат Цезарь</em>.${plateLink}`;
+            trayTip.className = 'smart-tip';
+        } else if (totalGreen > 0 && totalGreen < 20) {
+            trayTip.innerHTML = `<strong>В заказе очень мало овощей.</strong><br>Зеленый кружок есть, но клетчатки недостаточно. Добавьте <em>Салат овощной</em> или <em>Морковные палочки</em>.${plateLink}`;
+            trayTip.className = 'smart-tip';
+        } else {
+            trayTip.innerHTML = `<strong>Неплохой выбор для фастфуда.</strong><br>Вы набрали белок и достаточно клетчатки. Но помните, что это все равно высококалорийная еда.${plateLink}`;
+            trayTip.className = 'smart-tip';
+        }
+
+        // Отрисовка кружочков (без drinksContainer)
         const vegContainer = document.getElementById('tray-veg');
         const proteinContainer = document.getElementById('tray-protein');
         const carbsContainer = document.getElementById('tray-carbs');
-        const drinksContainer = document.getElementById('tray-drinks');
 
         if (vegContainer && proteinContainer && carbsContainer) {
             vegContainer.innerHTML = '';
             proteinContainer.innerHTML = '';
             carbsContainer.innerHTML = '';
-            if (drinksContainer) drinksContainer.innerHTML = '';
 
             let colorsInVeg = new Set();
             let colorsInProtein = new Set();
             let colorsInCarbs = new Set();
-            let colorsInDrinks = new Set();
 
             selectedDishes.forEach(dish => {
                 dish.colors.forEach(c => {
@@ -100,35 +141,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (c === 'green' || c === 'red' || c === 'orange') colorsInVeg.add(emojiSpan);
                     else if (c === 'brown') colorsInProtein.add(emojiSpan);
                     else if (c === 'yellow') colorsInCarbs.add(emojiSpan);
-                    else if (c === 'white') colorsInDrinks.add(emojiSpan);
                 });
             });
 
             colorsInVeg.forEach(html => vegContainer.innerHTML += html);
             colorsInProtein.forEach(html => proteinContainer.innerHTML += html);
             colorsInCarbs.forEach(html => carbsContainer.innerHTML += html);
-            if (drinksContainer) colorsInDrinks.forEach(html => drinksContainer.innerHTML += html);
-        }
-
-        // Честная оценка
-        if (selectedDishes.length === 0) {
-            trayTip.innerHTML = 'Выберите блюда, чтобы получить совет по балансу.';
-            trayTip.className = 'smart-tip';
-            return;
-        }
-
-        if (junkCount >= 2) {
-            trayTip.innerHTML = `⚠️ <strong>Внимание: избыток сахара.</strong><br>В заказе ${junkCount} десерта/сладких напитка. Это даст быстрый скачок энергии, но через час вы снова захотите есть.<br><small>💡 <b>Совет:</b> Оставьте один десерт, а остальное замените на воду.</small>`;
-            trayTip.className = 'smart-tip bad';
-        } else if (totalProteinServings < 1) {
-            trayTip.innerHTML = `⚠️ <strong>В заказе мало белка.</strong><br>Без белка (мяса, рыбы, яиц) вы быстро проголодаетесь. Добавьте бургер или наггетсы.`;
-            trayTip.className = 'smart-tip bad';
-        } else if (totalVeggieServings < 1) {
-            trayTip.innerHTML = `🟡 <strong>Это фастфуд, но можно сделать его сбалансированнее.</strong><br>В заказе есть белок, но мало овощей. Добавьте <em>Морковные палочки</em> или <em>Салат Цезарь</em>.<br><small>💡 <b>Совет на дом:</b> Вечером соберите <a href="../../../raznotsvetnaya-tarelka/index.html" style="color: #d84315; font-weight: bold;">«Разноцветную тарелку»</a>, чтобы добрать клетчатку.</small>`;
-            trayTip.className = 'smart-tip';
-        } else {
-            trayTip.innerHTML = `🟡 <strong>Неплохой выбор для фастфуда.</strong><br>Вы набрали белок и немного клетчатки. Но помните, что это все равно высококалорийная еда.`;
-            trayTip.className = 'smart-tip';
         }
 
         if (isPro) saveToHistory(selectedDishes, totalGreen);

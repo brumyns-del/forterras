@@ -75,17 +75,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (showMacrosCheckbox && showMacrosCheckbox.checked && macrosDisplay) {
             macrosDisplay.style.display = 'block';
-            macrosDisplay.innerHTML = `<b>Итого по чеку:</b><br>
-                Калории: ${totalKcal} ккал<br>
-                Белки: ${totalP}г | Жиры: ${totalF}г | Углеводы: ${totalC}г<br>
-                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed #ccc;">
-                    Ваше соотношение БЖУ: <b>${ratioText}</b><br>
-                    <span style="font-size: 0.8rem; color: #888;">Норма: 1 : 1 : 4</span>
-                </div>`;
+            macrosDisplay.innerHTML = `
+                <div class="bju-header">
+                    <span>Итого по чеку:</span>
+                    <span>${totalKcal} ккал</span>
+                </div>
+                <div class="bju-macros">
+                    <span>Б: ${totalP}г</span>
+                    <span>Ж: ${totalF}г</span>
+                    <span>У: ${totalC}г</span>
+                </div>
+                <div class="bju-ratio-box">
+                    <div class="ratio-row">
+                        <span>Ваше соотношение:</span>
+                        <span class="ratio-value">${ratioText}</span>
+                    </div>
+                    <div class="ratio-row">
+                        <span>Норма:</span>
+                        <span class="ratio-value normal-ratio">1 : 1 : 4</span>
+                    </div>
+                    <div style="margin-top: 10px; font-size: 0.75rem; color: #666; text-align: center;">
+                        В пересчете на калорийность: белки 10–35%, жиры 20–35%, углеводы 45–65%.
+                        <a href="#" target="_blank" style="color: #4a7c59; text-decoration: underline;">Читать подробную статью о нормах БЖУ</a>
+                        <br><a href="#" class="btn-buy" style="text-decoration: none; display: inline-block; padding: 6px 12px; font-size: 0.75rem; margin-top: 5px;">Рассчитать индивидуальные нормы (PRO)</a>
+                    </div>
+                </div>
+            `;
         } else if (macrosDisplay) {
             macrosDisplay.style.display = 'none';
         }
-
         // Отображение предупреждения о красителях
         const dyeWarning = document.getElementById('dye-warning');
         if (dyeWarning) {

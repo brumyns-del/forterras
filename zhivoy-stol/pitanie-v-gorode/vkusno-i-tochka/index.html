@@ -58,59 +58,44 @@
                     <div class="menu-items" id="cat-kids"></div>
                     <div class="menu-items" id="cat-sauce" style="margin-top:5px;"></div>
                 </div>
+                
             </div>
 
             <!-- ПРАВАЯ КОЛОНКА: ПОДНОС -->
-            <div class="tray-panel">
-                <h2>2. Ваш поднос</h2>
-                <div class="tray" id="tray-circle">
-                    <div class="tray-sector pc-veg" id="tray-veg"></div>
-                    <div class="tray-sector pc-protein" id="tray-protein"></div>
-                    <div class="tray-sector pc-carbs" id="tray-carbs"></div>
-                </div>
-
-                <!-- Блок для белых кружочков (напитки) -->
-                <div class="tray-drinks" id="tray-drinks-container">
-                    <span style="font-size: 0.85rem; color: #666;">Напитки:</span>
-                    <div id="tray-drinks"></div>
-                </div>
-
-                <!-- Галочка БЖУ -->
-                <div class="pro-toggle" style="text-align: center; margin-bottom: 15px;">
-                    <label style="cursor: pointer; font-size: 0.85rem; color: #666;">
-                        <input type="checkbox" id="show-macros"> Показать БЖУ (PRO)
-                    </label>
-                    <div id="macros-display"
-                        style="display: none; margin-top: 10px; background: #f0f4f0; padding: 10px; border-radius: 8px; font-size: 0.9rem;">
-                    </div>
-                </div>
-                
-                <!-- Само окошко подсказки (оно уже есть, просто оставьте его ниже) -->
-                                <!-- ПРЕДУПРЕЖДЕНИЕ О КРАСИТЕЛЯХ -->
-                                <div id="dye-warning"
-                                    style="display: none; color: #d84315; font-size: 0.8rem; font-weight: bold; margin-top: 15px; margin-bottom: 10px; text-align: center;">
-                                    ⚠️ К сожалению, цвет выбранных блюд зависит от красителей.
+                        <div class="tray-panel">
+                            <h2>Ваш поднос</h2>
+                            <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px; line-height: 1.4; text-align: center;">
+                            Кружочки показывают цвет вашего заказа: 🟢 овощи, 🟤 белок, 🟡 углеводы.<br>
+                            Цвет пищи отражает её нутриентный состав.
+                            <a href="#" target="_blank" style="color: #4a7c59; text-decoration: underline;">Подробнее</a>
+                            <br><span style="font-size: 0.75rem; color: #d84315;">* Звездочка означает, что цвет продукта зависит от
+                                красителей.</span>
+                            </p>
+                        
+                            <div class="tray" id="tray-circle">
+                                <div class="tray-sector pc-veg" id="tray-veg"></div>
+                                <div class="tray-sector pc-protein" id="tray-protein"></div>
+                                <div class="tray-sector pc-carbs" id="tray-carbs"></div>
+                            </div>
+                        
+                            <!-- Галочка БЖУ -->
+                            <div class="pro-toggle" style="text-align: center; margin-bottom: 15px;">
+                                <label style="cursor: pointer; font-size: 0.85rem; color: #666;">
+                                    <input type="checkbox" id="show-macros"> Показать БЖУ (PRO)
+                                </label>
+                                <div id="macros-display"
+                                    style="display: none; margin-top: 10px; background: #f0f4f0; padding: 10px; border-radius: 8px; font-size: 0.9rem;">
                                 </div>
-
-                <div id="smart-tip" class="smart-tip">Выберите блюда, чтобы получить совет по балансу.</div>
-            </div>
+                            </div>
+                        
+                            <!-- Окошко с советами -->
+                            <div id="smart-tip" class="smart-tip">Выберите блюда, чтобы получить совет по балансу.</div>
+                        </div>
         </div>
 
         <!-- БЛОК PRO -->
                 <!-- БЛОК ПРО БЖУ И НОРМЫ -->
-                <div class="bju-info-section">
-                    <h3>⚖️ Норма БЖУ</h3>
-                    <p>Базовое соотношение белков, жиров и углеводов для здорового человека — <b>1 : 1 : 4</b>.</p>
-                    <p style="font-size: 0.9rem; color: #666; margin-top: 5px;">
-                        В пересчете на калорийность: белки 10–35%, жиры 20–35%, углеводы 45–65%.
-                        <a href="#" target="_blank" style="color: #4a7c59; text-decoration: underline;">Читать подробную статью о нормах
-                            БЖУ</a>
-                    </p>
-                    <div style="margin-top: 15px;">
-                        <a href="#" class="btn-buy" style="text-decoration: none; display: inline-block;">Рассчитать индивидуальные
-                            нормы (PRO)</a>
-                    </div>
-                </div>
+                
         <div class="pro-section">
             <div class="pro-header">
                 <h3>📊 Ваша статистика за неделю</h3>

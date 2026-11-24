@@ -2,7 +2,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let isPro = localStorage.getItem('app_isPro') === 'true';
     updateProUI(isPro);
 
-    // Проверка, загрузилась ли база данных
+    // Словарь для эмодзи (пищевые группы ресторана)
+    const FOOD_GROUPS = {
+        veg: '🥦', fruit: '🍎', grain: '🌾', protein: '🍗', dairy: '🥛',
+        fat: '🧈', drink: '🥤', sauce: '🥫', sweet: '🍬'
+    };
+
+    // Проверка, что база данных загрузилась
     if (!window.App || !App.DB || !App.DB.Places || !App.DB.Places.vkusno) {
         console.error("Ошибка: База данных App.DB не загружена. Проверьте путь к products-db.js");
         return;
@@ -11,18 +17,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const vkusnoMenu = App.DB.Places.vkusno.menu;
     let selectedDishes = [];
 
-    // Отрисовка меню
+    // Отрисовка карточек блюд
     vkusnoMenu.forEach(dish => {
         const btn = document.createElement('button');
         btn.className = 'menu-btn';
-        const colorEmojis = dish.colors.map(c => App.COLOR_EMOJI[c] || '⚪').join('');
-        btn.innerHTML = `<span>${colorEmojis}</span> ${dish.name}`;
+
+        // Берем группы (если их нет, ставим пустой массив)
+        const groups = dish.groups || [];
+        const groupEmojis = groups.map(g => FOOD_GROUPS[g] || '🍽️').join('');
+
+        // Добавляем каплю чистоты состава
+        let dropHtml = '';
+        if (window.App && App.MENU_DETAILS && App.MENU_DETAILS[dish.id]) {
+            const detail = App.MENU_DETAILS[dish.id];
+            dropHtml = `<span class="clean-label-drop drop-${detail.clean_label}" title="Чистота состава"></span>`;
+        }
+
+        btn.innerHTML = `<span>${groupEmojis} ${dish.name}</span> ${dropHtml}`;
         btn.addEventListener('click', () => toggleDish(dish, btn));
 
         const catContainer = document.getElementById(`cat-${dish.category}`);
-        if (catContainer) catContainer.appendChild(btn);
+        if (catContainer) {
+            catContainer.appendChild(btn);
+        }
     });
 
+    // Логика выбора/отмены блюда
     function toggleDish(dish, btn) {
         const index = selectedDishes.findIndex(d => d.id === dish.id);
         if (index === -1) {
@@ -35,15 +55,14 @@ document.addEventListener('DOMContentLoaded', () => {
         updateTray();
     }
 
+    // Обновление подноса, БЖУ и оценок
     function updateTray() {
-        const totalGreen = selectedDishes.reduce((sum, dish) => sum + dish.green, 0);
+        const totalGreen = selectedDishes.reduce((sum, dish) => sum + (dish.green || 0), 0);
         const trayTip = document.getElementById('smart-tip');
 
-        // Считаем БЖУ, порции и красители
         let totalKcal = 0, totalP = 0, totalF = 0, totalC = 0;
         let totalProteinServings = 0;
         let junkCount = 0;
-        let dyeCount = 0;
 
         selectedDishes.forEach(dish => {
             if (dish.macros) {
@@ -54,10 +73,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if (dish.servings && dish.servings.protein) totalProteinServings += dish.servings.protein;
             if (dish.junk) junkCount++;
-            if (dish.dye) dyeCount++;
         });
 
-        // Считаем реальное соотношение БЖУ
+        // Расчет реального соотношения БЖУ
         let ratioText = "0 : 0 : 0";
         if (totalP > 0) {
             ratioText = `1 : ${(totalF / totalP).toFixed(1)} : ${(totalC / totalP).toFixed(1)}`;
@@ -67,10 +85,9 @@ document.addEventListener('DOMContentLoaded', () => {
             ratioText = `0 : 0 : 1`;
         }
 
-        // Отображение БЖУ (если включена галочка)
+        // Блок с цифрами БЖУ
         const macrosDisplay = document.getElementById('macros-display');
         const showMacrosCheckbox = document.getElementById('show-macros');
-
         if (showMacrosCheckbox) showMacrosCheckbox.onchange = updateTray;
 
         if (showMacrosCheckbox && showMacrosCheckbox.checked && macrosDisplay) {
@@ -94,23 +111,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span>Норма:</span>
                         <span class="ratio-value normal-ratio">1 : 1 : 4</span>
                     </div>
-                    <div style="margin-top: 10px; font-size: 0.75rem; color: #666; text-align: center;">
-                        В пересчете на калорийность: белки 10–35%, жиры 20–35%, углеводы 45–65%.
-                        <a href="#" target="_blank" style="color: #4a7c59; text-decoration: underline;">Читать подробную статью о нормах БЖУ</a>
-                        <br><a href="#" class="btn-buy" style="text-decoration: none; display: inline-block; padding: 6px 12px; font-size: 0.75rem; margin-top: 5px;">Рассчитать индивидуальные нормы (PRO)</a>
-                    </div>
                 </div>
             `;
         } else if (macrosDisplay) {
             macrosDisplay.style.display = 'none';
         }
-        // Отображение предупреждения о красителях
-        const dyeWarning = document.getElementById('dye-warning');
-        if (dyeWarning) {
-            dyeWarning.style.display = (dyeCount > 0) ? 'block' : 'none';
-        }
 
-        // Честная оценка
+        // Честная оценка (текст под подносом)
         if (selectedDishes.length === 0) {
             trayTip.innerHTML = 'Выберите блюда, чтобы получить совет по балансу.';
             trayTip.className = 'smart-tip';
@@ -135,42 +142,9 @@ document.addEventListener('DOMContentLoaded', () => {
             trayTip.innerHTML = `<strong>Неплохой выбор для фастфуда.</strong><br>Вы набрали белок и достаточно клетчатки. Но помните, что это все равно высококалорийная еда.${plateLink}`;
             trayTip.className = 'smart-tip';
         }
-
-        // Отрисовка кружочков (без drinksContainer)
-        const vegContainer = document.getElementById('tray-veg');
-        const proteinContainer = document.getElementById('tray-protein');
-        const carbsContainer = document.getElementById('tray-carbs');
-
-        if (vegContainer && proteinContainer && carbsContainer) {
-            vegContainer.innerHTML = '';
-            proteinContainer.innerHTML = '';
-            carbsContainer.innerHTML = '';
-
-            let colorsInVeg = new Set();
-            let colorsInProtein = new Set();
-            let colorsInCarbs = new Set();
-
-            selectedDishes.forEach(dish => {
-                dish.colors.forEach(c => {
-                    const colorName = App.BRIGHT_COLORS[c] ? App.BRIGHT_COLORS[c].label : c;
-                    const tooltip = `title="${colorName}"`;
-                    const emojiSpan = `<span ${tooltip}>${App.COLOR_EMOJI[c]}</span>`;
-
-                    if (c === 'green' || c === 'red' || c === 'orange') colorsInVeg.add(emojiSpan);
-                    else if (c === 'brown') colorsInProtein.add(emojiSpan);
-                    else if (c === 'yellow') colorsInCarbs.add(emojiSpan);
-                });
-            });
-
-            colorsInVeg.forEach(html => vegContainer.innerHTML += html);
-            colorsInProtein.forEach(html => proteinContainer.innerHTML += html);
-            colorsInCarbs.forEach(html => carbsContainer.innerHTML += html);
-        }
-
-        if (isPro) saveToHistory(selectedDishes, totalGreen);
     }
 
-    // --- ЛОГИКА PRO ---
+    // Логика для кнопки PRO (заглушка)
     window.App = window.App || {};
     App.buyPro = function () {
         if (confirm("Это демо-версия оплаты. Активировать PRO?")) {

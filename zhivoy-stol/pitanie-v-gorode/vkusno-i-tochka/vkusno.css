@@ -488,3 +488,104 @@ header {
     color: #4a7c59;
     /* Зеленый цвет для нормы */
 }
+/* Индикатор чистоты состава (Капли) */
+.clean-label-drop {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-left: 8px;
+    vertical-align: middle;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.drop-green {
+    background-color: #4caf50;
+}
+
+.drop-yellow {
+    background-color: #ffca28;
+}
+
+.drop-grey {
+    background-color: #9e9e9e;
+}
+
+/* Сетка для большого меню */
+.menu-category {
+    margin-bottom: 25px;
+}
+
+.menu-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+}
+
+/* Делаем карточки меню чуть компактнее, чтобы влезло больше */
+.menu-btn {
+    font-size: 0.85rem;
+    padding: 10px 12px;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+/* ============================================================================
+   КАПЛЯ (CLEAN LABEL) И АДАПТИВ
+   ========================================================================== */
+.clean-label-drop {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50% 0 50% 50%;
+    /* Форма капли */
+    transform: rotate(-45deg);
+    /* Наклон капли */
+    margin-left: 8px;
+    vertical-align: middle;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.drop-green {
+    background-color: #4caf50;
+}
+
+.drop-yellow {
+    background-color: #ffca28;
+}
+
+.drop-grey {
+    background-color: #9e9e9e;
+}
+
+/* Сетка меню (на ПК 2 колонки, на телефоне 1) */
+.menu-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 10px;
+}
+
+.menu-btn {
+    font-size: 0.85rem;
+    padding: 10px 12px;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Адаптив для телефонов: меню и поднос друг под другом */
+@media (max-width: 768px) {
+    .app-layout {
+        grid-template-columns: 1fr !important;
+        /* В одну колонку */
+    }
+
+    .tray-panel {
+        position: static !important;
+        /* Отключаем "липкость" на телефоне */
+        margin-top: 20px;
+    }
+}

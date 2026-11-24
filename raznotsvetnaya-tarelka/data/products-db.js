@@ -149,54 +149,68 @@ App.DB = {
         'vkusno': {
             name: 'Вкусно — и точка',
             menu: [
-                // --- БУРГЕРЫ (Белок + Углеводы) ---
-                { id: 'v_grand', name: 'Гранд Де Люкс', category: 'burger', colors: ['brown', 'yellow', 'red'], green: 5, protein: true, junk: false, dye: false, macros: { kcal: 610, p: 27, f: 34, c: 48 }, servings: { protein: 1.5, carbs: 1.5 } },
-                { id: 'v_big_hit', name: 'Биг Хит', category: 'burger', colors: ['brown', 'yellow', 'red'], green: 5, protein: true, junk: false, dye: false, macros: { kcal: 620, p: 25, f: 32, c: 55 }, servings: { protein: 1.5, carbs: 1.5 } },
-                { id: 'v_big_chicken', name: 'Биг Чикен', category: 'burger', colors: ['brown', 'yellow', 'green'], green: 8, protein: true, junk: false, dye: false, macros: { kcal: 550, p: 28, f: 26, c: 50 }, servings: { protein: 1.5, carbs: 1.5 } },
-                { id: 'v_cheese', name: 'Чизбургер', category: 'burger', colors: ['brown', 'yellow', 'red'], green: 2, protein: true, junk: false, dye: false, macros: { kcal: 300, p: 15, f: 13, c: 30 }, servings: { protein: 1, carbs: 1 } },
-                { id: 'v_chicken', name: 'Чикен Премьер', category: 'burger', colors: ['brown', 'yellow', 'white'], green: 3, protein: true, junk: false, dye: false, macros: { kcal: 490, p: 24, f: 22, c: 48 }, servings: { protein: 1.5, carbs: 1.5 } },
-                { id: 'v_fish', name: 'Фиш Бургер', category: 'burger', colors: ['brown', 'yellow', 'white'], green: 2, protein: true, junk: false, dye: false, macros: { kcal: 340, p: 15, f: 14, c: 38 }, servings: { protein: 1, carbs: 1 } },
+                // --- БУРГЕРЫ ---
+                { id: 'v_cheeseburger', name: 'Чизбургер', category: 'burger', groups: ['protein', 'grain', 'dairy', 'sauce'], green: 2, protein: true, junk: false, dye: false, macros: { kcal: 291, p: 14, f: 11, c: 33 }, servings: { protein: 1, carbs: 1 } },
+                { id: 'v_double_cheeseburger', name: 'Двойной Чизбургер', category: 'burger', groups: ['protein', 'grain', 'dairy', 'sauce'], green: 2, protein: true, junk: false, dye: false, macros: { kcal: 416, p: 24, f: 21, c: 34 }, servings: { protein: 2, carbs: 1 } },
+                { id: 'v_hamburger', name: 'Гамбургер', category: 'burger', groups: ['protein', 'grain', 'sauce'], green: 2, protein: true, junk: false, dye: false, macros: { kcal: 252, p: 12, f: 8.2, c: 33 }, servings: { protein: 1, carbs: 1 } },
+                { id: 'v_fish_burger', name: 'Фиш Бургер', category: 'burger', groups: ['protein', 'grain', 'dairy', 'sauce'], green: 0, protein: true, junk: false, dye: false, macros: { kcal: 327, p: 13, f: 13, c: 40 }, servings: { protein: 1, carbs: 1.5 } },
+                { id: 'v_double_fish', name: 'Двойной Фиш Бургер', category: 'burger', groups: ['protein', 'grain', 'dairy', 'sauce'], green: 0, protein: true, junk: false, dye: false, macros: { kcal: 464, p: 22, f: 20, c: 50 }, servings: { protein: 2, carbs: 2 } },
+                { id: 'v_chickenburger', name: 'Чикенбургер', category: 'burger', groups: ['protein', 'grain', 'veg', 'sauce'], green: 5, protein: true, junk: false, dye: false, macros: { kcal: 331, p: 10, f: 14, c: 40 }, servings: { protein: 1, carbs: 1.5 } },
+                { id: 'v_grand', name: 'Гранд', category: 'burger', groups: ['protein', 'grain', 'dairy', 'sauce'], green: 2, protein: true, junk: false, dye: false, macros: { kcal: 478, p: 30, f: 22, c: 38 }, servings: { protein: 2, carbs: 1.5 } },
+                { id: 'v_double_grand', name: 'Двойной Гранд', category: 'burger', groups: ['protein', 'grain', 'dairy', 'sauce'], green: 2, protein: true, junk: false, dye: false, macros: { kcal: 671, p: 48, f: 35, c: 40 }, servings: { protein: 3, carbs: 1.5 } },
+                { id: 'v_grand_deluxe', name: 'Гранд Де Люкс', category: 'burger', groups: ['protein', 'grain', 'dairy', 'veg', 'sauce'], green: 8, protein: true, junk: false, dye: false, macros: { kcal: 546, p: 30, f: 28, c: 43 }, servings: { protein: 2, carbs: 1.5, veggies: 0.5 } },
+                { id: 'v_chicken_premier', name: 'Чикен Премьер', category: 'burger', groups: ['protein', 'grain', 'dairy', 'veg', 'sauce'], green: 8, protein: true, junk: false, dye: false, macros: { kcal: 476, p: 22, f: 20, c: 52 }, servings: { protein: 1.5, carbs: 2, veggies: 0.5 } },
+                { id: 'v_big_special', name: 'Биг Спешиал', category: 'burger', groups: ['protein', 'grain', 'dairy', 'veg', 'sauce'], green: 8, protein: true, junk: false, dye: false, macros: { kcal: 756, p: 41, f: 42, c: 52 }, servings: { protein: 2.5, carbs: 2, veggies: 0.5 } },
+                { id: 'v_double_big_special', name: 'Двойной Биг Спешиал', category: 'burger', groups: ['protein', 'grain', 'dairy', 'veg', 'sauce'], green: 8, protein: true, junk: false, dye: false, macros: { kcal: 1042, p: 67, f: 63, c: 52 }, servings: { protein: 4, carbs: 2, veggies: 0.5 } },
+                { id: 'v_big_special_jr', name: 'Биг Спешиал Джуниор', category: 'burger', groups: ['protein', 'grain', 'dairy', 'veg', 'sauce'], green: 5, protein: true, junk: false, dye: false, macros: { kcal: 545, p: 30, f: 30, c: 38 }, servings: { protein: 2, carbs: 1.5 } },
+                { id: 'v_chicken_hit', name: 'Чикен Хит', category: 'burger', groups: ['protein', 'grain', 'veg', 'sauce'], green: 5, protein: true, junk: false, dye: false, macros: { kcal: 445, p: 19, f: 19, c: 50 }, servings: { protein: 1.5, carbs: 2 } },
+                { id: 'v_big_hit', name: 'Биг Хит', category: 'burger', groups: ['protein', 'grain', 'veg', 'sauce'], green: 5, protein: true, junk: false, dye: false, macros: { kcal: 503, p: 25, f: 25, c: 45 }, servings: { protein: 2, carbs: 1.5 } },
+                { id: 'v_double_big_hit', name: 'Двойной Биг Хит', category: 'burger', groups: ['protein', 'grain', 'veg', 'sauce'], green: 5, protein: true, junk: false, dye: false, macros: { kcal: 676, p: 40, f: 37, c: 46 }, servings: { protein: 3, carbs: 1.5 } },
+                { id: 'v_big_chicken', name: 'Биг Чикен Бургер', category: 'burger', groups: ['protein', 'grain', 'dairy', 'veg', 'sauce'], green: 8, protein: true, junk: false, dye: false, macros: { kcal: 678, p: 37, f: 32, c: 58 }, servings: { protein: 2.5, carbs: 2, veggies: 0.5 } },
+                { id: 'v_big_chicken_sesame', name: 'Биг Чикен Бургер Кунжутный', category: 'burger', groups: ['protein', 'grain', 'dairy', 'veg', 'sauce'], green: 8, protein: true, junk: false, dye: false, macros: { kcal: 735, p: 39, f: 37, c: 59 }, servings: { protein: 2.5, carbs: 2, veggies: 0.5 } },
+                { id: 'v_triple_cheese', name: 'Тройной Чизбургер Три Сыра', category: 'burger', groups: ['protein', 'grain', 'dairy', 'sauce'], green: 2, protein: true, junk: false, dye: false, macros: { kcal: 538, p: 34, f: 29, c: 34 }, servings: { protein: 3, carbs: 1 } },
 
-                // --- РОЛЛЫ И ПАНИНИ ---
-                { id: 'v_roll_curry', name: 'Чикен Карри Ролл', category: 'roll', colors: ['yellow', 'brown', 'white'], green: 2, protein: true, junk: false, dye: false, macros: { kcal: 450, p: 18, f: 22, c: 45 }, servings: { protein: 1, carbs: 1.5 } },
-                { id: 'v_panini_toscana', name: 'Панини Тоскана', category: 'roll', colors: ['yellow', 'brown', 'red'], green: 4, protein: true, junk: false, dye: false, macros: { kcal: 400, p: 20, f: 18, c: 38 }, servings: { protein: 1, carbs: 1.5 } },
-                { id: 'v_roll_fresh', name: 'Фреш Ролл с индейкой', category: 'roll', colors: ['yellow', 'green', 'white'], green: 15, protein: true, junk: false, dye: false, macros: { kcal: 350, p: 22, f: 12, c: 40 }, servings: { protein: 1, carbs: 1 } },
+                // --- РОЛЛЫ ---
+                { id: 'v_caesar_roll', name: 'Цезарь Ролл', category: 'roll', groups: ['protein', 'grain', 'veg', 'sauce'], green: 8, protein: true, junk: false, dye: false, macros: { kcal: 429, p: 17, f: 22, c: 41 }, servings: { protein: 1.5, carbs: 1.5, veggies: 0.5 } },
+                { id: 'v_big_special_roll', name: 'Биг Спешиал Ролл', category: 'roll', groups: ['protein', 'grain', 'dairy', 'veg', 'sauce'], green: 8, protein: true, junk: false, dye: false, macros: { kcal: 487, p: 25, f: 28, c: 33 }, servings: { protein: 2, carbs: 1.5, veggies: 0.5 } },
+                { id: 'v_shrimp_roll', name: 'Шримп Ролл', category: 'roll', groups: ['protein', 'grain', 'veg', 'sauce'], green: 8, protein: true, junk: false, dye: false, macros: { kcal: 397, p: 14, f: 17, c: 46 }, servings: { protein: 1.5, carbs: 1.5, veggies: 0.5 } },
+                { id: 'v_curry_roll', name: 'Чикен Карри ролл', category: 'roll', groups: ['protein', 'grain', 'veg', 'sauce'], green: 8, protein: true, junk: false, dye: false, macros: { kcal: 426, p: 18, f: 20, c: 44 }, servings: { protein: 1.5, carbs: 1.5, veggies: 0.5 } },
 
                 // --- СНЭКИ ---
-                { id: 'v_fries_s', name: 'Картофель фри (мал.)', category: 'snack', colors: ['yellow'], green: 0, protein: false, junk: false, dye: false, macros: { kcal: 230, p: 3, f: 10, c: 30 }, servings: { carbs: 1 } },
-                { id: 'v_fries_l', name: 'Картофель фри (бол.)', category: 'snack', colors: ['yellow'], green: 0, protein: false, junk: false, dye: false, macros: { kcal: 450, p: 5, f: 20, c: 60 }, servings: { carbs: 2 } },
-                { id: 'v_nuggets', name: 'Наггетсы (6 шт.)', category: 'snack', colors: ['brown', 'yellow'], green: 0, protein: true, junk: false, dye: false, macros: { kcal: 280, p: 15, f: 15, c: 20 }, servings: { protein: 1 } },
-                { id: 'v_mozzarella', name: 'Сырные палочки', category: 'snack', colors: ['yellow', 'brown'], green: 0, protein: true, junk: false, dye: false, macros: { kcal: 380, p: 14, f: 22, c: 32 }, servings: { protein: 1, carbs: 1 } },
+                { id: 'v_fries_s', name: 'Картофель фри (мал.)', category: 'snack', groups: ['grain', 'fat'], green: 0, protein: false, junk: false, dye: false, macros: { kcal: 230, p: 3, f: 10, c: 30 }, servings: { carbs: 1 } },
+                { id: 'v_fries_l', name: 'Картофель фри (бол.)', category: 'snack', groups: ['grain', 'fat'], green: 0, protein: false, junk: false, dye: false, macros: { kcal: 450, p: 5, f: 20, c: 60 }, servings: { carbs: 2 } },
+                { id: 'v_nuggets', name: 'Наггетсы (6 шт.)', category: 'snack', groups: ['protein', 'grain'], green: 0, protein: true, junk: false, dye: false, macros: { kcal: 280, p: 15, f: 15, c: 20 }, servings: { protein: 1 } },
+                { id: 'v_mozzarella', name: 'Сырные палочки', category: 'snack', groups: ['dairy', 'grain', 'fat'], green: 0, protein: true, junk: false, dye: false, macros: { kcal: 380, p: 14, f: 22, c: 32 }, servings: { protein: 1, carbs: 1 } },
 
                 // --- ЗАВТРАКИ ---
-                { id: 'v_breakfast_big', name: 'Большой завтрак', category: 'breakfast', colors: ['brown', 'yellow', 'white'], green: 0, protein: true, junk: false, dye: false, macros: { kcal: 600, p: 25, f: 35, c: 45 }, servings: { protein: 1.5, carbs: 1 } },
-                { id: 'v_omelet', name: 'Омлет с сосисками', category: 'breakfast', colors: ['yellow', 'brown'], green: 0, protein: true, junk: false, dye: false, macros: { kcal: 400, p: 20, f: 25, c: 15 }, servings: { protein: 1.5 } },
-                { id: 'v_pancakes', name: 'Блины с сюрпризом', category: 'breakfast', colors: ['yellow', 'white'], green: 0, protein: false, junk: true, dye: false, macros: { kcal: 350, p: 6, f: 12, c: 55 }, servings: { carbs: 2 } },
+                { id: 'v_breakfast_big', name: 'Большой завтрак', category: 'breakfast', groups: ['protein', 'grain', 'fat'], green: 0, protein: true, junk: false, dye: false, macros: { kcal: 600, p: 25, f: 35, c: 45 }, servings: { protein: 1.5, carbs: 1 } },
+                { id: 'v_omelet', name: 'Омлет с сосисками', category: 'breakfast', groups: ['protein', 'fat'], green: 0, protein: true, junk: false, dye: false, macros: { kcal: 400, p: 20, f: 25, c: 15 }, servings: { protein: 1.5 } },
+                { id: 'v_pancakes', name: 'Блины с сюрпризом', category: 'breakfast', groups: ['grain', 'sweet'], green: 0, protein: false, junk: true, dye: false, macros: { kcal: 350, p: 6, f: 12, c: 55 }, servings: { carbs: 2 } },
 
                 // --- САЛАТЫ И ОВОЩИ ---
-                { id: 'v_salad_caesar', name: 'Салат Цезарь', category: 'salad', colors: ['green', 'brown'], green: 40, protein: true, junk: false, dye: false, macros: { kcal: 250, p: 15, f: 15, c: 10 }, servings: { protein: 0.5, veggies: 1 } },
-                { id: 'v_salad_veg', name: 'Салат овощной', category: 'salad', colors: ['green', 'red'], green: 50, protein: false, junk: false, dye: false, macros: { kcal: 80, p: 2, f: 4, c: 8 }, servings: { veggies: 1.5 } },
-                { id: 'v_carrot_sticks', name: 'Морковные палочки', category: 'salad', colors: ['orange'], green: 40, protein: false, junk: false, dye: false, macros: { kcal: 50, p: 1, f: 0, c: 10 }, servings: { veggies: 1 } },
-                { id: 'v_apple_slices', name: 'Яблочные дольки', category: 'salad', colors: ['green', 'red'], green: 30, protein: false, junk: false, dye: false, macros: { kcal: 60, p: 0, f: 0, c: 15 }, servings: { veggies: 1 } },
+                { id: 'v_salad_caesar', name: 'Салат Цезарь', category: 'salad', groups: ['veg', 'protein', 'sauce'], green: 40, protein: true, junk: false, dye: false, macros: { kcal: 250, p: 15, f: 15, c: 10 }, servings: { protein: 0.5, veggies: 1 } },
+                { id: 'v_salad_veg', name: 'Салат овощной', category: 'salad', groups: ['veg'], green: 50, protein: false, junk: false, dye: false, macros: { kcal: 80, p: 2, f: 4, c: 8 }, servings: { veggies: 1.5 } },
+                { id: 'v_carrot_sticks', name: 'Морковные палочки', category: 'salad', groups: ['veg'], green: 40, protein: false, junk: false, dye: false, macros: { kcal: 50, p: 1, f: 0, c: 10 }, servings: { veggies: 1 } },
+                { id: 'v_apple_slices', name: 'Яблочные дольки', category: 'salad', groups: ['fruit'], green: 30, protein: false, junk: false, dye: false, macros: { kcal: 60, p: 0, f: 0, c: 15 }, servings: { veggies: 1 } },
 
-                // --- ДЕСЕРТЫ (Добавили красители некоторым) ---
-                { id: 'v_profiterole', name: 'Профитроль', category: 'dessert', colors: ['yellow', 'brown'], green: 0, protein: false, junk: true, dye: true, macros: { kcal: 250, p: 4, f: 14, c: 28 }, servings: { carbs: 1 } },
-                { id: 'v_whoopie', name: 'Вупи пай', category: 'dessert', colors: ['brown', 'white'], green: 0, protein: false, junk: true, dye: false, macros: { kcal: 350, p: 4, f: 18, c: 45 }, servings: { carbs: 1.5 } },
-                { id: 'v_pie_raspberry', name: 'Пирожок Фондан-малина', category: 'dessert', colors: ['brown', 'red'], green: 0, protein: false, junk: true, dye: true, macros: { kcal: 300, p: 3, f: 15, c: 40 }, servings: { carbs: 1.5 } },
+                // --- ДЕСЕРТЫ ---
+                { id: 'v_profiterole', name: 'Профитроль', category: 'dessert', groups: ['sweet', 'grain', 'fat'], green: 0, protein: false, junk: true, dye: true, macros: { kcal: 250, p: 4, f: 14, c: 28 }, servings: { carbs: 1 } },
+                { id: 'v_whoopie', name: 'Вупи пай', category: 'dessert', groups: ['sweet', 'grain', 'fat'], green: 0, protein: false, junk: true, dye: false, macros: { kcal: 350, p: 4, f: 18, c: 45 }, servings: { carbs: 1.5 } },
+                { id: 'v_pie_raspberry', name: 'Пирожок Фондан-малина', category: 'dessert', groups: ['sweet', 'grain', 'fruit'], green: 0, protein: false, junk: true, dye: true, macros: { kcal: 300, p: 3, f: 15, c: 40 }, servings: { carbs: 1.5 } },
 
-                // --- НАПИТКИ (Добавили красители коле и бабл-ти) ---
-                { id: 'v_water', name: 'Вода', category: 'drink', colors: ['white'], green: 0, protein: false, junk: false, dye: false, macros: { kcal: 0, p: 0, f: 0, c: 0 }, servings: {} },
-                { id: 'v_tea', name: 'Чай без сахара', category: 'drink', colors: ['white'], green: 0, protein: false, junk: false, dye: false, macros: { kcal: 5, p: 0, f: 0, c: 1 }, servings: {} },
-                { id: 'v_cappuccino', name: 'Капучино', category: 'drink', colors: ['white', 'brown'], green: 0, protein: false, junk: false, dye: false, macros: { kcal: 120, p: 6, f: 6, c: 10 }, servings: {} },
-                { id: 'v_latte', name: 'Латте Попкорн', category: 'drink', colors: ['white', 'brown', 'yellow'], green: 0, protein: false, junk: true, dye: false, macros: { kcal: 250, p: 6, f: 8, c: 38 }, servings: { carbs: 1.5 } },
-                { id: 'v_bubble_tea', name: 'Бабл-ти Розовый помело', category: 'drink', colors: ['white', 'red'], green: 0, protein: false, junk: true, dye: true, macros: { kcal: 300, p: 1, f: 2, c: 70 }, servings: { carbs: 2 } },
-                { id: 'v_cola', name: 'Кола (средняя)', category: 'drink', colors: ['yellow'], green: 0, protein: false, junk: true, dye: true, macros: { kcal: 150, p: 0, f: 0, c: 38 }, servings: { carbs: 1.5 } },
-                { id: 'v_juice', name: 'Сок апельсиновый', category: 'drink', colors: ['orange', 'red'], green: 0, protein: false, junk: true, dye: false, macros: { kcal: 120, p: 1, f: 0, c: 28 }, servings: { carbs: 1 } },
+                // --- НАПИТКИ ---
+                { id: 'v_water', name: 'Вода', category: 'drink', groups: ['drink'], green: 0, protein: false, junk: false, dye: false, macros: { kcal: 0, p: 0, f: 0, c: 0 }, servings: {} },
+                { id: 'v_tea', name: 'Чай без сахара', category: 'drink', groups: ['drink'], green: 0, protein: false, junk: false, dye: false, macros: { kcal: 5, p: 0, f: 0, c: 1 }, servings: {} },
+                { id: 'v_cappuccino', name: 'Капучино', category: 'drink', groups: ['drink', 'dairy'], green: 0, protein: false, junk: false, dye: false, macros: { kcal: 120, p: 6, f: 6, c: 10 }, servings: {} },
+                { id: 'v_latte', name: 'Латте Попкорн', category: 'drink', groups: ['drink', 'dairy', 'sweet'], green: 0, protein: false, junk: true, dye: false, macros: { kcal: 250, p: 6, f: 8, c: 38 }, servings: { carbs: 1.5 } },
+                { id: 'v_bubble_tea', name: 'Бабл-ти Розовый помело', category: 'drink', groups: ['drink', 'sweet', 'fruit'], green: 0, protein: false, junk: true, dye: true, macros: { kcal: 300, p: 1, f: 2, c: 70 }, servings: { carbs: 2 } },
+                { id: 'v_cola', name: 'Кола (средняя)', category: 'drink', groups: ['drink', 'sweet'], green: 0, protein: false, junk: true, dye: true, macros: { kcal: 150, p: 0, f: 0, c: 38 }, servings: { carbs: 1.5 } },
+                { id: 'v_juice', name: 'Сок апельсиновый', category: 'drink', groups: ['drink', 'fruit'], green: 0, protein: false, junk: true, dye: false, macros: { kcal: 120, p: 1, f: 0, c: 28 }, servings: { carbs: 1 } },
 
-                // --- ДЕТСКОЕ И СОУСЫ (Добавили красители соусам и комбо) ---
-                { id: 'v_kids_combo', name: 'Кидз Комбо', category: 'kids', colors: ['yellow', 'green', 'white'], green: 20, protein: true, junk: false, dye: true, macros: { kcal: 400, p: 15, f: 15, c: 50 }, servings: { protein: 1, carbs: 1 } },
-                { id: 'v_sauce_cheese', name: 'Соус Сырный', category: 'sauce', colors: ['white', 'yellow'], green: 0, protein: false, junk: true, dye: true, macros: { kcal: 80, p: 1, f: 7, c: 3 }, servings: {} },
-                { id: 'v_sauce_bbq', name: 'Соус Барбекю', category: 'sauce', colors: ['brown', 'red'], green: 0, protein: false, junk: true, dye: true, macros: { kcal: 60, p: 0, f: 0, c: 14 }, servings: {} }
+                // --- ДЕТСКОЕ И СОУСЫ ---
+                { id: 'v_kids_combo', name: 'Кидз Комбо', category: 'kids', groups: ['protein', 'grain', 'fruit'], green: 20, protein: true, junk: false, dye: true, macros: { kcal: 400, p: 15, f: 15, c: 50 }, servings: { protein: 1, carbs: 1 } },
+                { id: 'v_sauce_cheese', name: 'Соус Сырный', category: 'sauce', groups: ['sauce', 'dairy', 'fat'], green: 0, protein: false, junk: true, dye: true, macros: { kcal: 80, p: 1, f: 7, c: 3 }, servings: {} },
+                { id: 'v_sauce_bbq', name: 'Соус Барбекю', category: 'sauce', groups: ['sauce', 'sweet'], green: 0, protein: false, junk: true, dye: true, macros: { kcal: 60, p: 0, f: 0, c: 14 }, servings: {} }
             ]
         }
     }

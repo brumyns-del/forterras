@@ -64,6 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let totalProteinServings = 0;
         let junkCount = 0;
 
+        // Переменные для процентов заполнения
+        let totalVeggie = 0, totalProt = 0, totalCarbs = 0;
+
         selectedDishes.forEach(dish => {
             if (dish.macros) {
                 totalKcal += dish.macros.kcal;
@@ -71,11 +74,58 @@ document.addEventListener('DOMContentLoaded', () => {
                 totalF += dish.macros.f;
                 totalC += dish.macros.c;
             }
-            if (dish.servings && dish.servings.protein) totalProteinServings += dish.servings.protein;
+            if (dish.servings) {
+                if (dish.servings.protein) totalProteinServings += dish.servings.protein;
+                if (dish.servings.veggies) totalVeggie += dish.servings.veggies;
+                if (dish.servings.protein) totalProt += dish.servings.protein;
+                if (dish.servings.carbs) totalCarbs += dish.servings.carbs;
+            }
             if (dish.junk) junkCount++;
         });
 
-        // Расчет реального соотношения БЖУ
+        // === 1. РАСЧЕТ ПРОЦЕНТОВ ЗАПОЛНЕНИЯ ПОДНОСА ===
+        const targetVeg = 2, targetProt = 1.5, targetCarbs = 2;
+        const fillVeg = Math.min((totalVeggie / targetVeg) * 100, 100);
+        const fillProt = Math.min((totalProt / targetProt) * 100, 100);
+        const fillCarbs = Math.min((totalCarbs / targetCarbs) * 100, 100);
+
+        const trayEl = document.getElementById('tray-circle');
+        if (trayEl) {
+            trayEl.style.setProperty('--fill-veg', fillVeg + '%');
+            trayEl.style.setProperty('--fill-protein', fillProt + '%');
+            trayEl.style.setProperty('--fill-carbs', fillCarbs + '%');
+        }
+
+        // === 2. ОТРИСОВКА ЭМОДЗИ ===
+        const vegContainer = document.getElementById('tray-veg');
+        const proteinContainer = document.getElementById('tray-protein');
+        const carbsContainer = document.getElementById('tray-carbs');
+
+        if (vegContainer && proteinContainer && carbsContainer) {
+            vegContainer.innerHTML = '';
+            proteinContainer.innerHTML = '';
+            carbsContainer.innerHTML = '';
+
+            let groupsInVeg = new Set();
+            let groupsInProtein = new Set();
+            let groupsInCarbs = new Set();
+
+            selectedDishes.forEach(dish => {
+                const groups = dish.groups || [];
+                groups.forEach(g => {
+                    const emoji = FOOD_GROUPS[g] || '🍽️';
+                    if (g === 'veg' || g === 'fruit') groupsInVeg.add(emoji);
+                    else if (g === 'protein' || g === 'dairy') groupsInProtein.add(emoji);
+                    else if (g === 'grain' || g === 'sweet') groupsInCarbs.add(emoji);
+                });
+            });
+
+            groupsInVeg.forEach(emoji => vegContainer.innerHTML += `<span>${emoji}</span>`);
+            groupsInProtein.forEach(emoji => proteinContainer.innerHTML += `<span>${emoji}</span>`);
+            groupsInCarbs.forEach(emoji => carbsContainer.innerHTML += `<span>${emoji}</span>`);
+        }
+
+        // === 3. РАСЧЕТ БЖУ И ГАЛОЧКА ===
         let ratioText = "0 : 0 : 0";
         if (totalP > 0) {
             ratioText = `1 : ${(totalF / totalP).toFixed(1)} : ${(totalC / totalP).toFixed(1)}`;
@@ -85,7 +135,6 @@ document.addEventListener('DOMContentLoaded', () => {
             ratioText = `0 : 0 : 1`;
         }
 
-        // Блок с цифрами БЖУ
         const macrosDisplay = document.getElementById('macros-display');
         const showMacrosCheckbox = document.getElementById('show-macros');
         if (showMacrosCheckbox) showMacrosCheckbox.onchange = updateTray;
@@ -117,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
             macrosDisplay.style.display = 'none';
         }
 
-        // Честная оценка (текст под подносом)
+        // === 4. ЧЕСТНАЯ ОЦЕНКА ===
         if (selectedDishes.length === 0) {
             trayTip.innerHTML = 'Выберите блюда, чтобы получить совет по балансу.';
             trayTip.className = 'smart-tip';

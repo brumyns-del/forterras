@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Осознанный выбор в «Вкусно — и точка» | Пример страницы</title>
+  <style>
+    :root {
+      --green: #0f7b4f;
+      --green-light: #e8f5ef;
+      --amber: #b45309;
+      --amber-light: #fef3c7;
+      --red: #b91c1c;
+      --red-light: #fee2e2;
+      --ink: #172126;
+      --muted: #5b6770;
+      --line: #e3e8ec;
+      --card: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      color: var(--ink);
+      background: #f4f6f8;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 24px 16px 64px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #0f7b4f, #146c60);
+      color: #fff;
+      border-radius: 20px;
+      padding: 34px 28px;
+      margin-bottom: 26px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: clamp(26px, 4vw, 40px);
+      line-height: 1.15;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 720px;
+      opacity: .92;
+    }
+
+    .disclaimer {
+      margin: 14px 0 0;
+      padding: 12px 14px;
+      background: rgba(255,255,255,.14);
+      border-left: 4px solid #ffd166;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .toolbar {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 20px;
+    }
+
+    .toolbar h2 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      padding: 8px 13px;
+      border-radius: 999px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .chip:hover { border-color: var(--green); }
+
+    .chip.active {
+      background: var(--green);
+      border-color: var(--green);
+      color: #fff;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .field select,
+    .field input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      font-size: 15px;
+      background: #fff;
+    }
+
+    .result-count {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .section-head span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .price {
+      color: var(--muted);
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      font-size: 12px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .tag.green { background: var(--green-light); color: var(--green); }
+    .tag.amber { background: var(--amber-light); color: var(--amber); }
+    .tag.red { background: var(--red-light); color: var(--red); }
+    .tag.neutral { background: #eef2f5; color: var(--muted); }
+
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .facts b {
+      display: block;
+      color: var(--ink);
+      font-size: 15px;
+    }
+
+    .note {
+      font-size: 13px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+    }
+
+    .builder {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 26px;
+    }
+
+    .builder h2 {
+      margin: 0 0 8px;
+      font-size: 20px;
+    }
+
+    .builder p {
+      margin: 0 0 14px;
+      color: var(--muted);
+    }
+
+    .scenarios {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 12px;
+    }
+
+    .scenario {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+      background: #fafbfc;
+    }
+
+    .scenario h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+    }
+
+    .scenario p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .scenario button {
+      margin-top: 10px;
+      border: 0;
+      background: var(--green);
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .footer {
+      margin-top: 34px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+
+    <section class="hero">
+      <h1>Осознанный выбор в «Вкусно — и точка»</h1>
+      <p>
+        Соберите заказ под свою цель: перекус, обед после тренировки, семейный ужин или детский вариант.
+        Мы показываем состав, вес, калорийность и БЖУ, но не называем фастфуд «здоровым».
+      </p>
+      <div class="disclaimer">
+        <strong>Важно:</strong> это демонстрационная страница. Состав, вес, цена и наличие блюд могут отличаться
+        по городам и ресторанам. Перед заказом сверяйте данные в приложении или на сайте сети.
+      </div>
+    </section>
+
+    <section class="builder">
+      <h2>Подобрать заказ</h2>
+      <p>Выберите цель — и мы покажем подходящие позиции из меню.</p>
+
+      <div class="scenarios">
+        <div class="scenario">
+          <h3>Лёгкий перекус</h3>
+          <p>Небольшая порция, несладкий напиток, без десерта.</p>
+          <button data-goal="snack">Показать варианты</button>
+        </div>
+
+        <div class="scenario">
+          <h3>Обед после тренировки</h3>
+          <p>Больше белка, умеренная порция гарнира, вода вместо сладкого напитка.</p>
+          <button data-goal="protein">Показать варианты</button>
+        </div>
+
+        <div class="scenario">
+          <h3>Семейный заказ</h3>
+          <p>Основное блюдо, овощи или салат, вода и десерт по желанию.</p>
+          <button data-goal="family">Показать варианты</button>
+        </div>
+
+        <div class="scenario">
+          <h3>Детский заказ</h3>
+          <p>Порции из детского меню, напиток без сахара, десерт — по желанию.</p>
+          <button data-goal="kids">Показать варианты</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="toolbar">
+      <h2>Фильтры</h2>
+
+      <div class="chips" id="categoryChips">
+        <button class="chip active" data-category="all">Все категории</button>
+        <button class="chip" data-category="burgers">Бургеры</button>
+        <button class="chip" data-category="rolls">Роллы и панини</button>
+        <button class="chip" data-category="sides">Гарниры и картофель</button>
+        <button class="chip" data-category="starters">Стартеры</button>
+        <button class="chip" data-category="salads">Салаты и овощи</button>
+        <button class="chip" data-category="breakfast">Завтраки</button>
+        <button class="chip" data-category="combos">Комбо</button>
+        <button class="chip" data-category="drinks">Напитки</button>
+        <button class="chip" data-category="desserts">Десерты</button>
+        <button class="chip" data-category="extras">Соусы и добавки</button>
+      </div>
+
+      <div class="filters">
+        <div class="field">
+          <label for="goal">Цель</label>
+          <select id="goal">
+            <option value="all">Любая</option>
+            <option value="snack">Лёгкий перекус</option>
+            <option value="protein">Высокий белок</option>
+            <option value="family">Семейный заказ</option>
+            <option value="kids">Для ребёнка</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="diet">Ограничения</label>
+          <select id="diet">
+            <option value="all">Без ограничений</option>
+            <option value="vegetarian">Без мяса и рыбы</option>
+            <option value="lessSugar">Меньше сахара</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="maxKcal">Максимум калорий, ккал</label>
+          <input id="maxKcal" type="number" min="0" placeholder="Например, 500">
+        </div>
+
+        <div class="field">
+          <label for="sort">Сортировка</label>
+          <select id="sort">
+            <option value="default">По умолчанию</option>
+            <option value="kcalAsc">Калории: сначала меньше</option>
+            <option value="proteinDesc">Белок: сначала больше</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <p class="result-count" id="resultCount"></p>
+
+    <section class="section" data-section="burgers">
+      <div class="section-head">
+        <h2>Бургеры</h2>
+        <span>Говядина, курица, рыба, сыр, овощи и соусы</span>
+      </div>
+      <div class="cards" id="cards-burgers"></div>
+    </section>
+
+    <section class="section" data-section="rolls">
+      <div class="section-head">
+        <h2>Роллы и панини</h2>
+        <span>Курица, креветки, овощи, сыр и соусы</span>
+      </div>
+      <div class="cards" id="cards-rolls"></div>
+    </section>
+
+    <section class="section" data-section="sides">
+      <div class="section-head">
+        <h2>Гарниры и картофель</h2>
+        <span>Порции указаны отдельно — это удобно учитывать в заказе</span>
+      </div>
+      <div class="cards" id="cards-sides"></div>
+    </section>
+
+    <section class="section" data-section="starters">
+      <div class="section-head">
+        <h2>Стартеры</h2>
+        <span>Наггетсы, стрипсы, корн-доги и сырные закуски</span>
+      </div>
+      <div class="cards" id="cards-starters"></div>
+    </section>
+
+    <section class="section" data-section="salads">
+      <div class="section-head">
+        <h2>Салаты и овощи</h2>
+        <span>Основа для более лёгкого заказа</span>
+      </div>
+      <div class="cards" id="cards-salads"></div>
+    </section>
+
+    <section class="section" data-section="breakfast">
+      <div class="section-head">
+        <h2>Завтраки</h2>
+        <span>Яичницы, каши, блины, роллы и кофе</span>
+      </div>
+      <div class="cards" id="cards-breakfast"></div>
+    </section>
+
+    <section class="section" data-section="combos">
+      <div class="section-head">
+        <h2>Комбо</h2>
+        <span>Основное блюдо, гарнир и напиток</span>
+      </div>
+      <div class="cards" id="cards-combos"></div>
+    </section>
+
+    <section class="section" data-section="drinks">
+      <div class="section-head">
+        <h2>Напитки</h2>
+        <span>Кофе, чай, вода, лимонады и молочные коктейли</span>
+      </div>
+      <div class="cards" id="cards-drinks"></div>
+    </section>
+
+    <section class="section" data-section="desserts">
+      <div class="section-head">
+        <h2>Десерты</h2>
+        <span>Мороженое, пирожные, пирожки и выпечка</span>
+      </div>
+      <div class="cards" id="cards-desserts"></div>
+    </section>
+
+    <section class="section" data-section="extras">
+      <div class="section-head">
+        <h2>Соусы и добавки</h2>
+        <span>Могут заметно изменить калорийность, сахар и соль заказа</span>
+      </div>
+      <div class="cards" id="cards-extras"></div>
+    </section>
+
+    <footer class="footer">
+      <p>
+        <strong>Принцип страницы:</strong> мы не делим блюда на «полезные» и «вредные».
+        Мы помогаем сопоставить порцию, калорийность, белок, сахар и состав с вашей целью.
+      </p>
+      <p>
+        Данные в карточках приведены как пример интерфейса. Для публикации используйте официальные карточки
+        товаров «Вкусно — и точка», актуальные на дату обновления, и указывайте регион ресторана.
+      </p>
+    </footer>
+
+  </main>
+
+  <script>
+    const menu = [
+      {
+        id: 1,
+        name: "Гамбургер",
+        category: "burgers",
+        price: "от 91 ₽",
+        weight: "97 г",
+        kcal: 250,
+        protein: 13,
+        fat: 9,
+        carbs: 30,
+        tags: ["Говядина", "Есть лук и огурцы", "Есть соус"],
+        goals: ["protein", "snack"],
+        diet: [],
+        note: "Булочка 50 г, один говяжий бифштекс, кетчуп, маринованный огурец, лук, горчичный соус и приправа."
+      },
+      {
+        id: 2,
+        name: "Чикенбургер",
+        category: "burgers",
+        price: "от 139 ₽",
+        weight: "150 г",
+        kcal: 400,
+        protein: 17,
+        fat: 17,
+        carbs: 44,
+        tags: ["Курица", "Есть соус", "Панировка"],
+        goals: ["protein", "snack"],
+        diet: [],
+        note: "Куриная котлета в панировке, булочка, салат и специальный соус."
+      },
+      {
+        id: 3,
+        name: "Филе-о-фиш",
+        category: "burgers",
+        price: "от 199 ₽",
+        weight: "145 г",
+        kcal: 340,
+        protein: 14,
+        fat: 14,
+        carbs: 38,
+        tags: ["Рыба", "Есть соус", "Панировка"],
+        goals: ["protein"],
+        diet: [],
+        note: "Филе минтая в панировке, булочка, сыр Чеддер и соус тартар."
+      },
+      {
+        id: 4,
+        name: "Цезарь Ролл",
+        category: "rolls",
+        price: "от 229 ₽",
+        weight: "225 г",
+        kcal: 430,
+        protein: 21,
+        fat: 20,
+        carbs: 42,
+        tags: ["Курица", "Овощи", "Есть соус"],
+        goals: ["protein", "family"],
+        diet: [],
+        note: "Куриное филе в панировке, лепёшка, салат, помидор, сыр и майонез."
+      },
+      {
+        id: 5,
+        name: "Картофель фри, малый",
+        category: "sides",
+        price: "от 99 ₽",
+        weight: "76 г",
+        kcal: 230,
+        protein: 3,
+        fat: 11,
+        carbs: 30,
+        tags: ["Растительный", "Гарнир"],
+        goals: ["snack", "family"],
+        diet: ["vegetarian"],
+        note: "Удобнее выбирать малую порцию, если картофель — дополнение, а не основа обеда."
+      },
+      {
+        id: 6,
+        name: "Картофель по-деревенски, средний",
+        category: "sides",
+        price: "от 149 ₽",
+        weight: "165 г",
+        kcal: 330,
+        protein: 5,
+        fat: 15,
+        carbs: 43,
+        tags: ["Растительный", "Гарнир"],
+        goals: ["family"],
+        diet: ["vegetarian"],
+        note: "Более сытный гарнир; соус и приправа добавляются отдельно."
+      },
+      {
+        id: 7,
+        name: "Наггетсы, 6 шт.",
+        category: "starters",
+        price: "от 179 ₽",
+        weight: "107 г",
+        kcal: 270,
+        protein: 16,
+        fat: 15,
+        carbs: 19,
+        tags: ["Курица", "Панировка", "Перекус"],
+        goals: ["protein", "snack"],
+        diet: [],
+        note: "Куриные наггетсы; соус выбирайте отдельно и учитывайте его в заказе."
+      },
+      {
+        id: 8,
+        name: "Салат с курицей",
+        category: "salads",
+        price: "от 259 ₽",
+        weight: "220 г",
+        kcal: 290,
+        protein: 22,
+        fat: 15,
+        carbs: 15,
+        tags: ["Курица", "Овощи", "Высокий белок"],
+        goals: ["protein", "family"],
+        diet: [],
+        note: "Пример позиции для более лёгкого обеда. Соус лучше добавлять отдельно."
+      },
+      {
+        id: 9,
+        name: "Большой завтрак с сосисками",
+        category: "breakfast",
+        price: "от 288 ₽",
+        weight: "209 г",
+        kcal: 520,
+        protein: 24,
+        fat: 30,
+        carbs: 42,
+        tags: ["Завтрак", "Сытный", "Есть мясо"],
+        goals: ["protein", "family"],
+        diet: [],
+        note: "Подходит для плотного завтрака; для более лёгкого варианта выбирайте меньшую порцию и несладкий напиток."
+      },
+      {
+        id: 10,
+        name: "Биг Хит Комбо",
+        category: "combos",
+        price: "от 459 ₽",
+        weight: "зависит от выбора",
+        kcal: 950,
+        protein: 38,
+        fat: 45,
+        carbs: 98,
+        tags: ["Комбо", "Сытный", "Есть соус"],
+        goals: ["family"],
+        diet: [],
+        note: "Итог зависит от выбранного гарнира и напитка. Вода вместо сладкой газировки уменьшает добавленный сахар."
+      },
+      {
+        id: 11,
+        name: "Кидз Комбо",
+        category: "combos",
+        price: "от 151 ₽",
+        weight: "778,5 г",
+        kcal: 620,
+        protein: 20,
+        fat: 24,
+        carbs: 82,
+        tags: ["Для ребёнка", "Комбо", "Есть десерт"],
+        goals: ["kids", "family"],
+        diet: [],
+        note: "В состав входят обед, сюрприз и фруктовые пастилки. Напиток лучше выбирать без сахара."
+      },
+      {
+        id: 12,
+        name: "Вода без газа",
+        category: "drinks",
+        price: "от 69 ₽",
+        weight: "500 мл",
+        kcal: 0,
+        protein: 0,
+        fat: 0,
+        carbs: 0,
+        tags: ["Без сахара", "Напиток"],
+        goals: ["snack", "protein", "family", "kids"],
+        diet: ["vegetarian", "lessSugar"],
+        note: "Самый простой способ не добавлять сахар к заказу."
+      },
+      {
+        id: 13,
+        name: "Капучино без сахара",
+        category: "drinks",
+        price: "от 159 ₽",
+        weight: "300 мл",
+        kcal: 120,
+        protein: 7,
+        fat: 6,
+        carbs: 10,
+        tags: ["Кофе", "Есть молоко", "Меньше сахара"],
+        goals: ["snack"],
+        diet: [],
+        note: "Если добавить сироп, калорийность и сахар заметно вырастут."
+      },
+      {
+        id: 14,
+        name: "Пирожное Вупи пай",
+        category: "desserts",
+        price: "от 179 ₽",
+        weight: "60 г",
+        kcal: 250,
+        protein: 3,
+        fat: 13,
+        carbs: 32,
+        tags: ["Десерт", "Высокий сахар", "Сладкое"],
+        goals: [],
+        diet: [],
+        note: "Лучше рассматривать как отдельное удовольствие, а не как обязательную часть обеда."
+      },
+      {
+        id: 15,
+        name: "Соус луковый по-французски",
+        category: "extras",
+        price: "от 50 ₽",
+        weight: "25 г",
+        kcal: 90,
+        protein: 1,
+        fat: 8,
+        carbs: 3,
+        tags: ["Соус", "Добавка"],
+        goals: [],
+        diet: [],
+        note: "Один соус может добавить заметную порцию жиров и калорий; для старта попробуйте заказ без него."
+      }
+    ];
+
+    const state = {
+      category: "all",
+      goal: "all",
+      diet: "all",
+      maxKcal: "",
+      sort: "default"
+    };
+
+    const categoryTitles = {
+      burgers: "Бургеры",
+      rolls: "Роллы и панини",
+      sides: "Гарниры и картофель",
+      starters: "Стартеры",
+      salads: "Салаты и овощи",
+      breakfast: "Завтраки",
+      combos: "Комбо",
+      drinks: "Напитки",
+      desserts: "Десерты",
+      extras: "Соусы и добавки"
+    };
+
+    function tagClass(tag) {
+      const t = tag.toLowerCase();
+      if (t.includes("без сахара") || t.includes("меньше сахара") || t.includes("высокий белок") || t.includes("овощи") || t.includes("растительный")) return "green";
+      if (t.includes("соус") || t.includes("панировка") || t.includes("сытный") || t.includes("гарнир")) return "amber";
+      if (t.includes("высокий сахар") || t.includes("сладкое")) return "red";
+      return "neutral";
+    }
+
+    function card(item) {
+      return `
+        <article class="card">
+          <div class="card-top">
+            <h3>${item.name}</h3>
+            <span class="price">${item.price}</span>
+          </div>
+
+          <div class="tags">
+            ${item.tags.map(tag => `<span class="tag ${tagClass(tag)}">${tag}</span>`).join("")}
+          </div>
+
+          <div class="facts">
+            <div>Вес <b>${item.weight}</b></div>
+            <div>Ккал <b>${item.kcal}</b></div>
+            <div>Белки <b>${item.protein} г</b></div>
+            <div>Жиры <b>${item.fat} г</b></div>
+          </div>
+
+          <div class="facts">
+            <div>Углеводы <b>${item.carbs} г</b></div>
+            <div>Белок <b>${item.protein} г</b></div>
+            <div>Ккал <b>${item.kcal}</b></div>
+            <div>Порция <b>${item.weight}</b></div>
+          </div>
+
+          <p class="note">${item.note}</p>
+        </article>
+      `;
+    }
+
+    function filteredItems() {
+      let items = menu.filter(item => {
+        const categoryOk = state.category === "all" || item.category === state.category;
+        const goalOk = state.goal === "all" || item.goals.includes(state.goal);
+        const dietOk = state.diet === "all" || item.diet.includes(state.diet);
+        const kcalOk = !state.maxKcal || item.kcal <= Number(state.maxKcal);
+        return categoryOk && goalOk && dietOk && kcalOk;
+      });
+
+      if (state.sort === "kcalAsc") {
+        items = items.slice().sort((a, b) => a.kcal - b.kcal);
+      }
+
+      if (state.sort === "proteinDesc") {
+        items = items.slice().sort((a, b) => b.protein - a.protein);
+      }
+
+      return items;
+    }
+
+    function render() {
+      const items = filteredItems();
+
+      document.querySelectorAll(".section").forEach(section => {
+        const key = section.dataset.section;
+        const container = document.getElementById(`cards-${key}`);
+        const sectionItems = state.category === "all"
+          ? items.filter(item => item.category === key)
+          : items.filter(item => item.category === key);
+
+        if (sectionItems.length === 0) {
+          section.style.display = "none";
+          container.innerHTML = "";
+        } else {
+          section.style.display = "";
+          container.innerHTML = sectionItems.map(card).join("");
+        }
+      });
+
+      document.getElementById("resultCount").textContent =
+        `Найдено позиций: ${items.length}. Данные приведены для примера и требуют сверки с актуальным меню.`;
+    }
+
+    document.querySelectorAll("#categoryChips .chip").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll("#categoryChips .chip").forEach(b => b.classList.remove("active"));
+        button.classList.add("active");
+        state.category = button.dataset.category;
+        render();
+      });
+    });
+
+    document.getElementById("goal").addEventListener("change", e => {
+      state.goal = e.target.value;
+      render();
+    });
+
+    document.getElementById("diet").addEventListener("change", e => {
+      state.diet = e.target.value;
+      render();
+    });
+
+    document.getElementById("maxKcal").addEventListener("input", e => {
+      state.maxKcal = e.target.value;
+      render();
+    });
+
+    document.getElementById("sort").addEventListener("change", e => {
+      state.sort = e.target.value;
+      render();
+    });
+
+    document.querySelectorAll("[data-goal]").forEach(button => {
+      button.addEventListener("click", () => {
+        const goal = button.dataset.goal;
+        document.getElementById("goal").value = goal;
+        state.goal = goal;
+        render();
+
+        const firstVisible = [...document.querySelectorAll(".section")]
+          .find(section => section.style.display !== "none");
+
+        if (firstVisible) {
+          firstVisible.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+    });
+
+    render();
+  </script>
+</body>
+</html>

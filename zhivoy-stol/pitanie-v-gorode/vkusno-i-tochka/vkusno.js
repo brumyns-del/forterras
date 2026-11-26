@@ -64,8 +64,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let totalProteinServings = 0;
         let junkCount = 0;
 
-        // Переменные для процентов заполнения
-        let totalVeggie = 0, totalProt = 0, totalCarbs = 0;
+        // Переменные для порций
+        let totalVeggiePortions = 0;
 
         selectedDishes.forEach(dish => {
             if (dish.macros) {
@@ -74,21 +74,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 totalF += dish.macros.f;
                 totalC += dish.macros.c;
             }
-            if (dish.servings) {
-                if (dish.servings.protein) totalProteinServings += dish.servings.protein;
-                if (dish.servings.veggies) totalVeggie += dish.servings.veggies;
-                if (dish.servings.protein) totalProt += dish.servings.protein;
-                if (dish.servings.carbs) totalCarbs += dish.servings.carbs;
+            // Считаем овощи (если есть порции в базе)
+            if (dish.servings && dish.servings.veggies) {
+                totalVeggiePortions += dish.servings.veggies;
+            } else if (dish.green > 0) {
+                // Если в бургере есть салат, добавляем 0.2 порции (треть кулака)
+                totalVeggiePortions += 0.2;
             }
+            if (dish.servings && dish.servings.protein) totalProteinServings += dish.servings.protein;
             if (dish.junk) junkCount++;
         });
 
-        // === 1. РАСЧЕТ ПРОЦЕНТОВ ЗАПОЛНЕНИЯ ПОДНОСА ===
-        const targetVeg = 2, targetProt = 1.5, targetCarbs = 2;
-        const fillVeg = Math.min((totalVeggie / targetVeg) * 100, 100);
-        const fillProt = Math.min((totalProt / targetProt) * 100, 100);
-        const fillCarbs = Math.min((totalCarbs / targetCarbs) * 100, 100);
+        // === РАСЧЕТ ПРОЦЕНТОВ ЗАПОЛНЕНИЯ (НОВЫЕ НОРМЫ НА 2300 ККАЛ) ===
+        const targetProt = 115;   // 115 г белка = 100%
+        const targetCarbs = 291;  // 291 г углеводов = 100%
+        const targetVegPortions = 4; // 4 порции овощей = 100%
 
+        const fillVeg = Math.min((totalVeggiePortions / targetVegPortions) * 100, 100);
+        const fillProt = Math.min((totalP / targetProt) * 100, 100);
+        const fillCarbs = Math.min((totalC / targetCarbs) * 100, 100);
+
+        // Заливаем сектора
         const trayEl = document.getElementById('tray-circle');
         if (trayEl) {
             trayEl.style.setProperty('--fill-veg', fillVeg + '%');
@@ -96,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
             trayEl.style.setProperty('--fill-carbs', fillCarbs + '%');
         }
 
-        // === 2. ОТРИСОВКА ЭМОДЗИ ===
+        // === ОТРИСОВКА ЭМОДЗИ (ГРУППЫ) ===
         const vegContainer = document.getElementById('tray-veg');
         const proteinContainer = document.getElementById('tray-protein');
         const carbsContainer = document.getElementById('tray-carbs');
@@ -125,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
             groupsInCarbs.forEach(emoji => carbsContainer.innerHTML += `<span>${emoji}</span>`);
         }
 
-        // === 3. РАСЧЕТ БЖУ И ГАЛОЧКА ===
+        // === РАСЧЕТ БЖУ ===
         let ratioText = "0 : 0 : 0";
         if (totalP > 0) {
             ratioText = `1 : ${(totalF / totalP).toFixed(1)} : ${(totalC / totalP).toFixed(1)}`;
@@ -166,29 +172,41 @@ document.addEventListener('DOMContentLoaded', () => {
             macrosDisplay.style.display = 'none';
         }
 
-        // === 4. ЧЕСТНАЯ ОЦЕНКА ===
+        // === ЧЕСТНАЯ ОЦЕНКА И СОВЕТЫ НА ДОМ ===
         if (selectedDishes.length === 0) {
             trayTip.innerHTML = 'Выберите блюда, чтобы получить совет по балансу.';
             trayTip.className = 'smart-tip';
             return;
         }
 
-        const plateLink = `<br><small>💡 <b>Совет на дом:</b> Вечером соберите <a href="../../../raznotsvetnaya-tarelka/index.html" style="color: #d84315; font-weight: bold;">«Разноцветную тарелку»</a>, чтобы добрать клетчатку.</small>`;
+        // Считаем, чего не хватает
+        const missingProt = Math.max(0, 115 - totalP);
+        const missingCarbs = Math.max(0, 291 - totalC);
+        const missingVeg = Math.max(0, 4 - totalVeggiePortions);
 
+        let homeAdvice = '';
+        if (missingProt > 5 || missingCarbs > 20 || missingVeg > 0.5) {
+            homeAdvice = `<br><small>💡 <b>Совет на дом:</b> `;
+            if (missingProt > 5) homeAdvice += `добрать ${Math.round(missingProt)}г белка. `;
+            if (missingCarbs > 20) homeAdvice += `добрать ${Math.round(missingCarbs)}г углеводов. `;
+            if (missingVeg > 0.5) homeAdvice += `добрать ${missingVeg.toFixed(1)} порции овощей (кулаков). `;
+            homeAdvice += `Это можно сделать в <a href="../../../raznotsvetnaya-tarelka/index.html" style="color: #d84315; font-weight: bold;">«Разноцветной тарелке»</a>.</small>`;
+        } else {
+            homeAdvice = `<br><small>💡 <b>Совет на дом:</b> Вы почти закрыли дневные нормы! Осталось совсем чуть-чуть.</small>`;
+        }
+
+        // Текст оценки
         if (junkCount >= 2) {
-            trayTip.innerHTML = `⚠️ <strong>Внимание: избыток сахара.</strong><br>В заказе ${junkCount} десерта/сладких напитка. Это даст быстрый скачок энергии, но через час вы снова захотите есть.<br><small>💡 <b>Совет:</b> Оставьте один десерт, а остальное замените на воду.</small>${plateLink}`;
+            trayTip.innerHTML = `⚠️ <strong>Внимание: избыток сахара.</strong><br>В заказе ${junkCount} десерта/сладких напитка. Это даст быстрый скачок энергии, но через час вы снова захотите есть.${homeAdvice}`;
             trayTip.className = 'smart-tip bad';
         } else if (totalProteinServings < 1) {
-            trayTip.innerHTML = `⚠️ <strong>В заказе мало белка.</strong><br>Без белка (мяса, рыбы, яиц) вы быстро проголодаетесь. Добавьте бургер или наггетсы.${plateLink}`;
+            trayTip.innerHTML = `⚠️ <strong>В заказе мало белка.</strong><br>Без белка (мяса, рыбы, яиц) вы быстро проголодаетесь. Добавьте бургер или наггетсы.${homeAdvice}`;
             trayTip.className = 'smart-tip bad';
-        } else if (totalGreen === 0) {
-            trayTip.innerHTML = `<strong>В заказе нет овощей.</strong><br>Это фастфуд, но можно сделать его сбалансированнее. Добавьте <em>Морковные палочки</em> или <em>Салат Цезарь</em>.${plateLink}`;
-            trayTip.className = 'smart-tip';
-        } else if (totalGreen > 0 && totalGreen < 20) {
-            trayTip.innerHTML = `<strong>В заказе очень мало овощей.</strong><br>Зеленый кружок есть, но клетчатки недостаточно. Добавьте <em>Салат овощной</em> или <em>Морковные палочки</em>.${plateLink}`;
+        } else if (fillVeg < 30) {
+            trayTip.innerHTML = `<strong>Овощей маловато.</strong><br>Это фастфуд, но можно сделать его сбалансированнее. Добавьте <em>Морковные палочки</em> или <em>Салат Цезарь</em>.${homeAdvice}`;
             trayTip.className = 'smart-tip';
         } else {
-            trayTip.innerHTML = `<strong>Неплохой выбор для фастфуда.</strong><br>Вы набрали белок и достаточно клетчатки. Но помните, что это все равно высококалорийная еда.${plateLink}`;
+            trayTip.innerHTML = `<strong>Неплохой выбор для фастфуда.</strong><br>Вы набрали белок и достаточно клетчатки.${homeAdvice}`;
             trayTip.className = 'smart-tip';
         }
     }

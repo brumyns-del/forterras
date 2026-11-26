@@ -8,7 +8,7 @@
         vegetables: { title: '🌱 Живые продукты (½ тарелки)', cls: 'veg' },
         protein: { title: '🍗 Белки (¼ тарелки)', cls: 'protein' },
         carbs: { title: '🌾 Углеводы (¼ тарелки)', cls: 'carbs' },
-        fats: { title: '🥑 Полезные жиры', cls: 'fats' },
+        fats: { title: '🧈 Полезные жиры', cls: 'fats', color: '#6a4c93' },
         water: { title: '💧 Вода и напитки', cls: 'water' },
         sweets: { title: '🍬 Сладкое', cls: 'sweets' },
         harmful: { title: '⚠️ Нежелательно и вредно', cls: 'harmful' }

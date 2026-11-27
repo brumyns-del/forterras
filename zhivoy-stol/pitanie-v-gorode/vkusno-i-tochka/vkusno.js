@@ -172,43 +172,61 @@ document.addEventListener('DOMContentLoaded', () => {
             macrosDisplay.style.display = 'none';
         }
 
-        // === ЧЕСТНАЯ ОЦЕНКА И СОВЕТЫ НА ДОМ ===
+        // === ЧЕСТНАЯ ОЦЕНКА И МОСТ К ТАРЕЛКЕ ===
+        const bridgeSection = document.getElementById('bridge-section');
+
         if (selectedDishes.length === 0) {
             trayTip.innerHTML = 'Выберите блюда, чтобы получить совет по балансу.';
             trayTip.className = 'smart-tip';
+            if (bridgeSection) bridgeSection.style.display = 'none';
             return;
         }
 
-        // Считаем, чего не хватает
+        // Скрываем старую подсказку, показываем мост
+        trayTip.style.display = 'none';
+        if (bridgeSection) bridgeSection.style.display = 'block';
+
+        // 1. Заполняем левую часть (Ваш заказ)
+        const orderList = document.getElementById('bridge-order-list');
+        if (orderList) {
+            orderList.innerHTML = selectedDishes.map(d => `<li>${d.name}</li>`).join('');
+        }
+
+        // 2. Считаем нехватку
         const missingProt = Math.max(0, 115 - totalP);
         const missingCarbs = Math.max(0, 291 - totalC);
         const missingVeg = Math.max(0, 4 - totalVeggiePortions);
 
-        let homeAdvice = '';
-        if (missingProt > 5 || missingCarbs > 20 || missingVeg > 0.5) {
-            homeAdvice = `<br><small>💡 <b>Совет на дом:</b> `;
-            if (missingProt > 5) homeAdvice += `добрать ${Math.round(missingProt)}г белка. `;
-            if (missingCarbs > 20) homeAdvice += `добрать ${Math.round(missingCarbs)}г углеводов. `;
-            if (missingVeg > 0.5) homeAdvice += `добрать ${missingVeg.toFixed(1)} порции овощей (кулаков). `;
-            homeAdvice += `Это можно сделать в <a href="../../../raznotsvetnaya-tarelka/index.html" style="color: #d84315; font-weight: bold;">«Разноцветной тарелке»</a>.</small>`;
-        } else {
-            homeAdvice = `<br><small>💡 <b>Совет на дом:</b> Вы почти закрыли дневные нормы! Осталось совсем чуть-чуть.</small>`;
+        // 3. Заполняем правую часть (Советы)
+        const adviceList = document.getElementById('bridge-advice-list');
+        let adviceHtml = '';
+
+        // Логика: Если белка мало
+        if (missingProt > 20) {
+            adviceHtml += `<div class="advice-row"><span class="advice-condition">Если белка мало или нет:</span><span class="advice-action">🥩 Рыба, яйца, творог, мясо, бобовые</span></div>`;
+        } else if (totalProteinServings > 0 && junkCount === 0) {
+            adviceHtml += `<div class="advice-row"><span class="advice-condition">Белок есть, но однообразный:</span><span class="advice-action">🫘 Добавьте бобовые или рыбу</span></div>`;
         }
 
-        // Текст оценки
-        if (junkCount >= 2) {
-            trayTip.innerHTML = `⚠️ <strong>Внимание: избыток сахара.</strong><br>В заказе ${junkCount} десерта/сладких напитка. Это даст быстрый скачок энергии, но через час вы снова захотите есть.${homeAdvice}`;
-            trayTip.className = 'smart-tip bad';
-        } else if (totalProteinServings < 1) {
-            trayTip.innerHTML = `⚠️ <strong>В заказе мало белка.</strong><br>Без белка (мяса, рыбы, яиц) вы быстро проголодаетесь. Добавьте бургер или наггетсы.${homeAdvice}`;
-            trayTip.className = 'smart-tip bad';
-        } else if (fillVeg < 30) {
-            trayTip.innerHTML = `<strong>Овощей маловато.</strong><br>Это фастфуд, но можно сделать его сбалансированнее. Добавьте <em>Морковные палочки</em> или <em>Салат Цезарь</em>.${homeAdvice}`;
-            trayTip.className = 'smart-tip';
-        } else {
-            trayTip.innerHTML = `<strong>Неплохой выбор для фастфуда.</strong><br>Вы набрали белок и достаточно клетчатки.${homeAdvice}`;
-            trayTip.className = 'smart-tip';
+        // Логика: Углеводы
+        if (missingCarbs > 50) {
+            adviceHtml += `<div class="advice-row"><span class="advice-condition">Углеводов мало:</span><span class="advice-action">🌾 Гречка, овсянка, цельнозерновой хлеб</span></div>`;
+        } else if (totalCarbs > 200) {
+            adviceHtml += `<div class="advice-row"><span class="advice-condition">Углеводов много:</span><span class="advice-action">🥦 Овощи вместо гарнира</span></div>`;
         }
+
+        // Логика: Сахар и соусы
+        if (junkCount >= 1) {
+            adviceHtml += `<div class="advice-row"><span class="advice-condition">Был сладкий напиток/десерт:</span><span class="advice-action">💧 Вода или чай без сахара</span></div>`;
+        }
+        if (selectedDishes.some(d => d.groups && d.groups.includes('sauce'))) {
+            adviceHtml += `<div class="advice-row"><span class="advice-condition">Много соуса и солёного:</span><span class="advice-action">🥒 Свежие овощи и зелень</span></div>`;
+        }
+
+        // Всегда добавляем базовый совет
+        adviceHtml += `<div class="advice-row"><span class="advice-condition">Всегда:</span><span class="advice-action">🥗 Овощной салат и фрукты</span></div>`;
+
+        if (adviceList) adviceList.innerHTML = adviceHtml;
     }
 
     // Логика для кнопки PRO (заглушка)

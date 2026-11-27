@@ -569,3 +569,116 @@ header {
         margin-top: 20px;
     }
 }
+/* ============================================================================
+   БЛОК МОСТА (ПЕРЕХОД К ДОМАШНЕЙ ТАРЕЛКЕ)
+   ========================================================================== */
+.bridge-section {
+    margin-top: 30px;
+    border-radius: 16px;
+    padding: 25px;
+    /* Плавный градиент: слева оранжево-желтый, справа желто-зеленый */
+    background: linear-gradient(to right, #FFE8B3, #E4F2C0);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    color: #333;
+}
+
+.bridge-intro {
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.bridge-grid {
+    display: grid;
+    grid-template-columns: 1fr 40px 1fr;
+    gap: 15px;
+    align-items: center;
+}
+
+.bridge-left h4,
+.bridge-right h4 {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.bridge-left ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.bridge-left li {
+    margin-bottom: 5px;
+    padding-left: 15px;
+    position: relative;
+}
+
+.bridge-left li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #888;
+}
+
+.bridge-arrow {
+    font-size: 2rem;
+    color: #8a7a6b;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Рекомендации справа */
+.advice-row {
+    margin-bottom: 12px;
+    font-size: 0.85rem;
+}
+
+.advice-condition {
+    color: #777;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.advice-action {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #1e2a2e;
+}
+
+.bridge-disclaimer {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px dashed rgba(0, 0, 0, 0.1);
+    font-size: 0.7rem;
+    color: #888;
+    text-align: center;
+    line-height: 1.4;
+}
+
+/* Адаптив для телефонов (стрелка вниз) */
+@media (max-width: 600px) {
+    .bridge-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .bridge-arrow {
+        transform: rotate(90deg);
+        margin: 10px 0;
+    }
+
+    .bridge-left li {
+        padding-left: 0;
+    }
+
+    .bridge-left li::before {
+        display: none;
+    }
+}

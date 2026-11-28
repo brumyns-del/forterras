@@ -10,12 +10,13 @@
 
 <body>
     <div class="container">
-                <header>
-                    <div class="logo">🍔 Вкусно — и точка</div>
-                    <div class="subtitle">Не отказывайтесь от любимого</div>
-                    <p class="desc">Просто добавьте правильный цвет, чтобы сбалансировать поднос. Здесь вкусно и сытно, но постарайтесь
-                        сбалансировать рацион дома.</p>
-                </header>
+        <header>
+            <div class="logo">🍔 Вкусно — и точка</div>
+            <div class="subtitle">Не отказывайтесь от любимого</div>
+            <p class="desc">Просто добавьте правильный цвет, чтобы сбалансировать поднос. Здесь вкусно и сытно, но
+                постарайтесь
+                сбалансировать рацион дома.</p>
+        </header>
 
         <nav class="top-nav">
             <a href="../index.html" class="nav-btn back-btn">← Назад в Питание в городе</a>
@@ -58,102 +59,126 @@
                     <div class="menu-items" id="cat-kids"></div>
                     <div class="menu-items" id="cat-sauce" style="margin-top:5px;"></div>
                 </div>
-                
+
             </div>
 
             <!-- ПРАВАЯ КОЛОНКА: ПОДНОС -->
-                        <div class="tray-panel">
-                            <h2>Ваш поднос</h2>
-                                                            <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px; line-height: 1.4; text-align: center;">
-                    Значки показывают состав вашего заказа: 🥦 овощи/фрукты, 🍗 белок, 🌾 углеводы.<br>
-                    Чем больше значков, тем больше порций.
-                </p>
-                        
-                            <div class="tray" id="tray-circle">
-                                <div class="tray-sector pc-veg" id="tray-veg"></div>
-                                <div class="tray-sector pc-protein" id="tray-protein"></div>
-                                <div class="tray-sector pc-carbs" id="tray-carbs"></div>
-                            </div>
+            <div class="tray-panel">
+                <h2>Ваш поднос</h2>
 
-                                        <div style="font-size: 0.8rem; color: #555; text-align: center; margin-bottom: 15px;">
-                                            Окраска подноса отражает правило здорового питания и Ваш выбор:<br>
-                                            <span style="color: #43a047; font-weight: bold;">Зеленый</span> – овощи/фрукты,
-                                            <span style="color: #f9a825; font-weight: bold;">Желтый</span> – углеводы,
-                                            <span style="color: #d84315; font-weight: bold;">Красный</span> – белки.
-                                        </div>
-                            <!-- Галочка БЖУ -->
-                            <div class="pro-toggle" style="text-align: center; margin-bottom: 15px;">
-                                <label style="cursor: pointer; font-size: 0.85rem; color: #666;">
-                                    <input type="checkbox" id="show-macros"> Показать БЖУ (PRO)
-                                </label>
-                                <div id="macros-display"
-                                    style="display: none; margin-top: 10px; background: #f0f4f0; padding: 10px; border-radius: 8px; font-size: 0.9rem;">
-                                </div>
-                            </div>
-                        
-                            <!-- Окошко с советами -->
-                            <div id="smart-tip" class="smart-tip">Выберите блюда, чтобы получить совет по балансу.</div>
+                <!-- Компактная легенда -->
+                <div class="legend-box">
+                    <div class="legend-grid">
+                        <span>🥦 Овощи</span>
+                        <span>🍎 Фрукты</span>
+                        <span>🍗 Белок</span>
+                        <span>🌾 Злаки</span>
+                        <span>🥛 Молочное</span>
+                        <span>🧈 Жиры</span>
+                        <span>🥫 Соусы</span>
+                        <span>🍬 Сладкое</span>
+                    </div>
+                </div>
+
+                <div class="tray" id="tray-circle">
+                    <div class="tray-sector pc-veg" id="tray-veg"></div>
+                    <div class="tray-sector pc-protein" id="tray-protein"></div>
+                    <div class="tray-sector pc-carbs" id="tray-carbs"></div>
+                </div>
+
+                <div style="font-size: 0.8rem; color: #555; text-align: center; margin-bottom: 15px;">
+                    Окраска подноса:<br>
+                    <span style="color: #43a047; font-weight: bold;">Зеленый</span> – овощи/фрукты,
+                    <span style="color: #f9a825; font-weight: bold;">Желтый</span> – углеводы,
+                    <span style="color: #d84315; font-weight: bold;">Красный</span> – белки.
+                </div>
+
+                <!-- Блок визуализации жиров -->
+                <div class="fats-indicator" id="fats-indicator" style="display: none; margin-bottom: 15px;">
+                    <div class="fats-status" id="fats-status-text"></div>
+                    <div class="fats-bar-bg">
+                        <div class="fats-bar-fill" id="fats-bar-fill"></div>
+                    </div>
+                    <div style="font-size: 0.7rem; color: #888; margin-top: 4px; text-align: right;">Норма: 75 г</div>
+                    <div
+                        style="font-size: 0.7rem; color: #888; margin-top: 10px; text-align: center; line-height: 1.3;">
+                        Есть соусы, иногда при заказе на кассе возможна корректировка состава.
+                    </div>
+                    <!-- Галочка БЖУ -->
+                    <div class="pro-toggle" style="text-align: center; margin-bottom: 15px;">
+                        <label style="cursor: pointer; font-size: 0.85rem; color: #666;">
+                            <input type="checkbox" id="show-macros"> Показать БЖУ (PRO)
+                        </label>
+                        <div id="macros-display"
+                            style="display: none; margin-top: 10px; background: #f0f4f0; padding: 10px; border-radius: 8px; font-size: 0.9rem;">
                         </div>
-                                        <!-- БЛОК МОСТА (ПОДНОС - ТАРЕЛКА) -->
-                                        <div class="bridge-section" id="bridge-section" style="display: none;">
-                                            <div class="bridge-intro">
-                                                В большинстве заказов мало овощей, фруктов и клетчатки. Добавьте их дома.
-                                            </div>
-                                        
-                                            <div class="bridge-grid">
-                                                <!-- Левая часть: Что съели -->
-                                                <div class="bridge-left">
-                                                    <h4>Ваш заказ (Поднос)</h4>
-                                                    <ul id="bridge-order-list"></ul>
-                                                </div>
-                                        
-                                                <!-- Стрелка -->
-                                                <div class="bridge-arrow">→</div>
-                                        
-                                                <!-- Правая часть: Что добрать дома -->
-                                                <div class="bridge-right">
-                                                    <h4>Добавьте дома (Тарелка)</h4>
-                                                    <div id="bridge-advice-list"></div>
-                                                    <a href="../../../raznotsvetnaya-tarelka/index.html" class="btn-buy"
-                                                        style="display: block; text-align: center; margin-top: 15px; text-decoration: none; padding: 10px; font-size: 0.9rem;">Сбалансировать
-                                                        ужин →</a>
-                                                </div>
-                                            </div>
-                                        
-                                            <div class="bridge-disclaimer">
-                                                Даны общие рекомендации для здоровых взрослых. При некоторых заболеваниях и диетах будут отдельные рекомендации
-                                                и обязательно посоветуйтесь с врачом.
-                                            </div>
-                                        </div>
-        </div>
+                    </div>
+                </div>
 
-        <!-- БЛОК PRO -->
-                <!-- БЛОК ПРО БЖУ И НОРМЫ -->
                 
-        <div class="pro-section">
-            <div class="pro-header">
-                <h3>📊 Ваша статистика за неделю</h3>
-                <span class="pro-badge">PRO</span>
-            </div>
-            <p>Соберите «Радугу за неделю» — отслеживайте, сколько цветов вы съели.</p>
 
-            <div class="pro-locked" id="pro-lock">
-                <div class="lock-icon">🔒</div>
-                <p>История и рекомендации доступны в PRO-версии</p>
-                <button class="btn-buy" onclick="App.buyPro()">Оформить за 199 ₽/мес</button>
+                <!-- Окошко с советами (будет скрыто) -->
+                <div id="smart-tip" class="smart-tip" style="display: none;">Выберите блюда, чтобы получить совет по
+                    балансу.</div>
             </div>
-            <div class="pro-content" id="pro-content" style="display: none;">
-                <div class="week-tracker" id="week-tracker"></div>
-                <div class="home-advice" id="home-advice"></div>
+
+
+            <!-- БЛОК МОСТА (ПОДНОС - ТАРЕЛКА) -->
+            <div class="bridge-section" id="bridge-section" style="display: none;">
+                <div class="bridge-intro">
+                    В большинстве заказов мало овощей, фруктов и клетчатки. Добавьте их дома.
+                </div>
+
+                <div class="bridge-grid">
+                    <div class="bridge-left">
+                        <h4>Ваш заказ (Поднос)</h4>
+                        <ul id="bridge-order-list"></ul>
+                    </div>
+
+                    <div class="bridge-arrow">→</div>
+
+                    <div class="bridge-right">
+                        <h4>Добавьте дома (Тарелка)</h4>
+                        <div id="bridge-advice-list"></div>
+                        <a href="../../../raznotsvetnaya-tarelka/index.html" class="btn-buy"
+                            style="display: block; text-align: center; margin-top: 15px; text-decoration: none; padding: 10px; font-size: 0.9rem;">Сбалансировать
+                            ужин →</a>
+                    </div>
+                </div>
+
+                <div class="bridge-disclaimer">
+                    Даны общие рекомендации для здоровых взрослых. При некоторых заболеваниях и диетах будут отдельные
+                    рекомендации
+                    и обязательно посоветуйтесь с врачом.
+                </div>
+            </div>
+            <!-- БЛОК PRO -->
+            <!-- БЛОК ПРО БЖУ И НОРМЫ -->
+
+            <div class="pro-section">
+                <div class="pro-header">
+                    <h3>📊 Ваша статистика за неделю</h3>
+                    <span class="pro-badge">PRO</span>
+                </div>
+                <p>Соберите «Радугу за неделю» — отслеживайте, сколько цветов вы съели.</p>
+
+                <div class="pro-locked" id="pro-lock">
+                    <div class="lock-icon">🔒</div>
+                    <p>История и рекомендации доступны в PRO-версии</p>
+                    <button class="btn-buy" onclick="App.buyPro()">Оформить за 199 ₽/мес</button>
+                </div>
+                <div class="pro-content" id="pro-content" style="display: none;">
+                    <div class="week-tracker" id="week-tracker"></div>
+                    <div class="home-advice" id="home-advice"></div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- ПОДКЛЮЧАЕМ СКРИПТЫ -->
-    <script src="../../../raznotsvetnaya-tarelka/data/plateStrategies.js"></script>
-    <script src="../../../raznotsvetnaya-tarelka/data/products-db.js"></script>
-    <script src="../../../raznotsvetnaya-tarelka/data/menu-details.js"></script>
-    <script src="vkusno.js"></script>
+        <!-- ПОДКЛЮЧАЕМ СКРИПТЫ -->
+        <script src="../../../raznotsvetnaya-tarelka/data/plateStrategies.js"></script>
+        <script src="../../../raznotsvetnaya-tarelka/data/products-db.js"></script>
+        <script src="../../../raznotsvetnaya-tarelka/data/menu-details.js"></script>
+        <script src="vkusno.js"></script>
 </body>
 
 </html>

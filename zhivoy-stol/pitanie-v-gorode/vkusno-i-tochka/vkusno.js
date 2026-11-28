@@ -2,37 +2,41 @@ document.addEventListener('DOMContentLoaded', () => {
     let isPro = localStorage.getItem('app_isPro') === 'true';
     updateProUI(isPro);
 
-    // Словарь для эмодзи (пищевые группы ресторана)
+    // Словарь для эмодзи групп
     const FOOD_GROUPS = {
         veg: '🥦', fruit: '🍎', grain: '🌾', protein: '🍗', dairy: '🥛',
-        fat: '🧈', drink: '🥤', sauce: '🥫', sweet: '🍬'
+        fat: '🧈', drink: '💧', sauce: '🥫', sweet: '🍬', ready: '🍱'
     };
 
-    // Проверка, что база данных загрузилась
+    // Проверка, загрузилась ли база данных
     if (!window.App || !App.DB || !App.DB.Places || !App.DB.Places.vkusno) {
-        console.error("Ошибка: База данных App.DB не загружена. Проверьте путь к products-db.js");
+        console.error("Ошибка: База данных App.DB не загружена.");
         return;
     }
 
     const vkusnoMenu = App.DB.Places.vkusno.menu;
     let selectedDishes = [];
 
-    // Отрисовка карточек блюд
+    // ==========================================
+    // 1. ОТРИСОВКА МЕНЮ
+    // ==========================================
     vkusnoMenu.forEach(dish => {
         const btn = document.createElement('button');
         btn.className = 'menu-btn';
 
-        // Берем группы (если их нет, ставим пустой массив)
-        const groups = dish.groups || [];
-        const groupEmojis = groups.map(g => FOOD_GROUPS[g] || '🍽️').join('');
-
-        // Добавляем каплю чистоты состава
+        // Капля чистоты
         let dropHtml = '';
         if (window.App && App.MENU_DETAILS && App.MENU_DETAILS[dish.id]) {
             const detail = App.MENU_DETAILS[dish.id];
             dropHtml = `<span class="clean-label-drop drop-${detail.clean_label}" title="Чистота состава"></span>`;
         }
 
+        // Берем группы (если их нет, ставим пустой массив)
+        const groups = dish.groups || [];
+        // Превращаем группы в эмодзи (например, 🥦🍗🌾)
+        const groupEmojis = groups.map(g => FOOD_GROUPS[g] || '🍽️').join('');
+
+        // Собираем кнопку: Эмодзи + Название + Капля чистоты
         btn.innerHTML = `<span>${groupEmojis} ${dish.name}</span> ${dropHtml}`;
         btn.addEventListener('click', () => toggleDish(dish, btn));
 
@@ -42,7 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Логика выбора/отмены блюда
+    // ==========================================
+    // 2. ЛОГИКА ВЫБОРА БЛЮД
+    // ==========================================
     function toggleDish(dish, btn) {
         const index = selectedDishes.findIndex(d => d.id === dish.id);
         if (index === -1) {
@@ -55,16 +61,15 @@ document.addEventListener('DOMContentLoaded', () => {
         updateTray();
     }
 
-    // Обновление подноса, БЖУ и оценок
+    // ==========================================
+    // 3. ОБНОВЛЕНИЕ ПОДНОСА, БЖУ И МОСТА
+    // ==========================================
     function updateTray() {
-        const totalGreen = selectedDishes.reduce((sum, dish) => sum + (dish.green || 0), 0);
         const trayTip = document.getElementById('smart-tip');
 
         let totalKcal = 0, totalP = 0, totalF = 0, totalC = 0;
         let totalProteinServings = 0;
         let junkCount = 0;
-
-        // Переменные для порций
         let totalVeggiePortions = 0;
 
         selectedDishes.forEach(dish => {
@@ -74,27 +79,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 totalF += dish.macros.f;
                 totalC += dish.macros.c;
             }
-            // Считаем овощи (если есть порции в базе)
             if (dish.servings && dish.servings.veggies) {
                 totalVeggiePortions += dish.servings.veggies;
             } else if (dish.green > 0) {
-                // Если в бургере есть салат, добавляем 0.2 порции (треть кулака)
                 totalVeggiePortions += 0.2;
             }
             if (dish.servings && dish.servings.protein) totalProteinServings += dish.servings.protein;
             if (dish.junk) junkCount++;
         });
 
-        // === РАСЧЕТ ПРОЦЕНТОВ ЗАПОЛНЕНИЯ (НОВЫЕ НОРМЫ НА 2300 ККАЛ) ===
-        const targetProt = 115;   // 115 г белка = 100%
-        const targetCarbs = 291;  // 291 г углеводов = 100%
-        const targetVegPortions = 4; // 4 порции овощей = 100%
-
+        // --- 3.1. РАСЧЕТ ПРОЦЕНТОВ ЗАПОЛНЕНИЯ ---
+        const targetProt = 115, targetCarbs = 291, targetVegPortions = 4;
         const fillVeg = Math.min((totalVeggiePortions / targetVegPortions) * 100, 100);
         const fillProt = Math.min((totalP / targetProt) * 100, 100);
         const fillCarbs = Math.min((totalC / targetCarbs) * 100, 100);
 
-        // Заливаем сектора
         const trayEl = document.getElementById('tray-circle');
         if (trayEl) {
             trayEl.style.setProperty('--fill-veg', fillVeg + '%');
@@ -102,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
             trayEl.style.setProperty('--fill-carbs', fillCarbs + '%');
         }
 
-        // === ОТРИСОВКА ЭМОДЗИ (ГРУППЫ) ===
+        // --- 3.2. ОТРИСОВКА ЭМОДЗИ ---
         const vegContainer = document.getElementById('tray-veg');
         const proteinContainer = document.getElementById('tray-protein');
         const carbsContainer = document.getElementById('tray-carbs');
@@ -124,6 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     else if (g === 'protein' || g === 'dairy') groupsInProtein.add(emoji);
                     else if (g === 'grain' || g === 'sweet') groupsInCarbs.add(emoji);
                 });
+                if (groups.includes('sauce')) groupsInProtein.add(FOOD_GROUPS['sauce']);
             });
 
             groupsInVeg.forEach(emoji => vegContainer.innerHTML += `<span>${emoji}</span>`);
@@ -131,7 +131,36 @@ document.addEventListener('DOMContentLoaded', () => {
             groupsInCarbs.forEach(emoji => carbsContainer.innerHTML += `<span>${emoji}</span>`);
         }
 
-        // === РАСЧЕТ БЖУ ===
+        // --- 3.3. ВИЗУАЛИЗАЦИЯ ЖИРОВ ---
+        const fatsIndicator = document.getElementById('fats-indicator');
+        const fatsStatusText = document.getElementById('fats-status-text');
+        const fatsBarFill = document.getElementById('fats-bar-fill');
+
+        if (fatsIndicator && selectedDishes.length > 0) {
+            fatsIndicator.style.display = 'block';
+            const targetFat = 75;
+            const fatPercent = Math.min((totalF / targetFat) * 100, 100);
+
+            fatsBarFill.style.width = fatPercent + '%';
+
+            if (totalF < 40) {
+                fatsStatusText.innerHTML = 'Жиров мало';
+                fatsStatusText.style.color = '#607260';
+                fatsBarFill.style.backgroundColor = '#9e9e9e';
+            } else if (totalF >= 40 && totalF <= 85) {
+                fatsStatusText.innerHTML = 'Жиры в норме';
+                fatsStatusText.style.color = '#2e7d32';
+                fatsBarFill.style.backgroundColor = '#4caf50';
+            } else {
+                fatsStatusText.innerHTML = 'Жиров много';
+                fatsStatusText.style.color = '#d84315';
+                fatsBarFill.style.backgroundColor = '#f44336';
+            }
+        } else if (fatsIndicator) {
+            fatsIndicator.style.display = 'none';
+        }
+
+        // --- 3.4. РАСЧЕТ БЖУ ---
         let ratioText = "0 : 0 : 0";
         if (totalP > 0) {
             ratioText = `1 : ${(totalF / totalP).toFixed(1)} : ${(totalC / totalP).toFixed(1)}`;
@@ -172,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
             macrosDisplay.style.display = 'none';
         }
 
-        // === ЧЕСТНАЯ ОЦЕНКА И МОСТ К ТАРЕЛКЕ ===
+        // --- 3.5. ЧЕСТНАЯ ОЦЕНКА И МОСТ ---
         const bridgeSection = document.getElementById('bridge-section');
 
         if (selectedDishes.length === 0) {
@@ -182,54 +211,53 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Скрываем старую подсказку, показываем мост
         trayTip.style.display = 'none';
         if (bridgeSection) bridgeSection.style.display = 'block';
 
-        // 1. Заполняем левую часть (Ваш заказ)
         const orderList = document.getElementById('bridge-order-list');
         if (orderList) {
             orderList.innerHTML = selectedDishes.map(d => `<li>${d.name}</li>`).join('');
         }
 
-        // 2. Считаем нехватку
         const missingProt = Math.max(0, 115 - totalP);
         const missingCarbs = Math.max(0, 291 - totalC);
-        const missingVeg = Math.max(0, 4 - totalVeggiePortions);
 
-        // 3. Заполняем правую часть (Советы)
         const adviceList = document.getElementById('bridge-advice-list');
         let adviceHtml = '';
 
-        // Логика: Если белка мало
         if (missingProt > 20) {
-            adviceHtml += `<div class="advice-row"><span class="advice-condition">Если белка мало или нет:</span><span class="advice-action">🥩 Рыба, яйца, творог, мясо, бобовые</span></div>`;
+            adviceHtml += `<div class="advice-row"><span class="advice-condition">Белка мало или нет:</span><span class="advice-action">🥩 Рыба, яйца, творог, бобовые</span></div>`;
         } else if (totalProteinServings > 0 && junkCount === 0) {
             adviceHtml += `<div class="advice-row"><span class="advice-condition">Белок есть, но однообразный:</span><span class="advice-action">🫘 Добавьте бобовые или рыбу</span></div>`;
         }
 
-        // Логика: Углеводы
         if (missingCarbs > 50) {
-            adviceHtml += `<div class="advice-row"><span class="advice-condition">Углеводов мало:</span><span class="advice-action">🌾 Гречка, овсянка, цельнозерновой хлеб</span></div>`;
+            adviceHtml += `<div class="advice-row"><span class="advice-condition">Углеводов мало:</span><span class="advice-action">🌾 Гречка, овсянка, хлеб</span></div>`;
         } else if (totalCarbs > 200) {
             adviceHtml += `<div class="advice-row"><span class="advice-condition">Углеводов много:</span><span class="advice-action">🥦 Овощи вместо гарнира</span></div>`;
         }
 
-        // Логика: Сахар и соусы
+        if (totalF < 40) {
+            adviceHtml += `<div class="advice-row"><span class="advice-condition">Жиров мало:</span><span class="advice-action">🧈 Растительное масло, авокадо</span></div>`;
+        } else {
+            adviceHtml += `<div class="advice-row"><span class="advice-condition">Жиров достаточно:</span><span class="advice-action">🚫 Избегайте жирной пищи</span></div>`;
+        }
+
         if (junkCount >= 1) {
-            adviceHtml += `<div class="advice-row"><span class="advice-condition">Был сладкий напиток/десерт:</span><span class="advice-action">💧 Вода или чай без сахара</span></div>`;
+            adviceHtml += `<div class="advice-row"><span class="advice-condition">Был сладкий десерт/напиток:</span><span class="advice-action">💧 Вода или чай без сахара</span></div>`;
         }
         if (selectedDishes.some(d => d.groups && d.groups.includes('sauce'))) {
             adviceHtml += `<div class="advice-row"><span class="advice-condition">Много соуса и солёного:</span><span class="advice-action">🥒 Свежие овощи и зелень</span></div>`;
         }
 
-        // Всегда добавляем базовый совет
         adviceHtml += `<div class="advice-row"><span class="advice-condition">Всегда:</span><span class="advice-action">🥗 Овощной салат и фрукты</span></div>`;
 
         if (adviceList) adviceList.innerHTML = adviceHtml;
     }
 
-    // Логика для кнопки PRO (заглушка)
+    // ==========================================
+    // 4. ЛОГИКА PRO
+    // ==========================================
     window.App = window.App || {};
     App.buyPro = function () {
         if (confirm("Это демо-версия оплаты. Активировать PRO?")) {
